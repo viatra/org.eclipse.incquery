@@ -20,7 +20,7 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 /**
  * Depicts an abstract evaluator that evaluates tuples to Objects. Used inside evaluator nodes.
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public abstract class AbstractEvaluator {

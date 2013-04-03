@@ -31,7 +31,7 @@ import org.eclipse.incquery.runtime.rete.util.Options;
 /**
  * Basic layout that builds a linear RETE net based on a heuristic ordering of constraints.
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class BasicLinearLayout<PatternDescription, StubHandle, Collector> implements

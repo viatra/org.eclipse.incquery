@@ -37,7 +37,7 @@ import org.eclipse.incquery.runtime.rete.util.Options;
 /**
  * The buildable interface of a rete container.
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class ReteContainerBuildable<PatternDescription> implements

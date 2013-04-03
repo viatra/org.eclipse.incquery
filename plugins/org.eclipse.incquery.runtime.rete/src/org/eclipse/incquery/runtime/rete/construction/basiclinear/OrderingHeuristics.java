@@ -24,7 +24,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.basicenumerables.C
 import org.eclipse.incquery.runtime.rete.util.OrderingCompareAgent;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class OrderingHeuristics<PatternDescription, StubHandle, Collector> implements Comparator<PConstraint> {

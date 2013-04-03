@@ -16,7 +16,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 /**
  * An algorithm that builds a RETE net based on a PSystem.
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public interface IReteLayoutStrategy<PatternDescription, StubHandle, Collector> {

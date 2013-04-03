@@ -17,7 +17,7 @@ import java.util.Collection;
  * Represents all knowledge of the outside world towards the pattern matcher, but without specific run-time or
  * build-time information.
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  * @param <PatternDescription>
  *            the type describing a pattern

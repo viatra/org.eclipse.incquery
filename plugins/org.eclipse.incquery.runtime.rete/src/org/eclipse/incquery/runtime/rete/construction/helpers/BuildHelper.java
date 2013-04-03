@@ -22,7 +22,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class BuildHelper {
@@ -72,7 +72,7 @@ public class BuildHelper {
     /**
      * Calculated index mappings for a join, based on the common variables of the two parent stubs.
      * 
-     * @author Bergmann Gábor
+     * @author Gabor Bergmann
      * 
      */
     public static class JoinHelper<StubHandle> {

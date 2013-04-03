@@ -20,7 +20,7 @@ import org.eclipse.incquery.runtime.rete.construction.Buildable;
 import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public abstract class BasePConstraint<PatternDescription, StubHandle> implements PConstraint {

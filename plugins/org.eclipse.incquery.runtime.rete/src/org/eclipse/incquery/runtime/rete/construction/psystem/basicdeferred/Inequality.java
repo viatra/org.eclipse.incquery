@@ -24,7 +24,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.construction.psystem.VariableDeferredPConstraint;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class Inequality<PatternDescription, StubHandle> extends

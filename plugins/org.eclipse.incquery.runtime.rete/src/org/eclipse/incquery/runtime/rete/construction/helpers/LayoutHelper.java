@@ -27,7 +27,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.basicenumerables.T
 import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class LayoutHelper {

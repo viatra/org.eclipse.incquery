@@ -16,11 +16,10 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
 
 /**
- * @author Bergmann Gábor
  * 
- *         An implicit common parameter is the "effort" PatternDescription. This indicates that the build request is
- *         part of an effort to build the matcher of the given pattern; it it important to record this during code
- *         generation so that the generated code can be separated according to patterns.
+ * An implicit common parameter is the "effort" PatternDescription. This indicates that the build request is part of an
+ * effort to build the matcher of the given pattern; it it important to record this during code generation so that the
+ * generated code can be separated according to patterns.
  * 
  * @param <PatternDescription>
  *            the description of a pattern
@@ -28,6 +27,7 @@ import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
  *            the handle of a continuable supplier-like RETE ending with associated semantics
  * @param <Collector>
  *            the handle of a receiver-like RETE ending to which stubs can be connected
+ * @author Gabor Bergmann
  */
 public interface Buildable<PatternDescription, StubHandle, Collector> {
 

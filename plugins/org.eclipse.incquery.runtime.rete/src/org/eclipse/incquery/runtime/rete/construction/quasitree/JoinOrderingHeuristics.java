@@ -16,7 +16,7 @@ import java.util.Comparator;
 import org.eclipse.incquery.runtime.rete.util.OrderingCompareAgent;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class JoinOrderingHeuristics<PatternDescription, StubHandle, Collector> implements

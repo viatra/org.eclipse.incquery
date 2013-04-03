@@ -25,7 +25,7 @@ import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
 import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class TypeBinary<PatternDescription, StubHandle> extends

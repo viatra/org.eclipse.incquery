@@ -20,7 +20,7 @@ import org.eclipse.incquery.runtime.rete.boundary.IPredicateTraceListener;
 /**
  * Represents all knowledge of the outside world, that is needed durin runtime operation, towards the pattern matcher.
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public interface IPatternMatcherRuntimeContext<PatternDescription> extends IPatternMatcherContext<PatternDescription> {

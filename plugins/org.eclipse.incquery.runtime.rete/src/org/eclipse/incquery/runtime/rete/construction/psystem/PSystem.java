@@ -20,13 +20,13 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.basicenumerables.C
 import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class PSystem<PatternDescription, StubHandle, Collector> {
     private PatternDescription pattern;
     private IPatternMatcherContext<PatternDescription> context;
-    private Buildable<PatternDescription, StubHandle, Collector> buildable;
+    private Buildable<PatternDescription, StubHandle, Collector> buildable; // TODO Rete-specific
 
     private Set<PVariable> allVariables;
     private Set<PVariable> uniqueVariables;

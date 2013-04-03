@@ -24,7 +24,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class ConstantValue<PatternDescription, StubHandle> extends

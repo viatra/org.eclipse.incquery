@@ -20,7 +20,7 @@ import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public abstract class Feeder {

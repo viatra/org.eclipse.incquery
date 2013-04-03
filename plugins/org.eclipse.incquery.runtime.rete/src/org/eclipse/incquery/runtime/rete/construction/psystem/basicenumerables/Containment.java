@@ -21,7 +21,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class Containment<PatternDescription, StubHandle> extends CoreModelRelationship<PatternDescription, StubHandle> {

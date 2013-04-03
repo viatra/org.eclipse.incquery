@@ -11,7 +11,6 @@
 
 package org.eclipse.incquery.runtime.rete.construction;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,7 +21,7 @@ import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
 
 /**
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class CodegenRecordingCoordinator<PatternDescription> {
@@ -30,14 +29,14 @@ public class CodegenRecordingCoordinator<PatternDescription> {
     protected static final String buildablePrefix = "buildable";
     protected static final String collectorPrefix = "production";
 
-    public Long nextIdentifier; /**/
-    public String stubType; /**/
-    public String collectorType; /**/
-    public String buildableType; /**/
-    Map<PatternDescription, StringBuilder> builderCode; /**/
-    // HashMap<PatternDescription, String> collectors; /**/
-    // LinkedHashSet<PatternDescription> unbuilt; /**/
-    public IPatternMatcherContext<PatternDescription> targetContext; /**/
+    public Long nextIdentifier;
+    public String stubType;
+    public String collectorType;
+    public String buildableType;
+    Map<PatternDescription, StringBuilder> builderCode;
+    // HashMap<PatternDescription, String> collectors;
+    // LinkedHashSet<PatternDescription> unbuilt;
+    public IPatternMatcherContext<PatternDescription> targetContext;
 
     public CodegenRecordingCoordinator(IPatternMatcherContext<PatternDescription> targetContext, String stubType,
             String collectorType, String buildableType) {

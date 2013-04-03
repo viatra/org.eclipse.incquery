@@ -25,7 +25,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.VariableDeferredPC
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  * @param <PatternDescription>
  * @param <StubHandle>

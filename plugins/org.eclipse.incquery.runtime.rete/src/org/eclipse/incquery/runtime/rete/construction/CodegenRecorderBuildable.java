@@ -21,7 +21,7 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * Lightweight class that generates Java code of a builder method from the build actions. Code is sent to a coordinator
  * to be collected in string buffers there.
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  */
 public abstract class CodegenRecorderBuildable<PatternDescription> implements
         Buildable<PatternDescription, String, String> {
@@ -31,11 +31,6 @@ public abstract class CodegenRecorderBuildable<PatternDescription> implements
     public String baseName;
     public String indent;
 
-    /**
-     * @param code
-     * @param indent
-     * @param myName
-     */
     public CodegenRecorderBuildable(CodegenRecordingCoordinator<PatternDescription> coordinator,
             PatternDescription effort, String indent, String baseName, String instanceSuffix) {
         super();

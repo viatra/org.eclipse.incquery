@@ -16,7 +16,7 @@ import java.util.Set;
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class PVariable {
@@ -30,10 +30,6 @@ public class PVariable {
      * substitutes
      */
     private boolean virtual;
-    // /**
-    // * whether this is an exported symbolic parameter
-    // */
-    // private boolean exportedParameter;
 
     /**
      * Set of constraints that mention this variable

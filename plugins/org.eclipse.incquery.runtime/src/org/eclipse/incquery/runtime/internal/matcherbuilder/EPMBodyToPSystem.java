@@ -65,7 +65,7 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 import org.eclipse.xtext.xbase.XExpression;
 
 /**
- * @author Bergmann Gábor
+ * @author Bergmann Gabor
  * 
  */
 public class EPMBodyToPSystem<StubHandle, Collector> {

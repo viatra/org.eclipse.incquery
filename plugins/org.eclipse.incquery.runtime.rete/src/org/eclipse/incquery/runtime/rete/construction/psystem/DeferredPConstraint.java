@@ -19,7 +19,7 @@ import org.eclipse.incquery.runtime.rete.construction.Stub;
 /**
  * Any constraint that can only be checked on certain stubs (e.g. those stubs that already contain some variables).
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public abstract class DeferredPConstraint<PatternDescription, StubHandle> extends

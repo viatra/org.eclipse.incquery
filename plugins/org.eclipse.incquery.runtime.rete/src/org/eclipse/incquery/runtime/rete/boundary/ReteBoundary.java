@@ -43,7 +43,7 @@ import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
  * Responsible for the storage, maintenance and communication of the nodes of the network that are accessible form the
  * outside for various reasons.
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  * @param <PatternDescription>
  */

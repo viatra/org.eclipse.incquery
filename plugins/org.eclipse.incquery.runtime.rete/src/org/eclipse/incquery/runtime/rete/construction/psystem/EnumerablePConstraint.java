@@ -21,7 +21,7 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 /**
  * A constraint for which all satisfying tuples of variable values can be enumerated at any point during run-time.
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public abstract class EnumerablePConstraint<PatternDescription, StubHandle> extends

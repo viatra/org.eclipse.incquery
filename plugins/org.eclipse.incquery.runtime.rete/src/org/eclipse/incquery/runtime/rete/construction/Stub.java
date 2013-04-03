@@ -22,7 +22,7 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 
 /**
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  * @param <HandleType>
  *            the buildable-specific representation of RETE node handle this stub type will augment

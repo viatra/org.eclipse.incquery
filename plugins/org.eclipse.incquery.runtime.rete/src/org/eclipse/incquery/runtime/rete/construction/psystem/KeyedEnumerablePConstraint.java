@@ -14,7 +14,7 @@ package org.eclipse.incquery.runtime.rete.construction.psystem;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public abstract class KeyedEnumerablePConstraint<KeyType, PatternDescription, StubHandle> extends

@@ -22,7 +22,7 @@ import org.eclipse.incquery.runtime.rete.util.Options;
 import org.eclipse.incquery.runtime.rete.util.Options.BuilderMethod;
 
 /**
- * @author Bergmann Gábor
+ * @author Bergmann Gabor
  * 
  */
 public class EPMBuildScaffold<StubHandle, Collector> {

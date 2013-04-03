@@ -21,14 +21,12 @@ import org.eclipse.incquery.runtime.rete.construction.Stub;
 /**
  * A kind of deferred constraint that can only be checked when a set of deferring variables are all present in a stub.
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public abstract class VariableDeferredPConstraint<PatternDescription, StubHandle> extends
         DeferredPConstraint<PatternDescription, StubHandle> {
-    /**
-     * @param affectedVariables
-     */
+
     public VariableDeferredPConstraint(PSystem<PatternDescription, StubHandle, ?> pSystem,
             Set<PVariable> affectedVariables) {
         super(pSystem, affectedVariables);

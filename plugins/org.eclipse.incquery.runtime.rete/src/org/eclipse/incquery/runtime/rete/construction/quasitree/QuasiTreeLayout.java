@@ -32,7 +32,7 @@ import org.eclipse.incquery.runtime.rete.util.Options;
 /**
  * Layout ideas: see https://bugs.eclipse.org/bugs/show_bug.cgi?id=398763
  * 
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public class QuasiTreeLayout<PatternDescription, StubHandle, Collector> implements

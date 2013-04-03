@@ -12,7 +12,7 @@
 package org.eclipse.incquery.runtime.rete.boundary;
 
 /**
- * @author Bergmann Gábor
+ * @author Gabor Bergmann
  * 
  */
 public interface IManipulationListener extends Disconnectable {

@@ -25,15 +25,15 @@ import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
  * @author Bergmann Gábor
  * 
  */
-public class EPMBuilder<StubHandle, Collector> implements IRetePatternBuilder<Pattern, StubHandle, Collector> {
-    protected Buildable<Pattern, StubHandle, Collector> baseBuildable;
+public class EPMBuilder<Collector> implements IRetePatternBuilder<Pattern, Collector> {
+    protected Buildable<Pattern, Collector> baseBuildable;
     protected IPatternMatcherContext<Pattern> context;
 
     /**
      * @param baseBuildable
      * @param context
      */
-    public EPMBuilder(Buildable<Pattern, StubHandle, Collector> baseBuildable, IPatternMatcherContext<Pattern> context) {
+    public EPMBuilder(Buildable<Pattern, Collector> baseBuildable, IPatternMatcherContext<Pattern> context) {
         super();
         this.baseBuildable = baseBuildable;
         this.context = context;
@@ -52,7 +52,7 @@ public class EPMBuilder<StubHandle, Collector> implements IRetePatternBuilder<Pa
     @Override
     public Collector construct(Pattern pattern) throws RetePatternBuildException {
         try {
-            EPMBuildScaffold<StubHandle, Collector> epmBuildScaffold = new EPMBuildScaffold<StubHandle, Collector>(
+            EPMBuildScaffold<Collector> epmBuildScaffold = new EPMBuildScaffold<Collector>(
                     baseBuildable, context);
             return epmBuildScaffold.construct(pattern);
         } catch (RuntimeException ex) {

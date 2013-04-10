@@ -22,23 +22,24 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * 
  *         For a binary base pattern, computes the irreflexive transitive closure (base)+
  */
-public class BinaryTransitiveClosure<PatternDescription, StubHandle> extends
-        KeyedEnumerablePConstraint<PatternDescription, PatternDescription, StubHandle> {
+public class BinaryTransitiveClosure<PatternDescription> extends
+        KeyedEnumerablePConstraint<PatternDescription, PatternDescription> {
 
     /**
      * @param pSystem
      * @param variablesTuple
      * @param pattern
      */
-    public BinaryTransitiveClosure(PSystem<PatternDescription, StubHandle, ?> pSystem, Tuple variablesTuple,
+    public BinaryTransitiveClosure(PSystem<PatternDescription> pSystem, Tuple variablesTuple,
             PatternDescription pattern) {
         super(pSystem, variablesTuple, pattern);
     }
 
     @Override
-    public Stub<StubHandle> doCreateStub() throws RetePatternBuildException {
-        Stub<StubHandle> patternProduction = buildable.patternCallStub(variablesTuple, supplierKey);
-        return buildable.buildTransitiveClosure(patternProduction);
+    public Stub doCreateStub() throws RetePatternBuildException {
+        // Stub<StubHandle> patternProduction = buildable.patternCallStub(variablesTuple, supplierKey);
+        // return buildable.buildTransitiveClosure(patternProduction);
+        return null;
     }
 
     @Override

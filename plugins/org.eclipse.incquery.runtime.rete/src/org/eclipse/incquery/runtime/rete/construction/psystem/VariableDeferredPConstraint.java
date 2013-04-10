@@ -24,10 +24,9 @@ import org.eclipse.incquery.runtime.rete.construction.Stub;
  * @author Gabor Bergmann
  * 
  */
-public abstract class VariableDeferredPConstraint<PatternDescription, StubHandle> extends
-        DeferredPConstraint<PatternDescription, StubHandle> {
+public abstract class VariableDeferredPConstraint<PatternDescription> extends DeferredPConstraint<PatternDescription> {
 
-    public VariableDeferredPConstraint(PSystem<PatternDescription, StubHandle, ?> pSystem,
+    public VariableDeferredPConstraint(PSystem<PatternDescription> pSystem,
             Set<PVariable> affectedVariables) {
         super(pSystem, affectedVariables);
     }
@@ -38,12 +37,12 @@ public abstract class VariableDeferredPConstraint<PatternDescription, StubHandle
      * Refine further if needed
      */
     @Override
-    public boolean isReadyAt(Stub<StubHandle> stub) {
+    public boolean isReadyAt(Stub stub) {
         return stub.getVariablesIndex().keySet().containsAll(getDeferringVariables());
     }
 
     @Override
-    public void raiseForeverDeferredError(Stub<StubHandle> stub) throws RetePatternBuildException {
+    public void raiseForeverDeferredError(Stub stub) throws RetePatternBuildException {
         Set<PVariable> missing = CollectionsFactory.getSet(getDeferringVariables());//new HashSet<PVariable>(getDeferringVariables());
         missing.removeAll(stub.getVariablesIndex().keySet());
         String[] args = { toString(), Arrays.toString(missing.toArray()) };

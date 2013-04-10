@@ -24,27 +24,26 @@ import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
  * @param <PatternDescription>
  * @param <StubHandle>
  */
-public abstract class CoreModelRelationship<PatternDescription, StubHandle> extends
-        EnumerablePConstraint<PatternDescription, StubHandle> {
+public abstract class CoreModelRelationship<PatternDescription> extends EnumerablePConstraint<PatternDescription> {
 
     protected boolean transitive;
 
-    protected abstract Stub<StubHandle> doCreateTransitiveStub();
+    protected abstract Stub doCreateTransitiveStub();
 
-    protected abstract Stub<StubHandle> doCreateDirectStub();
+    protected abstract Stub doCreateDirectStub();
 
     /**
      * @param buildable
      * @param variablesTuple
      */
-    public CoreModelRelationship(PSystem<PatternDescription, StubHandle, ?> pSystem, PVariable parent, PVariable child,
+    public CoreModelRelationship(PSystem<PatternDescription> pSystem, PVariable parent, PVariable child,
             boolean transitive) {
         super(pSystem, new FlatTuple(parent, child));
         this.transitive = transitive;
     }
 
     @Override
-    public Stub<StubHandle> doCreateStub() throws RetePatternBuildException {
+    public Stub doCreateStub() throws RetePatternBuildException {
         return isTransitive() ? doCreateTransitiveStub() : doCreateDirectStub();
     }
 

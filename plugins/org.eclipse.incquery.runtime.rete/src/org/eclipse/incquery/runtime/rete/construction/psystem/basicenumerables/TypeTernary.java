@@ -30,8 +30,8 @@ import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
  * @author Gabor Bergmann
  * 
  */
-public class TypeTernary<PatternDescription, StubHandle> extends
-        KeyedEnumerablePConstraint<Object, PatternDescription, StubHandle> implements ITypeInfoProviderConstraint {
+public class TypeTernary<PatternDescription> extends KeyedEnumerablePConstraint<Object, PatternDescription> implements
+        ITypeInfoProviderConstraint {
     private final IPatternMatcherContext<PatternDescription> context;
     private PVariable edge; private PVariable source; private PVariable target;
     /**
@@ -40,7 +40,7 @@ public class TypeTernary<PatternDescription, StubHandle> extends
      * @param supplierKey
      *            type info
      */
-    public TypeTernary(PSystem<PatternDescription, StubHandle, ?> pSystem,
+    public TypeTernary(PSystem<PatternDescription> pSystem,
             IPatternMatcherContext<PatternDescription> context, PVariable edge, PVariable source, PVariable target,
             Object supplierKey) {
         super(pSystem, new FlatTuple(edge, source, target), supplierKey);
@@ -51,8 +51,9 @@ public class TypeTernary<PatternDescription, StubHandle> extends
     }
 
     @Override
-    public Stub<StubHandle> doCreateStub() {
-        return buildable.ternaryEdgeTypeStub(variablesTuple, supplierKey);
+    public Stub doCreateStub() {
+        return null;
+        // return buildable.ternaryEdgeTypeStub(variablesTuple, supplierKey);
     }
 
     @Override

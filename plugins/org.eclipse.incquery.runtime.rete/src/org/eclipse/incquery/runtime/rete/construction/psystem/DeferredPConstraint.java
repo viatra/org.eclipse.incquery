@@ -22,25 +22,24 @@ import org.eclipse.incquery.runtime.rete.construction.Stub;
  * @author Gabor Bergmann
  * 
  */
-public abstract class DeferredPConstraint<PatternDescription, StubHandle> extends
-        BasePConstraint<PatternDescription, StubHandle> {
+public abstract class DeferredPConstraint<PatternDescription> extends BasePConstraint<PatternDescription> {
 
-    public DeferredPConstraint(PSystem<PatternDescription, StubHandle, ?> pSystem, Set<PVariable> affectedVariables) {
+    public DeferredPConstraint(PSystem<PatternDescription> pSystem, Set<PVariable> affectedVariables) {
         super(pSystem, affectedVariables);
     }
 
-    public abstract boolean isReadyAt(Stub<StubHandle> stub);
+    public abstract boolean isReadyAt(Stub stub);
 
     /**
      * @pre this.isReadyAt(stub);
      */
-    public Stub<StubHandle> checkOn(Stub<StubHandle> stub) throws RetePatternBuildException {
-        Stub<StubHandle> newStub = doCheckOn(stub);
+    public Stub checkOn(Stub stub) throws RetePatternBuildException {
+        Stub newStub = doCheckOn(stub);
         newStub.addConstraint(this);
         return newStub;
     }
 
-    protected abstract Stub<StubHandle> doCheckOn(Stub<StubHandle> stub) throws RetePatternBuildException;
+    protected abstract Stub doCheckOn(Stub stub) throws RetePatternBuildException;
 
     /**
      * Called when the constraint is not ready, but cannot be deferred further.
@@ -49,5 +48,5 @@ public abstract class DeferredPConstraint<PatternDescription, StubHandle> extend
      * @throws RetePatternBuildException
      *             to indicate the error in detail. PRE: !isReady(stub)
      */
-    public abstract void raiseForeverDeferredError(Stub<StubHandle> stub) throws RetePatternBuildException;
+    public abstract void raiseForeverDeferredError(Stub stub) throws RetePatternBuildException;
 }

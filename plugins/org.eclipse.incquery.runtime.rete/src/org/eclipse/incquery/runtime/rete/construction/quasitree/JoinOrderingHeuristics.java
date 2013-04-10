@@ -19,8 +19,7 @@ import org.eclipse.incquery.runtime.rete.util.OrderingCompareAgent;
  * @author Gabor Bergmann
  * 
  */
-public class JoinOrderingHeuristics<PatternDescription, StubHandle, Collector> implements
-        Comparator<JoinCandidate<StubHandle>> {
+public class JoinOrderingHeuristics<PatternDescription, Collector> implements Comparator<JoinCandidate> {
 
     /*
      * (non-Javadoc)
@@ -28,8 +27,8 @@ public class JoinOrderingHeuristics<PatternDescription, StubHandle, Collector> i
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     @Override
-    public int compare(JoinCandidate<StubHandle> jc1, JoinCandidate<StubHandle> jc2) {
-        return new OrderingCompareAgent<JoinCandidate<StubHandle>>(jc1, jc2) {
+    public int compare(JoinCandidate jc1, JoinCandidate jc2) {
+        return new OrderingCompareAgent<JoinCandidate>(jc1, jc2) {
             @Override
             protected void doCompare() {
                 swallowBoolean(true && consider(preferTrue(a.isTrivial(), b.isTrivial()))

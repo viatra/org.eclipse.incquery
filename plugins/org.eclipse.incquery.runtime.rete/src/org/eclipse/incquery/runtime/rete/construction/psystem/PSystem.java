@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.Buildable;
 import org.eclipse.incquery.runtime.rete.construction.psystem.basicenumerables.ConstantValue;
 import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
 
@@ -23,10 +22,9 @@ import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
  * @author Gabor Bergmann
  * 
  */
-public class PSystem<PatternDescription, StubHandle, Collector> {
+public class PSystem<PatternDescription> {
     private PatternDescription pattern;
     private IPatternMatcherContext<PatternDescription> context;
-    private Buildable<PatternDescription, StubHandle, Collector> buildable; // TODO Rete-specific
 
     private Set<PVariable> allVariables;
     private Set<PVariable> uniqueVariables;
@@ -34,12 +32,10 @@ public class PSystem<PatternDescription, StubHandle, Collector> {
     private Set<PConstraint> constraints;
     private int nextVirtualNodeID;
 
-    public PSystem(IPatternMatcherContext<PatternDescription> context,
-            Buildable<PatternDescription, StubHandle, Collector> buildable, PatternDescription pattern) {
+    public PSystem(IPatternMatcherContext<PatternDescription> context, PatternDescription pattern) {
         super();
         this.pattern = pattern;
         this.context = context;
-        this.buildable = buildable;
         allVariables = CollectionsFactory.getSet();//new HashSet<PVariable>();
         uniqueVariables = CollectionsFactory.getSet();//new HashSet<PVariable>();
         variablesByName = CollectionsFactory.getMap();//new HashMap<Object, PVariable>();
@@ -102,7 +98,7 @@ public class PSystem<PatternDescription, StubHandle, Collector> {
 
     public PVariable newConstantVariable(Object value) {
         PVariable virtual = newVirtualVariable();
-        new ConstantValue<PatternDescription, StubHandle>(this, virtual, value);
+        new ConstantValue<PatternDescription>(this, virtual, value);
         return virtual;
     }
 
@@ -111,13 +107,6 @@ public class PSystem<PatternDescription, StubHandle, Collector> {
      */
     public IPatternMatcherContext<PatternDescription> getContext() {
         return context;
-    }
-
-    /**
-     * @return the buildable
-     */
-    public Buildable<PatternDescription, StubHandle, Collector> getBuildable() {
-        return buildable;
     }
 
     /**

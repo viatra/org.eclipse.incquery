@@ -20,7 +20,7 @@ import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
  * 
  * @author Gabor Bergmann
  */
-public interface IRetePatternBuilder<PatternDescription, StubHandle, Collector> {
+public interface IRetePatternBuilder<PatternDescription, Collector> {
 
     /**
      * Builds a part of the rete network that will match occurences of a given pattern.

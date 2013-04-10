@@ -22,20 +22,22 @@ import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
  * @author Gabor Bergmann
  * 
  */
-public class TypeUnary<PatternDescription, StubHandle> extends
-        KeyedEnumerablePConstraint<Object, PatternDescription, StubHandle> implements ITypeInfoProviderConstraint {
+public class TypeUnary<PatternDescription> extends
+ KeyedEnumerablePConstraint<Object, PatternDescription>
+        implements ITypeInfoProviderConstraint {
     /**
      * @param buildable
      * @param variable
      * @param typeKey
      */
-    public TypeUnary(PSystem<PatternDescription, StubHandle, ?> pSystem, PVariable variable, Object typeKey) {
+    public TypeUnary(PSystem<PatternDescription> pSystem, PVariable variable, Object typeKey) {
         super(pSystem, new FlatTuple(variable), typeKey);
     }
 
     @Override
-    public Stub<StubHandle> doCreateStub() {
-        return buildable.unaryTypeStub(variablesTuple, supplierKey);
+    public Stub doCreateStub() {
+        // return buildable.unaryTypeStub(variablesTuple, supplierKey);
+        return null;
     }
 
     @Override

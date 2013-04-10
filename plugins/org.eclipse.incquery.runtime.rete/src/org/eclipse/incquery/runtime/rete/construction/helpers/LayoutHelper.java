@@ -37,10 +37,9 @@ public class LayoutHelper {
      * 
      * @param pSystem
      */
-    public static <PatternDescription, StubHandle, Collector> void unifyVariablesAlongEqualities(
-            PSystem<PatternDescription, StubHandle, Collector> pSystem) {
+    public static <PatternDescription> void unifyVariablesAlongEqualities(PSystem<PatternDescription> pSystem) {
         Set<Equality> equals = pSystem.getConstraintsOfType(Equality.class);
-        for (Equality<PatternDescription, StubHandle> equality : equals) {
+        for (Equality<PatternDescription> equality : equals) {
             if (!equality.isMoot()) {
                 equality.getWho().unifyInto(equality.getWithWhom());
             }
@@ -53,8 +52,7 @@ public class LayoutHelper {
      * 
      * @param pSystem
      */
-    public static <PatternDescription, StubHandle, Collector> void eliminateWeakInequalities(
-            PSystem<PatternDescription, StubHandle, Collector> pSystem) {
+    public static <PatternDescription> void eliminateWeakInequalities(PSystem<PatternDescription> pSystem) {
         for (Inequality inequality : pSystem.getConstraintsOfType(Inequality.class))
             inequality.eliminateWeak();
     }
@@ -62,11 +60,11 @@ public class LayoutHelper {
     /**
      * Eliminates all unary type constraints that are inferrable from other constraints.
      */
-    public static <PatternDescription, StubHandle, Collector> void eliminateInferrableUnaryTypes(
-            final PSystem<PatternDescription, StubHandle, Collector> pSystem,
+    public static <PatternDescription, Collector> void eliminateInferrableUnaryTypes(
+            final PSystem<PatternDescription> pSystem,
             IPatternMatcherContext<PatternDescription> context) {
         Set<TypeUnary> constraintsOfType = pSystem.getConstraintsOfType(TypeUnary.class);
-        for (TypeUnary<PatternDescription, StubHandle> typeUnary : constraintsOfType) {
+        for (TypeUnary<PatternDescription> typeUnary : constraintsOfType) {
             PVariable var = (PVariable) typeUnary.getVariablesTuple().get(0);
             Object expressedType = typeUnary.getTypeInfo(var);
             Set<ITypeInfoProviderConstraint> typeRestrictors = var
@@ -91,8 +89,8 @@ public class LayoutHelper {
      * @param pSystem
      * @throws RetePatternBuildException
      */
-    public static <PatternDescription, StubHandle, Collector> void checkSanity(
-            PSystem<PatternDescription, StubHandle, Collector> pSystem) throws RetePatternBuildException {
+    public static <PatternDescription> void checkSanity(PSystem<PatternDescription> pSystem)
+            throws RetePatternBuildException {
         for (PConstraint pConstraint : pSystem.getConstraints())
             pConstraint.checkSanity();
     }
@@ -107,8 +105,8 @@ public class LayoutHelper {
      * @param stub
      * @return a PConstraint that is not enforced, if any, or null if all are enforced
      */
-    public static <PatternDescription, StubHandle, Collector> PConstraint getAnyUnenforcedConstraint(
-            PSystem<PatternDescription, StubHandle, Collector> pSystem, Stub<StubHandle> stub) {
+    public static <PatternDescription> PConstraint getAnyUnenforcedConstraint(PSystem<PatternDescription> pSystem,
+            Stub stub) {
         Set<PConstraint> allEnforcedConstraints = stub.getAllEnforcedConstraints();
         Set<PConstraint> constraints = pSystem.getConstraints();
         for (PConstraint pConstraint : constraints) {
@@ -126,7 +124,7 @@ public class LayoutHelper {
      * @throws RetePatternBuildException
      */
     public static <PatternDescription, StubHandle, Collector> void finalCheck(
-            final PSystem<PatternDescription, StubHandle, Collector> pSystem, Stub<StubHandle> stub)
+            final PSystem<PatternDescription> pSystem, Stub stub)
             throws RetePatternBuildException {
         PConstraint unenforcedConstraint = getAnyUnenforcedConstraint(pSystem, stub);
         if (unenforcedConstraint != null) {
@@ -135,7 +133,7 @@ public class LayoutHelper {
                             + " Could be caused if the value of some variables can not be deduced, e.g. by circularity of pattern constraints.",
                     new String[] { unenforcedConstraint.toString() }, "Could not enforce a pattern constraint", null);
         }
-        for (ExportedParameter<PatternDescription, StubHandle> export : pSystem
+        for (ExportedParameter<PatternDescription> export : pSystem
                 .getConstraintsOfType(ExportedParameter.class)) {
             if (!export.isReadyAt(stub)) {
                 throw new RetePatternBuildException(

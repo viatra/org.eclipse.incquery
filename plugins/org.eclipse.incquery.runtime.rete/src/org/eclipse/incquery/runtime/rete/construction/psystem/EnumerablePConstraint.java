@@ -15,7 +15,6 @@ import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
 import org.eclipse.incquery.runtime.rete.construction.Stub;
-import org.eclipse.incquery.runtime.rete.construction.helpers.BuildHelper;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 
 /**
@@ -24,28 +23,28 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * @author Gabor Bergmann
  * 
  */
-public abstract class EnumerablePConstraint<PatternDescription, StubHandle> extends
-        BasePConstraint<PatternDescription, StubHandle> {
+public abstract class EnumerablePConstraint<PatternDescription> extends BasePConstraint<PatternDescription> {
     protected Tuple variablesTuple;
-    private Stub<StubHandle> stub;
 
-    protected EnumerablePConstraint(PSystem<PatternDescription, StubHandle, ?> pSystem, Tuple variablesTuple) {
+    private Stub stub;
+
+    protected EnumerablePConstraint(PSystem<PatternDescription> pSystem, Tuple variablesTuple) {
         super(pSystem, variablesTuple.<PVariable> getDistinctElements());
         this.variablesTuple = variablesTuple;
     }
 
-    public Stub<StubHandle> getStub() throws RetePatternBuildException {
+    public Stub getStub() throws RetePatternBuildException {
         if (stub == null) {
             stub = doCreateStub();
             stub.addConstraint(this);
 
             // check for any variable coincidences and enforce them
-            stub = BuildHelper.enforceVariableCoincidences(buildable, stub);
+            // stub = BuildHelper.enforceVariableCoincidences(buildable, stub);
         }
         return stub;
     }
 
-    public abstract Stub<StubHandle> doCreateStub() throws RetePatternBuildException;
+    public abstract Stub doCreateStub() throws RetePatternBuildException;
 
     @Override
     public void doReplaceVariable(PVariable obsolete, PVariable replacement) {

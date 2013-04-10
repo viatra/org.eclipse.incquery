@@ -24,14 +24,14 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
  * @author Gabor Bergmann
  * 
  */
-public class Containment<PatternDescription, StubHandle> extends CoreModelRelationship<PatternDescription, StubHandle> {
+public class Containment<PatternDescription> extends CoreModelRelationship<PatternDescription> {
 
 	PVariable parent; 
 	PVariable child;
     /**
      * @param variablesTuple
      */
-    public Containment(PSystem<PatternDescription, StubHandle, ?> pSystem, PVariable parent, PVariable child,
+    public Containment(PSystem<PatternDescription> pSystem, PVariable parent, PVariable child,
             boolean transitive) {
         super(pSystem, parent, child, transitive);
         this.parent = parent;
@@ -42,16 +42,18 @@ public class Containment<PatternDescription, StubHandle> extends CoreModelRelati
      * @return
      */
     @Override
-    protected Stub<StubHandle> doCreateDirectStub() {
-        return buildable.containmentDirectStub(variablesTuple);
+    protected Stub doCreateDirectStub() {
+        // return buildable.containmentDirectStub(variablesTuple);
+        return null;
     }
 
     /**
      * @return
      */
     @Override
-    protected Stub<StubHandle> doCreateTransitiveStub() {
-        return buildable.containmentTransitiveStub(variablesTuple);
+    protected Stub doCreateTransitiveStub() {
+        return null;
+        // return buildable.containmentTransitiveStub(variablesTuple);
     }
     
     /* (non-Javadoc)

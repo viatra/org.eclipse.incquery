@@ -12,7 +12,6 @@
 package org.eclipse.incquery.runtime.rete.construction.psystem.basicdeferred;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,15 +27,15 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.VariableDeferredPC
  * @author Gabor Bergmann
  * 
  */
-public abstract class BaseTypeSafePredicateCheck<PatternDescription, StubHandle> extends
-        VariableDeferredPConstraint<PatternDescription, StubHandle> {
+public abstract class BaseTypeSafePredicateCheck<PatternDescription> extends
+        VariableDeferredPConstraint<PatternDescription> {
     private Map<PVariable, Set<Object>> allTypeRestrictions;
 
     /**
      * @param buildable
      * @param affectedVariables
      */
-    public BaseTypeSafePredicateCheck(PSystem<PatternDescription, StubHandle, ?> pSystem,
+    public BaseTypeSafePredicateCheck(PSystem<PatternDescription> pSystem,
             Set<PVariable> affectedVariables) {
         super(pSystem, affectedVariables);
     }
@@ -52,10 +51,10 @@ public abstract class BaseTypeSafePredicateCheck<PatternDescription, StubHandle>
     }
 
     @Override
-    public boolean isReadyAt(Stub<StubHandle> stub) {
-        if (super.isReadyAt(stub)) {
-            return checkTypeSafety(stub) == null;
-        }
+    public boolean isReadyAt(Stub stub) {
+        // if (super.isReadyAt(stub)) {
+        // return checkTypeSafety(stub) == null;
+        // }
         return false;
     }
 
@@ -65,7 +64,7 @@ public abstract class BaseTypeSafePredicateCheck<PatternDescription, StubHandle>
      * @param stub
      * @return a variable whose type safety is not enforced yet, or null if the stub is typesafe
      */
-    protected PVariable checkTypeSafety(Stub<StubHandle> stub) {
+    protected PVariable checkTypeSafety(Stub stub) {
         for (PVariable pVariable : getAffectedVariables()) {
             Set<Object> allTypeRestrictionsForVariable = getAllTypeRestrictions().get(pVariable);
             Set<Object> checkedTypeRestrictions = TypeHelper.inferTypes(pVariable, stub.getAllEnforcedConstraints());
@@ -92,7 +91,7 @@ public abstract class BaseTypeSafePredicateCheck<PatternDescription, StubHandle>
     }
 
     @Override
-    public void raiseForeverDeferredError(Stub<StubHandle> stub) throws RetePatternBuildException {
+    public void raiseForeverDeferredError(Stub stub) throws RetePatternBuildException {
         if (!super.isReadyAt(stub)) {
             super.raiseForeverDeferredError(stub);
         } else {

@@ -30,17 +30,17 @@ import org.eclipse.xtext.xbase.XExpression;
  * XExpression check constraint: the given XExpression formed over the variables must evaluate to true.
  */
 @SuppressWarnings("restriction")
-public class XBaseCheck<StubHandle> extends BaseTypeSafePredicateCheck<Pattern, StubHandle> {
+public class XBaseCheck<StubHandle> extends BaseTypeSafePredicateCheck<Pattern> {
 
     private final XExpression xExpression;
-    private final EPMBodyToPSystem<StubHandle, ?> pGraph;
+    private final EPMBodyToPSystem<?> pGraph;
     private final Pattern pattern;
 
     /**
      * @param pSystem
      * @param affectedVariables
      */
-    public XBaseCheck(EPMBodyToPSystem<StubHandle, ?> pGraph, XExpression xExpression, Pattern pattern) {
+    public XBaseCheck(EPMBodyToPSystem<?> pGraph, XExpression xExpression, Pattern pattern) {
         super(pGraph.pSystem, getExternalPNodeReferencesOfXExpression(pGraph, xExpression));
         this.pGraph = pGraph;
         this.xExpression = xExpression;
@@ -48,7 +48,7 @@ public class XBaseCheck<StubHandle> extends BaseTypeSafePredicateCheck<Pattern, 
     }
 
     @Override
-    protected Stub<StubHandle> doCheckOn(Stub<StubHandle> stub) throws RetePatternBuildException {
+    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
         Set<Integer> affectedIndices = new HashSet<Integer>();
         Map<String, Integer> tupleNameMap = new HashMap<String, Integer>();
         Set<Variable> variables = CorePatternLanguageHelper.getReferencedPatternVariablesOfXExpression(xExpression);
@@ -64,10 +64,11 @@ public class XBaseCheck<StubHandle> extends BaseTypeSafePredicateCheck<Pattern, 
             indices[k++] = index;
 
         XBaseEvaluator evaluator = new XBaseEvaluator(xExpression, tupleNameMap, pattern);
-        return buildable.buildPredicateChecker(evaluator, null, indices, stub);
+        // return buildable.buildPredicateChecker(evaluator, null, indices, stub);
+        return null;
     }
 
-    private static Set<PVariable> getExternalPNodeReferencesOfXExpression(EPMBodyToPSystem<?, ?> pGraph,
+    private static Set<PVariable> getExternalPNodeReferencesOfXExpression(EPMBodyToPSystem<?> pGraph,
             XExpression xExpression) {
         Set<PVariable> result = new HashSet<PVariable>();
         Set<Variable> variables = CorePatternLanguageHelper.getReferencedPatternVariablesOfXExpression(xExpression);

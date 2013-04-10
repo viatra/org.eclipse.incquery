@@ -33,8 +33,7 @@ public class BuildHelper {
      * 
      * @return the derived stub that contains the additional checkers, or the original if no action was neccessary.
      */
-    public static <StubHandle> Stub<StubHandle> enforceVariableCoincidences(Buildable<?, StubHandle, ?> buildable,
-            Stub<StubHandle> stub) {
+    public static Stub enforceVariableCoincidences(Buildable<?, ?> buildable, Stub stub) {
         Map<Object, List<Integer>> indexWithMupliplicity = stub.getVariablesTuple().invertIndexWithMupliplicity();
         for (Map.Entry<Object, List<Integer>> pVariableIndices : indexWithMupliplicity.entrySet()) {
             List<Integer> indices = pVariableIndices.getValue();
@@ -56,8 +55,8 @@ public class BuildHelper {
      * 
      * @return the derived stub that contains the additional checkers, or the original if no action was necessary.
      */
-    public static <StubHandle, Collector> void projectIntoCollector(Buildable<?, StubHandle, Collector> buildable,
-            Stub<StubHandle> stub, Collector collector, PVariable[] selectedVariables) {
+    public static <Collector> void projectIntoCollector(Buildable<?, Collector> buildable, Stub stub,
+            Collector collector, PVariable[] selectedVariables) {
         int paramNum = selectedVariables.length;
         int[] tI = new int[paramNum];
         for (int i = 0; i < paramNum; i++) {
@@ -65,7 +64,7 @@ public class BuildHelper {
         }
         int tiW = stub.getVariablesTuple().getSize();
         TupleMask trim = new TupleMask(tI, tiW);
-        Stub<StubHandle> trimmer = buildable.buildTrimmer(stub, trim);
+        Stub trimmer = buildable.buildTrimmer(stub, trim);
         buildable.buildConnection(trimmer, collector);
     }
 
@@ -75,7 +74,7 @@ public class BuildHelper {
      * @author Gabor Bergmann
      * 
      */
-    public static class JoinHelper<StubHandle> {
+    public static class JoinHelper {
         private TupleMask primaryMask;
         private TupleMask secondaryMask;
         private TupleMask complementerMask;
@@ -85,7 +84,7 @@ public class BuildHelper {
          * @param primaryStub
          * @param secondaryStub
          */
-        public JoinHelper(Stub<StubHandle> primaryStub, Stub<StubHandle> secondaryStub) {
+        public JoinHelper(Stub primaryStub, Stub secondaryStub) {
             super();
 
             Set<PVariable> primaryVariables = primaryStub.getVariablesTuple().getDistinctElements();
@@ -142,9 +141,8 @@ public class BuildHelper {
 
     }
 
-    public static <StubHandle> Stub<StubHandle> naturalJoin(Buildable<?, StubHandle, ?> buildable,
-            Stub<StubHandle> primaryStub, Stub<StubHandle> secondaryStub) {
-        JoinHelper<StubHandle> joinHelper = new JoinHelper<StubHandle>(primaryStub, secondaryStub);
+    public static <StubHandle> Stub naturalJoin(Buildable<?, ?> buildable, Stub primaryStub, Stub secondaryStub) {
+        JoinHelper joinHelper = new JoinHelper(primaryStub, secondaryStub);
         return buildable.buildBetaNode(primaryStub, secondaryStub, joinHelper.getPrimaryMask(),
                 joinHelper.getSecondaryMask(), joinHelper.getComplementerMask(), false);
     }

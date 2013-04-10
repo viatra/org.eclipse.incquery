@@ -35,35 +35,34 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * @author Gabor Bergmann
  * 
  */
-public class QuasiTreeLayout<PatternDescription, StubHandle, Collector> implements
-        IReteLayoutStrategy<PatternDescription, StubHandle, Collector> {
+public class QuasiTreeLayout<PatternDescription, Collector> implements IReteLayoutStrategy<PatternDescription> {
 
     @Override
-    public Stub<StubHandle> layout(PSystem<PatternDescription, StubHandle, Collector> pSystem)
+    public Stub layout(PSystem<PatternDescription> pSystem)
             throws RetePatternBuildException {
         return new Scaffold(pSystem).run();
     }
 
     public class Scaffold {
-        PSystem<PatternDescription, StubHandle, Collector> pSystem;
+        PSystem<PatternDescription> pSystem;
         PatternDescription pattern;
         IPatternMatcherContext<PatternDescription> context;
-        Buildable<PatternDescription, StubHandle, Collector> buildable;
+        Buildable<PatternDescription, Collector> buildable;
 
         Set<DeferredPConstraint> deferredConstraints = null;
-        Set<Stub<StubHandle>> forefront = new LinkedHashSet<Stub<StubHandle>>();
+        Set<Stub> forefront = new LinkedHashSet<Stub>();
 
-        Scaffold(PSystem<PatternDescription, StubHandle, Collector> pSystem) {
+        Scaffold(PSystem<PatternDescription> pSystem) {
             this.pSystem = pSystem;
             pattern = pSystem.getPattern();
             context = pSystem.getContext();
-            buildable = pSystem.getBuildable();
+            buildable = null;// pSystem.getBuildable();
         }
 
         /**
          * @return
          */
-        public Stub<StubHandle> run() throws RetePatternBuildException {
+        public Stub run() throws RetePatternBuildException {
             try {
                 context.logDebug(getClass().getSimpleName() + ": patternbody build started");
 
@@ -82,12 +81,12 @@ public class QuasiTreeLayout<PatternDescription, StubHandle, Collector> implemen
                 // PROCESS CONSTRAINTS
                 deferredConstraints = pSystem.getConstraintsOfType(DeferredPConstraint.class);
                 Set<EnumerablePConstraint> enumerables = pSystem.getConstraintsOfType(EnumerablePConstraint.class);
-                for (EnumerablePConstraint<PatternDescription, StubHandle> enumerable : enumerables) {
-                    Stub<StubHandle> stub = enumerable.getStub();
+                for (EnumerablePConstraint<PatternDescription> enumerable : enumerables) {
+                    Stub stub = enumerable.getStub();
                     admitStub(stub);
                 }
                 if (enumerables.isEmpty()) { // EXTREME CASE
-                    Stub<StubHandle> stub = buildable.buildStartStub(new Object[] {}, new Object[] {});
+                    Stub stub = buildable.buildStartStub(new Object[] {}, new Object[] {});
                     admitStub(stub);
                 }
 
@@ -95,15 +94,15 @@ public class QuasiTreeLayout<PatternDescription, StubHandle, Collector> implemen
                 while (forefront.size() > 1) {
                     // TODO QUASI-TREE TRIVIAL JOINS?
 
-                    List<JoinCandidate<StubHandle>> candidates = generateJoinCandidates();
-                    JoinOrderingHeuristics<PatternDescription, StubHandle, Collector> ordering = new JoinOrderingHeuristics<PatternDescription, StubHandle, Collector>();
-                    JoinCandidate<StubHandle> selectedJoin = Collections.min(candidates, ordering);
+                    List<JoinCandidate> candidates = generateJoinCandidates();
+                    JoinOrderingHeuristics<PatternDescription, Collector> ordering = new JoinOrderingHeuristics<PatternDescription, Collector>();
+                    JoinCandidate selectedJoin = Collections.min(candidates, ordering);
                     doJoin(selectedJoin.getPrimary(), selectedJoin.getSecondary());
                 }
 
                 // FINAL CHECK, whether all exported variables are present
                 assert (forefront.size() == 1);
-                Stub<StubHandle> finalStub = forefront.iterator().next();
+                Stub finalStub = forefront.iterator().next();
                 LayoutHelper.finalCheck(pSystem, finalStub);
 
                 context.logDebug(getClass().getSimpleName() + ": patternbody build concluded");
@@ -114,23 +113,23 @@ public class QuasiTreeLayout<PatternDescription, StubHandle, Collector> implemen
             }
         }
 
-        public List<JoinCandidate<StubHandle>> generateJoinCandidates() {
-            List<JoinCandidate<StubHandle>> candidates = new ArrayList<JoinCandidate<StubHandle>>();
+        public List<JoinCandidate> generateJoinCandidates() {
+            List<JoinCandidate> candidates = new ArrayList<JoinCandidate>();
             int bIndex = 0;
-            for (Stub<StubHandle> b : forefront) {
+            for (Stub b : forefront) {
                 int aIndex = 0;
-                for (Stub<StubHandle> a : forefront) {
+                for (Stub a : forefront) {
                     if (aIndex++ >= bIndex)
                         break;
-                    candidates.add(new JoinCandidate<StubHandle>(a, b));
+                    candidates.add(new JoinCandidate(a, b));
                 }
                 bIndex++;
             }
             return candidates;
         }
 
-        private void admitStub(Stub<StubHandle> stub) throws RetePatternBuildException {
-            for (DeferredPConstraint<PatternDescription, StubHandle> deferred : deferredConstraints) {
+        private void admitStub(Stub stub) throws RetePatternBuildException {
+            for (DeferredPConstraint<PatternDescription> deferred : deferredConstraints) {
                 if (!stub.getAllEnforcedConstraints().contains(deferred)) {
                     if (deferred.isReadyAt(stub)) {
                         admitStub(deferred.checkOn(stub));
@@ -141,9 +140,9 @@ public class QuasiTreeLayout<PatternDescription, StubHandle, Collector> implemen
             forefront.add(stub);
         }
 
-        private void doJoin(Stub<StubHandle> primaryStub, Stub<StubHandle> secondaryStub)
+        private void doJoin(Stub primaryStub, Stub secondaryStub)
                 throws RetePatternBuildException {
-            Stub<StubHandle> joinedStub = BuildHelper.naturalJoin(buildable, primaryStub, secondaryStub);
+            Stub joinedStub = BuildHelper.naturalJoin(buildable, primaryStub, secondaryStub);
             forefront.remove(primaryStub);
             forefront.remove(secondaryStub);
             admitStub(joinedStub);

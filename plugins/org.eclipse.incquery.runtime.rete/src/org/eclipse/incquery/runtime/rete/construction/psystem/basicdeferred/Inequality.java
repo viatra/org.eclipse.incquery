@@ -27,8 +27,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.VariableDeferredPC
  * @author Gabor Bergmann
  * 
  */
-public class Inequality<PatternDescription, StubHandle> extends
-        VariableDeferredPConstraint<PatternDescription, StubHandle>
+public class Inequality<PatternDescription> extends VariableDeferredPConstraint<PatternDescription>
 // implements IFoldablePConstraint
 {
 
@@ -42,11 +41,11 @@ public class Inequality<PatternDescription, StubHandle> extends
      */
     private boolean weak;
 
-    public Inequality(PSystem<PatternDescription, StubHandle, ?> pSystem, PVariable who, PVariable withWhom) {
+    public Inequality(PSystem<PatternDescription> pSystem, PVariable who, PVariable withWhom) {
         this(pSystem, who, withWhom, false);
     }
 
-    public Inequality(PSystem<PatternDescription, StubHandle, ?> pSystem, PVariable who, PVariable withWhom,
+    public Inequality(PSystem<PatternDescription> pSystem, PVariable who, PVariable withWhom,
             boolean weak) {
         super(pSystem, CollectionsFactory.getSet(Arrays.asList(new PVariable[] { who, withWhom }) ));
         // this(pSystem, who, Collections.singleton(withWhom));
@@ -76,10 +75,11 @@ public class Inequality<PatternDescription, StubHandle> extends
     }
 
     @Override
-    protected Stub<StubHandle> doCheckOn(Stub<StubHandle> stub) throws RetePatternBuildException {
+    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
         Map<Object, Integer> variablesIndex = stub.getVariablesIndex();
-        return buildable.buildInjectivityChecker(stub, variablesIndex.get(who),
-                new int[] { variablesIndex.get(withWhom) });
+        // return buildable.buildInjectivityChecker(stub, variablesIndex.get(who),
+        // new int[] { variablesIndex.get(withWhom) });
+        return null;
     }
 
     // private static int[] mapIndices(Map<Object, Integer> variablesIndex, Set<PVariable> keys) {

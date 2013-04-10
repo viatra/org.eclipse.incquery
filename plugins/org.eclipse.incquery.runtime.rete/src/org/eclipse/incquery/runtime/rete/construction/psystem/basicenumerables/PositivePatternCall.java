@@ -25,22 +25,23 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * @author Gabor Bergmann
  * 
  */
-public class PositivePatternCall<PatternDescription, StubHandle> extends
-        KeyedEnumerablePConstraint<PatternDescription, PatternDescription, StubHandle> {
+public class PositivePatternCall<PatternDescription> extends
+        KeyedEnumerablePConstraint<PatternDescription, PatternDescription> {
 
     /**
      * @param buildable
      * @param variablesTuple
      * @param pattern
      */
-    public PositivePatternCall(PSystem<PatternDescription, StubHandle, ?> pSystem, Tuple variablesTuple,
+    public PositivePatternCall(PSystem<PatternDescription> pSystem, Tuple variablesTuple,
             PatternDescription pattern) {
         super(pSystem, variablesTuple, pattern);
     }
 
     @Override
-    public Stub<StubHandle> doCreateStub() throws RetePatternBuildException {
-        return buildable.patternCallStub(variablesTuple, supplierKey);
+    public Stub doCreateStub() throws RetePatternBuildException {
+        // return buildable.patternCallStub(variablesTuple, supplierKey);
+        return null;
     }
 
     @Override

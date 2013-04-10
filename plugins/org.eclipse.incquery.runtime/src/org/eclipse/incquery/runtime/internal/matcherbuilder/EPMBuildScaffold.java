@@ -25,16 +25,16 @@ import org.eclipse.incquery.runtime.rete.util.Options.BuilderMethod;
  * @author Bergmann Gabor
  * 
  */
-public class EPMBuildScaffold<StubHandle, Collector> {
+public class EPMBuildScaffold<Collector> {
 
-    protected Buildable<Pattern, StubHandle, Collector> baseBuildable;
+    protected Buildable<Pattern, Collector> baseBuildable;
     protected IPatternMatcherContext<Pattern> context;
 
     /**
      * @param baseBuildable
      * @param context
      */
-    public EPMBuildScaffold(Buildable<Pattern, StubHandle, Collector> baseBuildable,
+    public EPMBuildScaffold(Buildable<Pattern, Collector> baseBuildable,
             IPatternMatcherContext<Pattern> context) {
         super();
         this.baseBuildable = baseBuildable;
@@ -47,14 +47,14 @@ public class EPMBuildScaffold<StubHandle, Collector> {
 
         context.logDebug("EPMBuilder starts construction of: " + pattern.getName());
         for (PatternBody body : pattern.getBodies()) {
-            Buildable<Pattern, StubHandle, Collector> currentBuildable = baseBuildable.getNextContainer().putOnTab(
+            Buildable<Pattern, Collector> currentBuildable = baseBuildable.getNextContainer().putOnTab(
                     pattern);
             if (Options.builderMethod == BuilderMethod.LEGACY) {
                 throw new UnsupportedOperationException();
             } else {
-                EPMBodyToPSystem<StubHandle, Collector> converter = new EPMBodyToPSystem<StubHandle, Collector>(
+                EPMBodyToPSystem<Collector> converter = new EPMBodyToPSystem<Collector>(
                         pattern, body, context, currentBuildable);
-                Stub<StubHandle> bodyFinal = Options.builderMethod.<Pattern, StubHandle, Collector> layoutStrategy()
+                Stub bodyFinal = Options.builderMethod.<Pattern, Collector> layoutStrategy()
                         .layout(converter.toPSystem());
                 BuildHelper.projectIntoCollector(currentBuildable, bodyFinal, production,
                         converter.symbolicParameterArray());

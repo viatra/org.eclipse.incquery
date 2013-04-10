@@ -36,7 +36,6 @@ import org.eclipse.incquery.runtime.rete.construction.ReteContainerBuildable;
 import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherRuntimeContext;
 import org.eclipse.incquery.runtime.rete.matcher.ReteEngine;
 import org.eclipse.incquery.runtime.rete.network.Receiver;
-import org.eclipse.incquery.runtime.rete.network.Supplier;
 import org.eclipse.incquery.runtime.rete.remote.Address;
 
 import com.google.inject.Injector;
@@ -307,7 +306,7 @@ public class IncQueryEngine {
         ReteEngine<Pattern> engine;
         engine = new ReteEngine<Pattern>(context, reteThreads);
         ReteContainerBuildable<Pattern> buildable = new ReteContainerBuildable<Pattern>(engine);
-        EPMBuilder<Address<? extends Supplier>, Address<? extends Receiver>> builder = new EPMBuilder<Address<? extends Supplier>, Address<? extends Receiver>>(
+        EPMBuilder<Address<? extends Receiver>> builder = new EPMBuilder<Address<? extends Receiver>>(
                 buildable, context);
         engine.setBuilder(builder);
         return engine;

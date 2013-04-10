@@ -24,23 +24,19 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * 
  * @author Gabor Bergmann
  * 
- * @param <HandleType>
- *            the buildable-specific representation of RETE node handle this stub type will augment
  */
-public class Stub<HandleType> {
-    private HandleType handle;
+public class Stub {
     private Tuple variablesTuple;
     private Map<Object, Integer> variablesIndex;
     private Set<PConstraint> constraints;
-    private Stub<HandleType> primaryParentStub;
-    private Stub<HandleType> secondaryParentStub;
+    private Stub primaryParentStub;
+    private Stub secondaryParentStub;
 	private final Set<PVariable> variablesSet;
 
-    private Stub(Map<Object, Integer> variablesIndex, Tuple variablesTuple, HandleType handle) {
+    private Stub(Map<Object, Integer> variablesIndex, Tuple variablesTuple) {
         super();
         this.variablesIndex = variablesIndex;
         this.variablesTuple = variablesTuple;
-        this.handle = handle;
         this.constraints = CollectionsFactory.getSet();//new HashSet<PConstraint>();
 		variablesSet = new HashSet<PVariable>();
 		for (Object pVar : variablesIndex.keySet()) {
@@ -48,28 +44,27 @@ public class Stub<HandleType> {
 		}
     }
 
-    public Stub(Tuple variablesTuple, HandleType handle) {
-        this(variablesTuple.invertIndex(), variablesTuple, handle);
+    public Stub(Tuple variablesTuple, Object handle) {
+        this(variablesTuple.invertIndex(), variablesTuple);
     }
 
     // public Stub(Stub<HandleType> template) {
     // this(template.variablesIndex, template.variablesTuple, template.getHandle());
     // }
-    public Stub(Stub<HandleType> primaryParent, HandleType handle) {
-        this(primaryParent.variablesIndex, primaryParent.variablesTuple, handle);
+    public Stub(Stub primaryParent, Object handle) {
+        this(primaryParent.variablesIndex, primaryParent.variablesTuple);
         this.primaryParentStub = primaryParent;
         constraints.addAll(primaryParent.getAllEnforcedConstraints());
     }
 
-    public Stub(Stub<HandleType> primaryParent, Tuple variablesTuple, HandleType handle) {
-        this(variablesTuple.invertIndex(), variablesTuple, handle);
+    public Stub(Stub primaryParent, Tuple variablesTuple, Object handle) {
+        this(variablesTuple.invertIndex(), variablesTuple);
         this.primaryParentStub = primaryParent;
         constraints.addAll(primaryParent.getAllEnforcedConstraints());
     }
 
-    public Stub(Stub<HandleType> primaryParent, Stub<HandleType> secondaryParent, Tuple variablesTuple,
-            HandleType handle) {
-        this(variablesTuple.invertIndex(), variablesTuple, handle);
+    public Stub(Stub primaryParent, Stub secondaryParent, Tuple variablesTuple, Object handle) {
+        this(variablesTuple.invertIndex(), variablesTuple);
         this.primaryParentStub = primaryParent;
         this.secondaryParentStub = secondaryParent;
         constraints.addAll(primaryParent.getAllEnforcedConstraints());
@@ -78,7 +73,7 @@ public class Stub<HandleType> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Stub(" + getVariablesTuple() + "@" + getHandle() + "|");
+        StringBuilder sb = new StringBuilder("Stub(" + getVariablesTuple() + "@" + "|");
         for (PConstraint constraint : constraints)
             sb.append(constraint.toString() + "&");
         sb.append(")");
@@ -90,13 +85,6 @@ public class Stub<HandleType> {
      */
     public Tuple getVariablesTuple() {
         return variablesTuple;
-    }
-
-    /**
-     * @return the handle of a RETE supplier node that hosts a certain relation (set of tuples)
-     */
-    public HandleType getHandle() {
-        return handle;
     }
 
     /**
@@ -142,14 +130,14 @@ public class Stub<HandleType> {
     /**
      * @return the primaryParentStub
      */
-    public Stub<HandleType> getPrimaryParentStub() {
+    public Stub getPrimaryParentStub() {
         return primaryParentStub;
     }
 
     /**
      * @return the secondaryParentStub
      */
-    public Stub<HandleType> getSecondaryParentStub() {
+    public Stub getSecondaryParentStub() {
         return secondaryParentStub;
     }
 

@@ -26,15 +26,15 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
  * @author Gabor Bergmann
  * 
  */
-class JoinCandidate<StubHandle> {
-    Stub<StubHandle> primary;
-    Stub<StubHandle> secondary;
+class JoinCandidate {
+    Stub primary;
+    Stub secondary;
 
     Set<PVariable> varPrimary;
     Set<PVariable> varSecondary;
     Set<PVariable> varCommon;
 
-    JoinCandidate(Stub<StubHandle> primary, Stub<StubHandle> secondary) {
+    JoinCandidate(Stub primary, Stub secondary) {
         super();
         this.primary = primary;
         this.secondary = secondary;
@@ -48,14 +48,14 @@ class JoinCandidate<StubHandle> {
     /**
      * @return the a
      */
-    public Stub<StubHandle> getPrimary() {
+    public Stub getPrimary() {
         return primary;
     }
 
     /**
      * @return the b
      */
-    public Stub<StubHandle> getSecondary() {
+    public Stub getSecondary() {
         return secondary;
     }
 

@@ -27,7 +27,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
  * @author Gabor Bergmann
  * 
  */
-public class Equality<PatternDescription, StubHandle> extends DeferredPConstraint<PatternDescription, StubHandle> {
+public class Equality<PatternDescription> extends DeferredPConstraint<PatternDescription> {
 
     private PVariable who;
     private PVariable withWhom;
@@ -36,7 +36,7 @@ public class Equality<PatternDescription, StubHandle> extends DeferredPConstrain
      * @param buildable
      * @param affectedVariables
      */
-    public Equality(PSystem<PatternDescription, StubHandle, ?> pSystem, PVariable who, PVariable withWhom) {
+    public Equality(PSystem<PatternDescription> pSystem, PVariable who, PVariable withWhom) {
         super(pSystem, buildSet(who, withWhom));
         this.who = who;
         this.withWhom = withWhom;
@@ -97,7 +97,7 @@ public class Equality<PatternDescription, StubHandle> extends DeferredPConstrain
     }
 
     @Override
-    public boolean isReadyAt(Stub<StubHandle> stub) {
+    public boolean isReadyAt(Stub stub) {
         return isMoot() || stub.getVariablesIndex().containsKey(who) && stub.getVariablesIndex().containsKey(withWhom);
         // will be replaced by || if copierNode is available;
         // until then, LayoutHelper.unifyVariablesAlongEqualities(PSystem<PatternDescription, StubHandle, Collector>) is
@@ -105,7 +105,7 @@ public class Equality<PatternDescription, StubHandle> extends DeferredPConstrain
     }
 
     @Override
-    protected Stub<StubHandle> doCheckOn(Stub<StubHandle> stub) throws RetePatternBuildException {
+    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
         if (isMoot())
             return stub;
 
@@ -114,8 +114,9 @@ public class Equality<PatternDescription, StubHandle> extends DeferredPConstrain
         if (index1 != null && index2 != null) {
             if (index1.equals(index2))
                 return stub;
-            else
-                return buildable.buildEqualityChecker(stub, new int[] { index1, index2 });
+            else {
+                // return buildable.buildEqualityChecker(stub, new int[] { index1, index2 });
+            }
         } else if (index1 == null) {
             // TODO build copierNode here
         }
@@ -123,7 +124,7 @@ public class Equality<PatternDescription, StubHandle> extends DeferredPConstrain
     }
 
     @Override
-    public void raiseForeverDeferredError(Stub<StubHandle> stub) throws RetePatternBuildException {
+    public void raiseForeverDeferredError(Stub stub) throws RetePatternBuildException {
         String[] args = { who.toString(), withWhom.toString() };
         String msg = "Cannot express equality of variables {1} and {2} if neither of them is deducable.";
         String shortMsg = "Equality between undeducible variables.";

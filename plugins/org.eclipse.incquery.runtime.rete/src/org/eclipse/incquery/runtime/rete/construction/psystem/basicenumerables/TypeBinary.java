@@ -28,8 +28,9 @@ import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
  * @author Gabor Bergmann
  * 
  */
-public class TypeBinary<PatternDescription, StubHandle> extends
-        KeyedEnumerablePConstraint<Object, PatternDescription, StubHandle> implements ITypeInfoProviderConstraint {
+public class TypeBinary<PatternDescription> extends
+ KeyedEnumerablePConstraint<Object, PatternDescription>
+        implements ITypeInfoProviderConstraint {
     private final IPatternMatcherContext<PatternDescription> context;
     private PVariable source; private PVariable target;
 
@@ -38,7 +39,7 @@ public class TypeBinary<PatternDescription, StubHandle> extends
      * @param variablesTuple
      * @param typeKey
      */
-    public TypeBinary(PSystem<PatternDescription, StubHandle, ?> pSystem,
+    public TypeBinary(PSystem<PatternDescription> pSystem,
             IPatternMatcherContext<PatternDescription> context, PVariable source, PVariable target, Object typeKey) {
         super(pSystem, new FlatTuple(source, target), typeKey);
         this.source = source;
@@ -47,8 +48,9 @@ public class TypeBinary<PatternDescription, StubHandle> extends
     }
 
     @Override
-    public Stub<StubHandle> doCreateStub() {
-        return buildable.binaryEdgeTypeStub(variablesTuple, supplierKey);
+    public Stub doCreateStub() {
+        // return buildable.binaryEdgeTypeStub(variablesTuple, supplierKey);
+        return null;
     }
 
     @Override

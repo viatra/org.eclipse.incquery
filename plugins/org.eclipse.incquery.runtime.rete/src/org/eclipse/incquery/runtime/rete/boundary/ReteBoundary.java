@@ -91,7 +91,7 @@ public class ReteBoundary<PatternDescription> {
      * Stubs of parent nodes that have the key node as their child. For RETE --> Stub traceability, mainly at production
      * nodes.
      */
-    protected Map<Address<? extends Receiver>, Set<Stub<Address<? extends Supplier>>>> parentStubsOfReceiver;
+    protected Map<Address<? extends Receiver>, Set<Stub>> parentStubsOfReceiver;
 
     /**
      * Prerequisite: engine has its network and framework fields initialized
@@ -632,8 +632,8 @@ public class ReteBoundary<PatternDescription> {
     }
 
     public void registerParentStubForReceiver(Address<? extends Receiver> receiver,
-            Stub<Address<? extends Supplier>> parentStub) {
-        Set<Stub<Address<? extends Supplier>>> parents = parentStubsOfReceiver.get(receiver);
+ Stub parentStub) {
+        Set<Stub> parents = parentStubsOfReceiver.get(receiver);
         if (parents == null) {
             parents = CollectionsFactory.getSet();//new HashSet<Stub<Address<? extends Supplier>>>();
             parentStubsOfReceiver.put(receiver, parents);
@@ -641,8 +641,8 @@ public class ReteBoundary<PatternDescription> {
         parents.add(parentStub);
     }
 
-    public Set<Stub<Address<? extends Supplier>>> getParentStubsOfReceiver(Address<? extends Receiver> receiver) {
-        Set<Stub<Address<? extends Supplier>>> parents = parentStubsOfReceiver.get(receiver);
+    public Set<Stub> getParentStubsOfReceiver(Address<? extends Receiver> receiver) {
+        Set<Stub> parents = parentStubsOfReceiver.get(receiver);
         if (parents == null)
             parents = Collections.emptySet();
         return parents;

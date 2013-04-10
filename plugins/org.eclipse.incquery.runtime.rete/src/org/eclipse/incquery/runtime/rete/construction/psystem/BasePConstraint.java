@@ -16,25 +16,22 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.Buildable;
 import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
 
 /**
  * @author Gabor Bergmann
  * 
  */
-public abstract class BasePConstraint<PatternDescription, StubHandle> implements PConstraint {
-    protected PSystem<PatternDescription, StubHandle, ?> pSystem;
-    protected Buildable<PatternDescription, StubHandle, ?> buildable;
+public abstract class BasePConstraint<PatternDescription> implements PConstraint {
+    protected PSystem<PatternDescription> pSystem;
     private final Set<PVariable> affectedVariables;
 
     /**
      * @param affectedVariables
      */
-    public BasePConstraint(PSystem<PatternDescription, StubHandle, ?> pSystem, Set<PVariable> affectedVariables) {
+    public BasePConstraint(PSystem<PatternDescription> pSystem, Set<PVariable> affectedVariables) {
         super();
         this.pSystem = pSystem;
-        this.buildable = pSystem.getBuildable();
         this.affectedVariables = CollectionsFactory.getSet(affectedVariables);//new HashSet<PVariable>(affectedVariables);
 
         for (PVariable pVariable : affectedVariables) {

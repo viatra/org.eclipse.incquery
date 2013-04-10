@@ -51,12 +51,12 @@ public class Options {
     public enum BuilderMethod {
         LEGACY, // ONLY with GTASM
         PSYSTEM_BASIC_LINEAR, PSYSTEM_QUASITREE;
-        public <PatternDescription, StubHandle, Collector> IReteLayoutStrategy<PatternDescription, StubHandle, Collector> layoutStrategy() {
+        public <PatternDescription, Collector> IReteLayoutStrategy<PatternDescription> layoutStrategy() {
             switch (this) {
             case PSYSTEM_BASIC_LINEAR:
-                return new BasicLinearLayout<PatternDescription, StubHandle, Collector>();
+                return new BasicLinearLayout<PatternDescription>();
             case PSYSTEM_QUASITREE:
-                return new QuasiTreeLayout<PatternDescription, StubHandle, Collector>();
+                return new QuasiTreeLayout<PatternDescription, Collector>();
             default:
                 return null;
             }

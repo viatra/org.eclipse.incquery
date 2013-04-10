@@ -41,7 +41,7 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * 
  */
 public class ReteContainerBuildable<PatternDescription> implements
-        Buildable<PatternDescription, Address<? extends Supplier>, Address<? extends Receiver>> {
+        Buildable<PatternDescription, Address<? extends Receiver>> {
 
     protected Library library;
     protected ReteContainer targetContainer;
@@ -87,104 +87,116 @@ public class ReteContainerBuildable<PatternDescription> implements
         this.library = targetContainer.getLibrary();
     }
 
-    public Stub<Address<? extends Supplier>> buildTrimmer(Stub<Address<? extends Supplier>> stub, TupleMask trimMask) {
-        Address<TrimmerNode> bodyTerminator = library.accessTrimmerNode(stub.getHandle(), trimMask);
-        return new Stub<Address<? extends Supplier>>(stub, trimMask.transform(stub.getVariablesTuple()), bodyTerminator);
+    public Stub buildTrimmer(Stub stub, TupleMask trimMask) {
+        // Address<TrimmerNode> bodyTerminator = library.accessTrimmerNode(stub.getHandle(), trimMask);
+        Address<TrimmerNode> bodyTerminator = library.accessTrimmerNode(null, trimMask);
+        return new Stub(stub, trimMask.transform(stub.getVariablesTuple()), bodyTerminator);
     }
 
-    public void buildConnection(Stub<Address<? extends Supplier>> stub, Address<? extends Receiver> collector) {
-        reteNet.connectRemoteNodes(stub.getHandle(), collector, true);
+    public void buildConnection(Stub stub, Address<? extends Receiver> collector) {
+        // reteNet.connectRemoteNodes(stub.getHandle(), collector, true);
+        reteNet.connectRemoteNodes(null, collector, true);
         boundary.registerParentStubForReceiver(collector, stub);
     }
 
-    public Stub<Address<? extends Supplier>> buildStartStub(Object[] constantValues, Object[] constantNames) {
-        return new Stub<Address<? extends Supplier>>(new FlatTuple(constantNames), library.accessConstantNode(boundary
+    public Stub buildStartStub(Object[] constantValues, Object[] constantNames) {
+        return new Stub(new FlatTuple(constantNames), library.accessConstantNode(boundary
                 .wrapTuple(new FlatTuple(constantValues))));
     }
 
-    public Stub<Address<? extends Supplier>> buildEqualityChecker(Stub<Address<? extends Supplier>> stub, int[] indices) {
-        Address<EqualityFilterNode> checker = library.accessEqualityFilterNode(stub.getHandle(), indices);
-        return new Stub<Address<? extends Supplier>>(stub, checker);
+    public Stub buildEqualityChecker(Stub stub, int[] indices) {
+        // Address<EqualityFilterNode> checker = library.accessEqualityFilterNode(stub.getHandle(), indices);
+        Address<EqualityFilterNode> checker = library.accessEqualityFilterNode(null, indices);
+        return new Stub(stub, checker);
     }
 
-    public Stub<Address<? extends Supplier>> buildInjectivityChecker(Stub<Address<? extends Supplier>> stub,
+    public Stub buildInjectivityChecker(Stub stub,
             int subject, int[] inequalIndices) {
-        Address<InequalityFilterNode> checker = library.accessInequalityFilterNode(stub.getHandle(), subject,
+        // Address<InequalityFilterNode> checker = library.accessInequalityFilterNode(stub.getHandle(), subject,
+        Address<InequalityFilterNode> checker = library.accessInequalityFilterNode(null, subject,
                 new TupleMask(inequalIndices, stub.getVariablesTuple().getSize()));
-        return new Stub<Address<? extends Supplier>>(stub, checker);
+        return new Stub(stub, checker);
     }
 
     @Override
-    public Stub<Address<? extends Supplier>> buildTransitiveClosure(Stub<Address<? extends Supplier>> stub) {
-        Address<TransitiveClosureNode> checker = library.accessTransitiveClosureNode(stub.getHandle());
-        return new Stub<Address<? extends Supplier>>(stub, checker);
+    public Stub buildTransitiveClosure(Stub stub) {
+        // Address<TransitiveClosureNode> checker = library.accessTransitiveClosureNode(stub.getHandle());
+        Address<TransitiveClosureNode> checker = library.accessTransitiveClosureNode(null);
+        return new Stub(stub, checker);
     }
 
-    public Stub<Address<? extends Supplier>> patternCallStub(Tuple nodes, PatternDescription supplierKey)
+    public Stub patternCallStub(Tuple nodes, PatternDescription supplierKey)
             throws RetePatternBuildException {
-        return new Stub<Address<? extends Supplier>>(nodes, boundary.accessProduction(supplierKey));
+        return new Stub(nodes, boundary.accessProduction(supplierKey));
     }
 
-    public Stub<Address<? extends Supplier>> instantiationTransitiveStub(Tuple nodes) {
-        return new Stub<Address<? extends Supplier>>(nodes, boundary.accessInstantiationTransitiveRoot());
+    public Stub instantiationTransitiveStub(Tuple nodes) {
+        return new Stub(nodes, boundary.accessInstantiationTransitiveRoot());
     }
 
-    public Stub<Address<? extends Supplier>> instantiationDirectStub(Tuple nodes) {
-        return new Stub<Address<? extends Supplier>>(nodes, boundary.accessInstantiationRoot());
+    public Stub instantiationDirectStub(Tuple nodes) {
+        return new Stub(nodes, boundary.accessInstantiationRoot());
     }
 
-    public Stub<Address<? extends Supplier>> generalizationTransitiveStub(Tuple nodes) {
-        return new Stub<Address<? extends Supplier>>(nodes, boundary.accessGeneralizationTransitiveRoot());
+    public Stub generalizationTransitiveStub(Tuple nodes) {
+        return new Stub(nodes, boundary.accessGeneralizationTransitiveRoot());
     }
 
-    public Stub<Address<? extends Supplier>> generalizationDirectStub(Tuple nodes) {
-        return new Stub<Address<? extends Supplier>>(nodes, boundary.accessGeneralizationRoot());
+    public Stub generalizationDirectStub(Tuple nodes) {
+        return new Stub(nodes, boundary.accessGeneralizationRoot());
     }
 
-    public Stub<Address<? extends Supplier>> containmentTransitiveStub(Tuple nodes) {
-        return new Stub<Address<? extends Supplier>>(nodes, boundary.accessContainmentTransitiveRoot());
+    public Stub containmentTransitiveStub(Tuple nodes) {
+        return new Stub(nodes, boundary.accessContainmentTransitiveRoot());
     }
 
-    public Stub<Address<? extends Supplier>> containmentDirectStub(Tuple nodes) {
-        return new Stub<Address<? extends Supplier>>(nodes, boundary.accessContainmentRoot());
+    public Stub containmentDirectStub(Tuple nodes) {
+        return new Stub(nodes, boundary.accessContainmentRoot());
     }
 
-    public Stub<Address<? extends Supplier>> binaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
-        return new Stub<Address<? extends Supplier>>(nodes, boundary.accessBinaryEdgeRoot(supplierKey));
+    public Stub binaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
+        return new Stub(nodes, boundary.accessBinaryEdgeRoot(supplierKey));
     }
 
-    public Stub<Address<? extends Supplier>> ternaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
-        return new Stub<Address<? extends Supplier>>(nodes, boundary.accessTernaryEdgeRoot(supplierKey));
+    public Stub ternaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
+        return new Stub(nodes, boundary.accessTernaryEdgeRoot(supplierKey));
     }
 
-    public Stub<Address<? extends Supplier>> unaryTypeStub(Tuple nodes, Object supplierKey) {
-        return new Stub<Address<? extends Supplier>>(nodes, boundary.accessUnaryRoot(supplierKey));
+    public Stub unaryTypeStub(Tuple nodes, Object supplierKey) {
+        return new Stub(nodes, boundary.accessUnaryRoot(supplierKey));
     }
 
-    public Stub<Address<? extends Supplier>> buildBetaNode(Stub<Address<? extends Supplier>> primaryStub,
-            Stub<Address<? extends Supplier>> sideStub, TupleMask primaryMask, TupleMask sideMask,
+    public Stub buildBetaNode(Stub primaryStub, Stub sideStub, TupleMask primaryMask, TupleMask sideMask,
             TupleMask complementer, boolean negative) {
-        Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(primaryStub.getHandle(),
+        // Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(primaryStub.getHandle(),
+        Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(
+                (Address<? extends Supplier>) null,
                 primaryMask);
-        Address<? extends Indexer> sideSlot = library.accessProjectionIndexer(sideStub.getHandle(), sideMask);
+        // Address<? extends Indexer> sideSlot = library.accessProjectionIndexer(sideStub.getHandle(), sideMask);
+        Address<? extends Indexer> sideSlot = library.accessProjectionIndexer((Address<? extends Supplier>) null,
+                sideMask);
 
         if (negative) {
             Address<? extends DualInputNode> checker = library.accessExistenceNode(primarySlot, sideSlot, true);
-            return new Stub<Address<? extends Supplier>>(primaryStub, checker);
+            return new Stub(primaryStub, checker);
         } else {
             Address<? extends DualInputNode> checker = library.accessJoinNode(primarySlot, sideSlot, complementer);
             Tuple newCalibrationPattern = complementer.combine(primaryStub.getVariablesTuple(),
                     sideStub.getVariablesTuple(), Options.enableInheritance, true);
-            return new Stub<Address<? extends Supplier>>(primaryStub, sideStub, newCalibrationPattern, checker);
+            return new Stub(primaryStub, sideStub, newCalibrationPattern, checker);
         }
     }
 
-    public Stub<Address<? extends Supplier>> buildCounterBetaNode(Stub<Address<? extends Supplier>> primaryStub,
-            Stub<Address<? extends Supplier>> sideStub, TupleMask primaryMask, TupleMask originalSideMask,
+    public Stub buildCounterBetaNode(Stub primaryStub, Stub sideStub, TupleMask primaryMask,
+            TupleMask originalSideMask,
             TupleMask complementer, Object aggregateResultCalibrationElement) {
-        Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(primaryStub.getHandle(),
+        // Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(primaryStub.getHandle(),
+        Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(
+                (Address<? extends Supplier>) null,
                 primaryMask);
-        Address<? extends Indexer> sideSlot = library.accessCountOuterIndexer(sideStub.getHandle(), originalSideMask);
+        // Address<? extends Indexer> sideSlot = library.accessCountOuterIndexer(sideStub.getHandle(),
+        // originalSideMask);
+        Address<? extends Indexer> sideSlot = library.accessCountOuterIndexer(null, originalSideMask);
 
         Address<? extends DualInputNode> checker = library.accessJoinNode(primarySlot, sideSlot,
                 TupleMask.selectSingle(originalSideMask.indices.length, originalSideMask.indices.length + 1));
@@ -192,18 +204,20 @@ public class ReteContainerBuildable<PatternDescription> implements
         Object[] newCalibrationElement = { aggregateResultCalibrationElement };
         Tuple newCalibrationPattern = new LeftInheritanceTuple(primaryStub.getVariablesTuple(), newCalibrationElement);
 
-        Stub<Address<? extends Supplier>> result = new Stub<Address<? extends Supplier>>(primaryStub,
+        Stub result = new Stub(primaryStub,
                 newCalibrationPattern, checker);
 
         return result;
     }
 
-    public Stub<Address<? extends Supplier>> buildCountCheckBetaNode(Stub<Address<? extends Supplier>> primaryStub,
-            Stub<Address<? extends Supplier>> sideStub, TupleMask primaryMask, TupleMask originalSideMask,
+    public Stub buildCountCheckBetaNode(Stub primaryStub, Stub sideStub, TupleMask primaryMask,
+            TupleMask originalSideMask,
             int resultPositionInSignature) {
-        Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(primaryStub.getHandle(),
+        Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(
+                (Address<? extends Supplier>) null,
                 primaryMask);
-        Address<? extends Indexer> sideSlot = library.accessCountOuterIdentityIndexer(sideStub.getHandle(),
+        // Address<? extends Indexer> sideSlot = library.accessCountOuterIdentityIndexer(sideStub.getHandle(),
+        Address<? extends Indexer> sideSlot = library.accessCountOuterIdentityIndexer(null,
                 originalSideMask, resultPositionInSignature);
 
         Address<? extends DualInputNode> checker = library.accessJoinNode(primarySlot, sideSlot,
@@ -211,21 +225,21 @@ public class ReteContainerBuildable<PatternDescription> implements
 
         Tuple newCalibrationPattern = primaryStub.getVariablesTuple();
 
-        Stub<Address<? extends Supplier>> result = new Stub<Address<? extends Supplier>>(primaryStub,
+        Stub result = new Stub(primaryStub,
                 newCalibrationPattern, checker);
 
         return result;
     }
 
-    public Stub<Address<? extends Supplier>> buildPredicateChecker(AbstractEvaluator evaluator, Integer rhsIndex,
-            int[] affectedIndices, Stub<Address<? extends Supplier>> stub) {
+    public Stub buildPredicateChecker(AbstractEvaluator evaluator, Integer rhsIndex, int[] affectedIndices, Stub stub) {
         PredicateEvaluatorNode ten = new PredicateEvaluatorNode(engine, targetContainer, rhsIndex, affectedIndices,
                 stub.getVariablesTuple().getSize(), evaluator);
         Address<PredicateEvaluatorNode> checker = Address.of(ten);
 
-        reteNet.connectRemoteNodes(stub.getHandle(), checker, true);
+        // reteNet.connectRemoteNodes(stub.getHandle(), checker, true);
+        reteNet.connectRemoteNodes(null, checker, true);
 
-        Stub<Address<? extends Supplier>> result = new Stub<Address<? extends Supplier>>(stub, checker);
+        Stub result = new Stub(stub, checker);
 
         return result;
     }
@@ -237,7 +251,7 @@ public class ReteContainerBuildable<PatternDescription> implements
         return new ReteContainerBuildable<PatternDescription>(engine, reteNet.getNextContainer());
     }
 
-    public Stub<Address<? extends Supplier>> buildScopeConstrainer(Stub<Address<? extends Supplier>> stub,
+    public Stub buildScopeConstrainer(Stub stub,
             boolean transitive, Object unwrappedContainer, int constrainedIndex) {
         Address<? extends Supplier> root = (transitive) ? boundary.accessContainmentTransitiveRoot() : boundary
                 .accessContainmentRoot();
@@ -252,9 +266,10 @@ public class ReteContainerBuildable<PatternDescription> implements
         int[] primaryIndices = { constrainedIndex };
         TupleMask primaryMask = new TupleMask(primaryIndices, stub.getVariablesTuple().getSize());
         Address<? extends IterableIndexer> primary = targetContainer.getLibrary().accessProjectionIndexer(
-                stub.getHandle(), primaryMask);
+                (Address<? extends Supplier>) null, primaryMask);
+        // stub.getHandle(), primaryMask);
         // build checker
-        stub = new Stub<Address<? extends Supplier>>(stub, targetContainer.getLibrary().accessExistenceNode(primary,
+        stub = new Stub(stub, targetContainer.getLibrary().accessExistenceNode(primary,
                 secondary, false));
         return stub;
     }

@@ -27,21 +27,21 @@ import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
  * @author Gabor Bergmann
  * 
  */
-public class ConstantValue<PatternDescription, StubHandle> extends
-        KeyedEnumerablePConstraint<Object, PatternDescription, StubHandle> {
+public class ConstantValue<PatternDescription> extends KeyedEnumerablePConstraint<Object, PatternDescription> {
 
     /**
      * @param buildable
      * @param variablesTuple
      * @param supplierKey
      */
-    public ConstantValue(PSystem<PatternDescription, StubHandle, ?> pSystem, PVariable variable, Object value) {
+    public ConstantValue(PSystem<PatternDescription> pSystem, PVariable variable, Object value) {
         super(pSystem, new FlatTuple(variable), value);
     }
 
     @Override
-    public Stub<StubHandle> doCreateStub() throws RetePatternBuildException {
-        return buildable.buildStartStub(new Object[] { supplierKey }, this.variablesTuple.getElements());
+    public Stub doCreateStub() throws RetePatternBuildException {
+        // return buildable.buildStartStub(new Object[] { supplierKey }, this.variablesTuple.getElements());
+        return null;
     }
 
     @Override

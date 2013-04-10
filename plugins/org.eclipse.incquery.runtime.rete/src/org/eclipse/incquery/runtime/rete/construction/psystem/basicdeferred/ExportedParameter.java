@@ -24,8 +24,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.VariableDeferredPC
  * @author Gabor Bergmann
  * 
  */
-public class ExportedParameter<PatternDescription, StubHandle> extends
-        VariableDeferredPConstraint<PatternDescription, StubHandle> {
+public class ExportedParameter<PatternDescription> extends VariableDeferredPConstraint<PatternDescription> {
     PVariable parameterVariable;
     Object parameterName;
 
@@ -33,7 +32,7 @@ public class ExportedParameter<PatternDescription, StubHandle> extends
      * @param buildable
      * @param parameterVariable
      */
-    public ExportedParameter(PSystem<PatternDescription, StubHandle, ?> pSystem, PVariable parameterVariable,
+    public ExportedParameter(PSystem<PatternDescription> pSystem, PVariable parameterVariable,
             String parameterName) {
         super(pSystem, Collections.singleton(parameterVariable));
         this.parameterVariable = parameterVariable;
@@ -78,7 +77,7 @@ public class ExportedParameter<PatternDescription, StubHandle> extends
     }
 
     @Override
-    protected Stub<StubHandle> doCheckOn(Stub<StubHandle> stub) throws RetePatternBuildException {
+    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
         return stub;
     }
 
@@ -97,7 +96,7 @@ public class ExportedParameter<PatternDescription, StubHandle> extends
     }
 
     @Override
-    public void raiseForeverDeferredError(Stub<StubHandle> stub) throws RetePatternBuildException {
+    public void raiseForeverDeferredError(Stub stub) throws RetePatternBuildException {
         String[] args = { parameterName.toString() };
         String msg = "Pattern Graph Search terminated incompletely: "
                 + "exported pattern variable {1} could not be determined based on the pattern constraints. "

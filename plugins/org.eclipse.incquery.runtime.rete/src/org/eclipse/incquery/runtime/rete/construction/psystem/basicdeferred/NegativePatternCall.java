@@ -25,14 +25,13 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * @author Gabor Bergmann
  * 
  */
-public class NegativePatternCall<PatternDescription, StubHandle> extends
-        PatternCallBasedDeferred<PatternDescription, StubHandle> {
+public class NegativePatternCall<PatternDescription> extends PatternCallBasedDeferred<PatternDescription> {
 
     /**
      * @param buildable
      * @param affectedVariables
      */
-    public NegativePatternCall(PSystem<PatternDescription, StubHandle, ?> pSystem, Tuple actualParametersTuple,
+    public NegativePatternCall(PSystem<PatternDescription> pSystem, Tuple actualParametersTuple,
             PatternDescription pattern) {
         super(pSystem, actualParametersTuple, pattern);
     }
@@ -51,11 +50,12 @@ public class NegativePatternCall<PatternDescription, StubHandle> extends
     }
 
     @Override
-    protected Stub<StubHandle> doCheckOn(Stub<StubHandle> stub) throws RetePatternBuildException {
-        Stub<StubHandle> sideStub = getSideStub();
-        BuildHelper.JoinHelper<StubHandle> joinHelper = getJoinHelper(stub, sideStub);
-        return buildable.buildBetaNode(stub, sideStub, joinHelper.getPrimaryMask(), joinHelper.getSecondaryMask(),
-                joinHelper.getComplementerMask(), true);
+    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
+        Stub sideStub = getSideStub();
+        BuildHelper.JoinHelper joinHelper = getJoinHelper(stub, sideStub);
+        // return buildable.buildBetaNode(stub, sideStub, joinHelper.getPrimaryMask(), joinHelper.getSecondaryMask(),
+        // joinHelper.getComplementerMask(), true);
+        return null;
     }
 
     @Override

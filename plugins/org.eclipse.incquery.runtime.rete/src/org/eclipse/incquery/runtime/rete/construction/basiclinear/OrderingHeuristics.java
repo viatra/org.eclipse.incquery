@@ -27,13 +27,13 @@ import org.eclipse.incquery.runtime.rete.util.OrderingCompareAgent;
  * @author Gabor Bergmann
  * 
  */
-public class OrderingHeuristics<PatternDescription, StubHandle, Collector> implements Comparator<PConstraint> {
-    private Stub<StubHandle> stub;
+public class OrderingHeuristics<PatternDescription> implements Comparator<PConstraint> {
+    private Stub stub;
 
     /**
      * @param stub
      */
-    public OrderingHeuristics(Stub<StubHandle> stub) {
+    public OrderingHeuristics(Stub stub) {
         super();
         this.stub = stub;
     }
@@ -65,12 +65,12 @@ public class OrderingHeuristics<PatternDescription, StubHandle, Collector> imple
     }
 
     boolean isConstant(PConstraint o) {
-        return (o instanceof ConstantValue<?, ?>);
+        return (o instanceof ConstantValue<?>);
     }
 
     boolean isReady(PConstraint o) {
-        return (o instanceof EnumerablePConstraint<?, ?>)
-                || (o instanceof DeferredPConstraint<?, ?> && ((DeferredPConstraint<PatternDescription, StubHandle>) o)
+        return (o instanceof EnumerablePConstraint<?>)
+                || (o instanceof DeferredPConstraint<?> && ((DeferredPConstraint<PatternDescription>) o)
                         .isReadyAt(stub));
     }
 

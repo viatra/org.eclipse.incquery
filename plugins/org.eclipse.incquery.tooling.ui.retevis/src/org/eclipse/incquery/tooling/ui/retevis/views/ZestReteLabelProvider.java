@@ -193,29 +193,29 @@ public class ZestReteLabelProvider extends LabelProvider implements IEntityStyle
         return sb.toString();
     }
 
-    private Collection<Stub<Address<?>>> getStubsForNode(Node n) {
-        Collection<Stub<Address<?>>> r = reverseMap.get(n);
+    private Collection<Stub> getStubsForNode(Node n) {
+        Collection<Stub> r = reverseMap.get(n);
         if (r != null)
             return r;
         else
             return Collections.emptySet();
     }
 
-    private Map<Node, Collection<Stub<Address<?>>>> reverseMap;// = new HashMap<Node, Collection<Stub<Address<?>>>>();
+    private Map<Node, Collection<Stub>> reverseMap;// = new HashMap<Node, Collection<Stub<Address<?>>>>();
 
     private void resetReverseMap() {
-        reverseMap = new HashMap<Node, Collection<Stub<Address<?>>>>();
+        reverseMap = new HashMap<Node, Collection<Stub>>();
     }
 
     private void initalizeReverseMap(Production prod) {
         for (Object _stubOfProd : rb.getParentStubsOfReceiver(new Address<Node>(prod))) {
             Stub stubOfProd = (Stub) _stubOfProd;
-            for (Stub<Address<?>> s : getAllParentStubs(stubOfProd)) {
-                Address<Node> address = (Address<Node>) s.getHandle();
+            for (Stub s : getAllParentStubs(stubOfProd)) {
+                Address<Node> address = (Address<Node>) null;// s.getHandle();
                 Node n = rb.getHeadContainer().resolveLocal(address);
-                Collection<Stub<Address<?>>> t = reverseMap.get(n);
+                Collection<Stub> t = reverseMap.get(n);
                 if (t == null) {
-                    t = new HashSet<Stub<Address<?>>>();
+                    t = new HashSet<Stub>();
                 }
                 t.add(s);
                 reverseMap.put(n, t);
@@ -223,9 +223,9 @@ public class ZestReteLabelProvider extends LabelProvider implements IEntityStyle
         }
     }
 
-    private static Collection<Stub<Address<?>>> getAllParentStubs(Stub<Address<?>> st) {
+    private static Collection<Stub> getAllParentStubs(Stub st) {
         if (st != null) {
-            List<Stub<Address<?>>> v = new ArrayList<Stub<Address<?>>>();
+            List<Stub> v = new ArrayList<Stub>();
             v.add(st);
             v.addAll(getAllParentStubs(st.getPrimaryParentStub()));
             v.addAll(getAllParentStubs(st.getSecondaryParentStub()));

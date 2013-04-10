@@ -18,18 +18,15 @@ import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
 import org.eclipse.incquery.runtime.rete.construction.Stub;
-import org.eclipse.incquery.runtime.rete.construction.helpers.BuildHelper;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
-import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
 
 /**
  * @author Gabor Bergmann
  * 
  */
-public class PatternMatchCounter<PatternDescription, StubHandle> extends
-        PatternCallBasedDeferred<PatternDescription, StubHandle> {
+public class PatternMatchCounter<PatternDescription> extends PatternCallBasedDeferred<PatternDescription> {
 
     private PVariable resultVariable;
 
@@ -37,7 +34,7 @@ public class PatternMatchCounter<PatternDescription, StubHandle> extends
      * @param buildable
      * @param affectedVariables
      */
-    public PatternMatchCounter(PSystem<PatternDescription, StubHandle, ?> pSystem, Tuple actualParametersTuple,
+    public PatternMatchCounter(PSystem<PatternDescription> pSystem, Tuple actualParametersTuple,
             PatternDescription pattern, PVariable resultVariable) {
         super(pSystem, actualParametersTuple, pattern, Collections.singleton(resultVariable));
         this.resultVariable = resultVariable;
@@ -70,23 +67,24 @@ public class PatternMatchCounter<PatternDescription, StubHandle> extends
     }
 
     @Override
-    protected Stub<StubHandle> doCheckOn(Stub<StubHandle> stub) throws RetePatternBuildException {
-        Stub<StubHandle> sideStub = getSideStub();
-        BuildHelper.JoinHelper<StubHandle> joinHelper = getJoinHelper(stub, sideStub);
-        Integer resultPositionLeft = stub.getVariablesIndex().get(resultVariable);
-        TupleMask primaryMask = joinHelper.getPrimaryMask();
-        TupleMask secondaryMask = joinHelper.getSecondaryMask();
-        final Stub<StubHandle> counterBetaStub = buildable.buildCounterBetaNode(stub, sideStub, primaryMask, secondaryMask,
-        		joinHelper.getComplementerMask(), resultVariable);
-        if (resultPositionLeft == null) {
-			return counterBetaStub;
-        } else {
-            int resultPositionFinal = counterBetaStub.getVariablesTuple().getSize() - 1; // appended to the last position
-            final Stub<StubHandle> equalityCheckerStub = 
-            		buildable.buildEqualityChecker(counterBetaStub, new int[]{resultPositionFinal, resultPositionLeft});
-            return buildable.buildTrimmer(equalityCheckerStub, TupleMask.omit(resultPositionFinal, 1+resultPositionFinal));
-        }
-
+    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
+        // Stub sideStub = getSideStub();
+        // BuildHelper.JoinHelper joinHelper = getJoinHelper(stub, sideStub);
+        // Integer resultPositionLeft = stub.getVariablesIndex().get(resultVariable);
+        // TupleMask primaryMask = joinHelper.getPrimaryMask();
+        // TupleMask secondaryMask = joinHelper.getSecondaryMask();
+        // final Stub counterBetaStub = buildable.buildCounterBetaNode(stub, sideStub, primaryMask, secondaryMask,
+        // joinHelper.getComplementerMask(), resultVariable);
+        // if (resultPositionLeft == null) {
+        // return counterBetaStub;
+        // } else {
+        // int resultPositionFinal = counterBetaStub.getVariablesTuple().getSize() - 1; // appended to the last position
+        // final Stub equalityCheckerStub =
+        // buildable.buildEqualityChecker(counterBetaStub, new int[]{resultPositionFinal, resultPositionLeft});
+        // return buildable.buildTrimmer(equalityCheckerStub, TupleMask.omit(resultPositionFinal,
+        // 1+resultPositionFinal));
+        // }
+        return null;
     }
 
     @Override

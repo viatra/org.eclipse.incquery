@@ -34,15 +34,14 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * @author Gabor Bergmann
  * 
  */
-public class BasicLinearLayout<PatternDescription, StubHandle, Collector> implements
-        IReteLayoutStrategy<PatternDescription, StubHandle, Collector> {
+public class BasicLinearLayout<PatternDescription> implements IReteLayoutStrategy<PatternDescription> {
 
     @Override
-    public Stub<StubHandle> layout(final PSystem<PatternDescription, StubHandle, Collector> pSystem)
+    public Stub layout(final PSystem<PatternDescription> pSystem)
             throws RetePatternBuildException {
         PatternDescription pattern = pSystem.getPattern();
         IPatternMatcherContext<PatternDescription> context = pSystem.getContext();
-        Buildable<PatternDescription, StubHandle, Collector> buildable = pSystem.getBuildable();
+        Buildable<PatternDescription, ?> buildable = null;// pSystem.getBuildable();
         try {
 
             context.logDebug(getClass().getSimpleName() + ": patternbody build started");
@@ -60,7 +59,7 @@ public class BasicLinearLayout<PatternDescription, StubHandle, Collector> implem
             LayoutHelper.checkSanity(pSystem);
 
             // STARTING THE LINE
-            Stub<StubHandle> stub = buildable.buildStartStub(new Object[] {}, new Object[] {});
+            Stub stub = buildable.buildStartStub(new Object[] {}, new Object[] {});
 
             // Set<ConstantValue> constants = pSystem.getConstraintsOfType(ConstantValue.class);
             // for (ConstantValue<PatternDescription, StubHandle> pConstraint : constants) {
@@ -77,15 +76,15 @@ public class BasicLinearLayout<PatternDescription, StubHandle, Collector> implem
             // MAIN LOOP
             while (!pQueue.isEmpty()) {
                 PConstraint pConstraint = Collections.min(pQueue,
-                        new OrderingHeuristics<PatternDescription, StubHandle, Collector>(stub)); // pQueue.iterator().next();
+ new OrderingHeuristics<PatternDescription>(stub)); // pQueue.iterator().next();
                 pQueue.remove(pConstraint);
 
-                if (pConstraint instanceof EnumerablePConstraint<?, ?>) {
-                    EnumerablePConstraint<PatternDescription, StubHandle> enumerable = (EnumerablePConstraint<PatternDescription, StubHandle>) pConstraint;
-                    Stub<StubHandle> sideStub = enumerable.getStub();
+                if (pConstraint instanceof EnumerablePConstraint<?>) {
+                    EnumerablePConstraint<PatternDescription> enumerable = (EnumerablePConstraint<PatternDescription>) pConstraint;
+                    Stub sideStub = enumerable.getStub();
                     stub = BuildHelper.naturalJoin(buildable, stub, sideStub);
                 } else {
-                    DeferredPConstraint<PatternDescription, StubHandle> deferred = (DeferredPConstraint<PatternDescription, StubHandle>) pConstraint;
+                    DeferredPConstraint<PatternDescription> deferred = (DeferredPConstraint<PatternDescription>) pConstraint;
                     if (deferred.isReadyAt(stub)) {
                         stub = deferred.checkOn(stub);
                     } else {

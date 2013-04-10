@@ -13,7 +13,6 @@ package org.eclipse.incquery.runtime.rete.matcher;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -30,7 +29,6 @@ import org.eclipse.incquery.runtime.rete.network.Library;
 import org.eclipse.incquery.runtime.rete.network.Network;
 import org.eclipse.incquery.runtime.rete.network.Production;
 import org.eclipse.incquery.runtime.rete.network.Receiver;
-import org.eclipse.incquery.runtime.rete.network.Supplier;
 import org.eclipse.incquery.runtime.rete.remote.Address;
 import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
 
@@ -55,7 +53,7 @@ public class ReteEngine<PatternDescription> {
     // protected Map<GTPattern, Map<Map<Integer, Scope>, RetePatternMatcher>> matchersScoped; // (pattern, scopemap) ->
     // matcher
 
-    protected IRetePatternBuilder<PatternDescription, Address<? extends Supplier>, Address<? extends Receiver>> builder;
+    protected IRetePatternBuilder<PatternDescription, Address<? extends Receiver>> builder;
 
     protected final boolean parallelExecutionEnabled; // TRUE if model manipulation can go on
 
@@ -410,8 +408,7 @@ public class ReteEngine<PatternDescription> {
      * @param builder
      *            the pattern matcher builder to set
      */
-    public void setBuilder(
-            IRetePatternBuilder<PatternDescription, Address<? extends Supplier>, Address<? extends Receiver>> builder) {
+    public void setBuilder(IRetePatternBuilder<PatternDescription, Address<? extends Receiver>> builder) {
         this.builder = builder;
     }
 
@@ -451,7 +448,7 @@ public class ReteEngine<PatternDescription> {
         return context;
     }
 
-    public IRetePatternBuilder<PatternDescription, Address<? extends Supplier>, Address<? extends Receiver>> getBuilder() {
+    public IRetePatternBuilder<PatternDescription, Address<? extends Receiver>> getBuilder() {
         return builder;
     }
 

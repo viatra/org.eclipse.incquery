@@ -76,11 +76,6 @@ public class Stub<HandleType> {
         constraints.addAll(secondaryParent.getAllEnforcedConstraints());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Stub(" + getVariablesTuple() + "@" + getHandle() + "|");
@@ -91,7 +86,7 @@ public class Stub<HandleType> {
     }
 
     /**
-     * @return the tuple of variables that define the schame emanating from the handle
+     * @return the tuple of variables that define the scheme emanating from the handle
      */
     public Tuple getVariablesTuple() {
         return variablesTuple;

@@ -34,9 +34,6 @@ public class PSystem<PatternDescription, StubHandle, Collector> {
     private Set<PConstraint> constraints;
     private int nextVirtualNodeID;
 
-    /**
-	 * 
-	 */
     public PSystem(IPatternMatcherContext<PatternDescription> context,
             Buildable<PatternDescription, StubHandle, Collector> buildable, PatternDescription pattern) {
         super();

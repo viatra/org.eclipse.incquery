@@ -54,7 +54,7 @@ public class BuildHelper {
     /**
      * Trims the results in the stub into a collector, by selecting exported variables in a particular order.
      * 
-     * @return the derived stub that contains the additional checkers, or the original if no action was neccessary.
+     * @return the derived stub that contains the additional checkers, or the original if no action was necessary.
      */
     public static <StubHandle, Collector> void projectIntoCollector(Buildable<?, StubHandle, Collector> buildable,
             Stub<StubHandle> stub, Collector collector, PVariable[] selectedVariables) {

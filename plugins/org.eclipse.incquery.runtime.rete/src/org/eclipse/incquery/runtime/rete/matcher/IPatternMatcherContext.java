@@ -42,7 +42,7 @@ public interface IPatternMatcherContext<PatternDescription> {
     Object binaryEdgeSourceType(Object typeObject); // TODO global supertypes?
 
     /**
-     * @return the direction in which sub/supertypes arequeryable
+     * @return the direction in which sub/supertypes are queryable
      */
     GeneralizationQueryDirection allowedGeneralizationQueryDirection();
 

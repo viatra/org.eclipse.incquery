@@ -26,7 +26,7 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * @author Gabor Bergmann
  * 
  */
-public class PatternMatchCounter<PatternDescription> extends PatternCallBasedDeferred<PatternDescription> {
+public class PatternMatchCounter<PatternDescription> extends PatternCallBasedDeferred {
 
     private PVariable resultVariable;
 
@@ -34,7 +34,7 @@ public class PatternMatchCounter<PatternDescription> extends PatternCallBasedDef
      * @param buildable
      * @param affectedVariables
      */
-    public PatternMatchCounter(PSystem<PatternDescription> pSystem, Tuple actualParametersTuple,
+    public PatternMatchCounter(PSystem pSystem, Tuple actualParametersTuple,
             PatternDescription pattern, PVariable resultVariable) {
         super(pSystem, actualParametersTuple, pattern, Collections.singleton(resultVariable));
         this.resultVariable = resultVariable;

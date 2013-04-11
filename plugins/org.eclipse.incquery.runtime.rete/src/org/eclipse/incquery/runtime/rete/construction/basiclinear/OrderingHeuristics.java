@@ -65,12 +65,12 @@ public class OrderingHeuristics<PatternDescription> implements Comparator<PConst
     }
 
     boolean isConstant(PConstraint o) {
-        return (o instanceof ConstantValue<?>);
+        return (o instanceof ConstantValue);
     }
 
     boolean isReady(PConstraint o) {
-        return (o instanceof EnumerablePConstraint<?>)
-                || (o instanceof DeferredPConstraint<?> && ((DeferredPConstraint<PatternDescription>) o)
+        return (o instanceof EnumerablePConstraint)
+                || (o instanceof DeferredPConstraint && ((DeferredPConstraint) o)
                         .isReadyAt(stub));
     }
 

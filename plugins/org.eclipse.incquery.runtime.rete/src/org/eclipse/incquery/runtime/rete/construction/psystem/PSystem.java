@@ -22,9 +22,9 @@ import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
  * @author Gabor Bergmann
  * 
  */
-public class PSystem<PatternDescription> {
-    private PatternDescription pattern;
-    private IPatternMatcherContext<PatternDescription> context;
+public class PSystem {
+    private Object pattern;
+    private IPatternMatcherContext context;
 
     private Set<PVariable> allVariables;
     private Set<PVariable> uniqueVariables;
@@ -32,7 +32,7 @@ public class PSystem<PatternDescription> {
     private Set<PConstraint> constraints;
     private int nextVirtualNodeID;
 
-    public PSystem(IPatternMatcherContext<PatternDescription> context, PatternDescription pattern) {
+    public PSystem(IPatternMatcherContext context, Object pattern) {
         super();
         this.pattern = pattern;
         this.context = context;
@@ -98,14 +98,14 @@ public class PSystem<PatternDescription> {
 
     public PVariable newConstantVariable(Object value) {
         PVariable virtual = newVirtualVariable();
-        new ConstantValue<PatternDescription>(this, virtual, value);
+        new ConstantValue(this, virtual, value);
         return virtual;
     }
 
     /**
      * @return the context
      */
-    public IPatternMatcherContext<PatternDescription> getContext() {
+    public IPatternMatcherContext getContext() {
         return context;
     }
 
@@ -149,7 +149,7 @@ public class PSystem<PatternDescription> {
     /**
      * @return the pattern
      */
-    public PatternDescription getPattern() {
+    public Object getPattern() {
         return pattern;
     }
 

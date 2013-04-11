@@ -18,24 +18,24 @@ import org.eclipse.incquery.runtime.rete.boundary.IManipulationListener;
 import org.eclipse.incquery.runtime.rete.boundary.IPredicateTraceListener;
 
 /**
- * Represents all knowledge of the outside world, that is needed durin runtime operation, towards the pattern matcher.
+ * Represents all knowledge of the outside world, that is needed during runtime operation, towards the pattern matcher.
  * 
  * @author Gabor Bergmann
  * 
  */
-public interface IPatternMatcherRuntimeContext<PatternDescription> extends IPatternMatcherContext<PatternDescription> {
+public interface IPatternMatcherRuntimeContext extends IPatternMatcherContext {
 
     // ---------------------------------------------------------------------------------
 
     /**
      * @pre: network, framework, boundary, disconnectables initialised
      */
-    IManipulationListener subscribePatternMatcherForUpdates(ReteEngine<PatternDescription> engine);
+    IManipulationListener subscribePatternMatcherForUpdates(ReteEngine engine);
 
     /**
      * @pre: boundary, disconnectables initialised
      */
-    IPredicateTraceListener subscribePatternMatcherForTraceInfluences(ReteEngine<PatternDescription> engine);
+    IPredicateTraceListener subscribePatternMatcherForTraceInfluences(ReteEngine engine);
 
     Object ternaryEdgeTarget(Object relation);
 

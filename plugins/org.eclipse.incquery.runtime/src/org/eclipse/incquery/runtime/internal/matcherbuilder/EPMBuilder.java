@@ -21,26 +21,28 @@ import org.eclipse.incquery.runtime.rete.construction.IRetePatternBuilder;
 import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
 import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
 
+import com.google.common.base.Preconditions;
+
 /**
  * @author Bergmann Gábor
  * 
  */
-public class EPMBuilder<Collector> implements IRetePatternBuilder<Pattern, Collector> {
-    protected Buildable<Pattern, Collector> baseBuildable;
-    protected IPatternMatcherContext<Pattern> context;
+public class EPMBuilder<Collector> implements IRetePatternBuilder<Collector> {
+    protected Buildable<Collector> baseBuildable;
+    protected IPatternMatcherContext context;
 
     /**
      * @param baseBuildable
      * @param context
      */
-    public EPMBuilder(Buildable<Pattern, Collector> baseBuildable, IPatternMatcherContext<Pattern> context) {
+    public EPMBuilder(Buildable<Collector> baseBuildable, IPatternMatcherContext context) {
         super();
         this.baseBuildable = baseBuildable;
         this.context = context;
     }
 
     @Override
-    public IPatternMatcherContext<Pattern> getContext() {
+    public IPatternMatcherContext getContext() {
         return context;
     }
 
@@ -50,7 +52,9 @@ public class EPMBuilder<Collector> implements IRetePatternBuilder<Pattern, Colle
     }
 
     @Override
-    public Collector construct(Pattern pattern) throws RetePatternBuildException {
+    public Collector construct(Object _pattern) throws RetePatternBuildException {
+        Preconditions.checkArgument(_pattern instanceof Pattern, "Invalid parameter type");
+        Pattern pattern = (Pattern) _pattern;
         try {
             EPMBuildScaffold<Collector> epmBuildScaffold = new EPMBuildScaffold<Collector>(
                     baseBuildable, context);
@@ -63,9 +67,11 @@ public class EPMBuilder<Collector> implements IRetePatternBuilder<Pattern, Colle
     }
 
     @Override
-    public HashMap<Object, Integer> getPosMapping(Pattern gtPattern) {
+    public HashMap<Object, Integer> getPosMapping(Object _pattern) {
+        Preconditions.checkArgument(_pattern instanceof Pattern, "Invalid parameter type");
+        Pattern pattern = (Pattern) _pattern;
         HashMap<Object, Integer> result = new HashMap<Object, Integer>();
-        EList<Variable> parameters = gtPattern.getParameters();
+        EList<Variable> parameters = pattern.getParameters();
         for (int i = 0; i < parameters.size(); ++i)
             result.put(parameters.get(i), i);
         return result;

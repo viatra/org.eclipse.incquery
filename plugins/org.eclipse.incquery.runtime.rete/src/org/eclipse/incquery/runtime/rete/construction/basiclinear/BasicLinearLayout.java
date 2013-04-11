@@ -34,14 +34,13 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * @author Gabor Bergmann
  * 
  */
-public class BasicLinearLayout<PatternDescription> implements IReteLayoutStrategy<PatternDescription> {
+public class BasicLinearLayout<PatternDescription> implements IReteLayoutStrategy {
 
     @Override
-    public Stub layout(final PSystem<PatternDescription> pSystem)
-            throws RetePatternBuildException {
-        PatternDescription pattern = pSystem.getPattern();
-        IPatternMatcherContext<PatternDescription> context = pSystem.getContext();
-        Buildable<PatternDescription, ?> buildable = null;// pSystem.getBuildable();
+    public Stub layout(final PSystem pSystem) throws RetePatternBuildException {
+        Object pattern = pSystem.getPattern();
+        IPatternMatcherContext context = pSystem.getContext();
+        Buildable<?> buildable = null;// pSystem.getBuildable();
         try {
 
             context.logDebug(getClass().getSimpleName() + ": patternbody build started");
@@ -79,12 +78,12 @@ public class BasicLinearLayout<PatternDescription> implements IReteLayoutStrateg
  new OrderingHeuristics<PatternDescription>(stub)); // pQueue.iterator().next();
                 pQueue.remove(pConstraint);
 
-                if (pConstraint instanceof EnumerablePConstraint<?>) {
-                    EnumerablePConstraint<PatternDescription> enumerable = (EnumerablePConstraint<PatternDescription>) pConstraint;
+                if (pConstraint instanceof EnumerablePConstraint) {
+                    EnumerablePConstraint enumerable = (EnumerablePConstraint) pConstraint;
                     Stub sideStub = enumerable.getStub();
                     stub = BuildHelper.naturalJoin(buildable, stub, sideStub);
                 } else {
-                    DeferredPConstraint<PatternDescription> deferred = (DeferredPConstraint<PatternDescription>) pConstraint;
+                    DeferredPConstraint deferred = (DeferredPConstraint) pConstraint;
                     if (deferred.isReadyAt(stub)) {
                         stub = deferred.checkOn(stub);
                     } else {

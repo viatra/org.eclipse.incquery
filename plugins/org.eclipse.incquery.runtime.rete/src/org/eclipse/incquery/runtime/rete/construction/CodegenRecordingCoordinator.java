@@ -24,7 +24,7 @@ import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
  * @author Gabor Bergmann
  * 
  */
-public class CodegenRecordingCoordinator<PatternDescription> {
+public class CodegenRecordingCoordinator {
     protected static final String varPrefix = "var";
     protected static final String buildablePrefix = "buildable";
     protected static final String collectorPrefix = "production";
@@ -33,12 +33,12 @@ public class CodegenRecordingCoordinator<PatternDescription> {
     public String stubType;
     public String collectorType;
     public String buildableType;
-    Map<PatternDescription, StringBuilder> builderCode;
+    Map<Object, StringBuilder> builderCode;
     // HashMap<PatternDescription, String> collectors;
     // LinkedHashSet<PatternDescription> unbuilt;
-    public IPatternMatcherContext<PatternDescription> targetContext;
+    public IPatternMatcherContext targetContext;
 
-    public CodegenRecordingCoordinator(IPatternMatcherContext<PatternDescription> targetContext, String stubType,
+    public CodegenRecordingCoordinator(IPatternMatcherContext targetContext, String stubType,
             String collectorType, String buildableType) {
         super();
         this.targetContext = targetContext;
@@ -69,12 +69,12 @@ public class CodegenRecordingCoordinator<PatternDescription> {
         return newIdentifier(collectorPrefix);
     }
 
-    public void emitPatternBuilderLine(PatternDescription effort, String indent, String line) {
+    public void emitPatternBuilderLine(Object effort, String indent, String line) {
         StringBuilder sb = getBuilder(effort);
         emitLine(sb, indent, line);
     }
 
-    StringBuilder getBuilder(PatternDescription effort) {
+    StringBuilder getBuilder(Object effort) {
         if (effort == null)
             throw new UnsupportedOperationException("Build actions must be put on the tab of a pattern");
         StringBuilder result = builderCode.get(effort);
@@ -91,11 +91,11 @@ public class CodegenRecordingCoordinator<PatternDescription> {
         where.append(System.getProperty("line.separator"));
     }
 
-    public String getFinishedBuilderCode(PatternDescription pattern) {
+    public String getFinishedBuilderCode(Object pattern) {
         return builderCode.get(pattern).toString();
     }
 
-    public Set<PatternDescription> getBuiltPatterns() {
+    public Set<Object> getBuiltPatterns() {
         return builderCode.keySet();
     }
 

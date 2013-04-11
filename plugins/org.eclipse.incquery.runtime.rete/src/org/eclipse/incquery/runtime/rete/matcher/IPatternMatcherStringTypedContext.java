@@ -18,8 +18,7 @@ import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
  * @author Gabor Bergmann
  * 
  */
-public interface IPatternMatcherStringTypedContext<PatternDescription> extends
-        IPatternMatcherContext<PatternDescription> {
+public interface IPatternMatcherStringTypedContext<PatternDescription> extends IPatternMatcherContext {
 
     // String retrieveUnaryTypeFQN(Object typeObject);
     // String retrieveTernaryEdgeTypeFQN(Object typeObject);

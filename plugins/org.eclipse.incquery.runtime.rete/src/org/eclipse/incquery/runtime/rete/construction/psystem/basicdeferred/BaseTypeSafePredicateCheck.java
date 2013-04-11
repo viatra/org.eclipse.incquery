@@ -27,16 +27,14 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.VariableDeferredPC
  * @author Gabor Bergmann
  * 
  */
-public abstract class BaseTypeSafePredicateCheck<PatternDescription> extends
-        VariableDeferredPConstraint<PatternDescription> {
+public abstract class BaseTypeSafePredicateCheck extends VariableDeferredPConstraint {
     private Map<PVariable, Set<Object>> allTypeRestrictions;
 
     /**
      * @param buildable
      * @param affectedVariables
      */
-    public BaseTypeSafePredicateCheck(PSystem<PatternDescription> pSystem,
-            Set<PVariable> affectedVariables) {
+    public BaseTypeSafePredicateCheck(PSystem pSystem, Set<PVariable> affectedVariables) {
         super(pSystem, affectedVariables);
     }
 

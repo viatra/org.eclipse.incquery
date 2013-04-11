@@ -24,7 +24,7 @@ import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
  * @param <PatternDescription>
  * @param <StubHandle>
  */
-public abstract class CoreModelRelationship<PatternDescription> extends EnumerablePConstraint<PatternDescription> {
+public abstract class CoreModelRelationship extends EnumerablePConstraint {
 
     protected boolean transitive;
 
@@ -36,7 +36,7 @@ public abstract class CoreModelRelationship<PatternDescription> extends Enumerab
      * @param buildable
      * @param variablesTuple
      */
-    public CoreModelRelationship(PSystem<PatternDescription> pSystem, PVariable parent, PVariable child,
+    public CoreModelRelationship(PSystem pSystem, PVariable parent, PVariable child,
             boolean transitive) {
         super(pSystem, new FlatTuple(parent, child));
         this.transitive = transitive;

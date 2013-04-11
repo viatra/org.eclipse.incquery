@@ -30,7 +30,7 @@ import org.eclipse.xtext.xbase.XExpression;
  * XExpression check constraint: the given XExpression formed over the variables must evaluate to true.
  */
 @SuppressWarnings("restriction")
-public class XBaseCheck<StubHandle> extends BaseTypeSafePredicateCheck<Pattern> {
+public class XBaseCheck<StubHandle> extends BaseTypeSafePredicateCheck {
 
     private final XExpression xExpression;
     private final EPMBodyToPSystem<?> pGraph;

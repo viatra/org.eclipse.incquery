@@ -28,8 +28,8 @@ public class ReferenceFeeder extends Feeder {
      * @param boundary
      * @param typeObject
      */
-    public ReferenceFeeder(Address<? extends Receiver> receiver, IPatternMatcherRuntimeContext<?> context,
-            Network network, ReteBoundary<?> boundary, Object typeObject) {
+    public ReferenceFeeder(Address<? extends Receiver> receiver, IPatternMatcherRuntimeContext context,
+            Network network, ReteBoundary boundary, Object typeObject) {
         super(receiver, context, network, boundary);
         this.typeObject = typeObject;
     }

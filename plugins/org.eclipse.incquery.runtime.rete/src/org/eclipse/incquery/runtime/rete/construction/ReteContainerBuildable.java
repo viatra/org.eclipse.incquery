@@ -40,14 +40,13 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * @author Gabor Bergmann
  * 
  */
-public class ReteContainerBuildable<PatternDescription> implements
-        Buildable<PatternDescription, Address<? extends Receiver>> {
+public class ReteContainerBuildable implements Buildable<Address<? extends Receiver>> {
 
     protected Library library;
     protected ReteContainer targetContainer;
     protected Network reteNet;
-    protected ReteBoundary<PatternDescription> boundary;
-    protected ReteEngine<PatternDescription> engine;
+    protected ReteBoundary boundary;
+    protected ReteEngine engine;
     protected boolean headAttached = false;
 
     /**
@@ -56,7 +55,7 @@ public class ReteContainerBuildable<PatternDescription> implements
      * 
      * @param targetContainer
      */
-    public ReteContainerBuildable(ReteEngine<PatternDescription> engine, ReteContainer targetContainer) {
+    public ReteContainerBuildable(ReteEngine engine, ReteContainer targetContainer) {
         super();
         this.engine = engine;
         this.reteNet = engine.getReteNet();
@@ -70,7 +69,7 @@ public class ReteContainerBuildable<PatternDescription> implements
      * Constructs the builder attached to the head container. Prerequisite: engine has its network and boundary fields
      * initialized
      */
-    public ReteContainerBuildable(ReteEngine<PatternDescription> engine) {
+    public ReteContainerBuildable(ReteEngine engine) {
         super();
         this.engine = engine;
         this.reteNet = engine.getReteNet();
@@ -125,7 +124,7 @@ public class ReteContainerBuildable<PatternDescription> implements
         return new Stub(stub, checker);
     }
 
-    public Stub patternCallStub(Tuple nodes, PatternDescription supplierKey)
+    public Stub patternCallStub(Tuple nodes, Object supplierKey)
             throws RetePatternBuildException {
         return new Stub(nodes, boundary.accessProduction(supplierKey));
     }
@@ -247,8 +246,8 @@ public class ReteContainerBuildable<PatternDescription> implements
     /**
      * @return a buildable that potentially acts on a separate container
      */
-    public ReteContainerBuildable<PatternDescription> getNextContainer() {
-        return new ReteContainerBuildable<PatternDescription>(engine, reteNet.getNextContainer());
+    public ReteContainerBuildable getNextContainer() {
+        return new ReteContainerBuildable(engine, reteNet.getNextContainer());
     }
 
     public Stub buildScopeConstrainer(Stub stub,
@@ -274,14 +273,14 @@ public class ReteContainerBuildable<PatternDescription> implements
         return stub;
     }
 
-    public Address<? extends Receiver> patternCollector(PatternDescription pattern) throws RetePatternBuildException {
+    public Address<? extends Receiver> patternCollector(Object pattern) throws RetePatternBuildException {
         return engine.getBoundary().createProductionInternal(pattern);
     }
 
     /**
      * No need to distinguish
      */
-    public ReteContainerBuildable<PatternDescription> putOnTab(PatternDescription effort) {
+    public ReteContainerBuildable putOnTab(Object effort) {
         return this;
     }
 

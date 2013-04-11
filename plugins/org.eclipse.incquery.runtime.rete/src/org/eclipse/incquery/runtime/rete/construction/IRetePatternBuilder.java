@@ -20,7 +20,7 @@ import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
  * 
  * @author Gabor Bergmann
  */
-public interface IRetePatternBuilder<PatternDescription, Collector> {
+public interface IRetePatternBuilder<Collector> {
 
     /**
      * Builds a part of the rete network that will match occurences of a given pattern.
@@ -31,12 +31,12 @@ public interface IRetePatternBuilder<PatternDescription, Collector> {
      * @throws RetePatternBuildException
      *             if construction fails.
      */
-    Collector construct(PatternDescription gtPattern) throws RetePatternBuildException;
+    Collector construct(Object gtPattern) throws RetePatternBuildException;
 
     /**
      * Extract the position mapping of the graph pattern.
      */
-    Map<Object, Integer> getPosMapping(PatternDescription gtPattern);
+    Map<Object, Integer> getPosMapping(Object gtPattern);
 
     // /**
     // * Extends the rete network beyond a production node to
@@ -67,7 +67,7 @@ public interface IRetePatternBuilder<PatternDescription, Collector> {
     /**
      * Returns the context associated with this builder.
      */
-    public IPatternMatcherContext<PatternDescription> getContext();
+    public IPatternMatcherContext getContext();
 
     /**
      * After the ReteEngine is reinitialized, the pattern builder has to be notified about the change.

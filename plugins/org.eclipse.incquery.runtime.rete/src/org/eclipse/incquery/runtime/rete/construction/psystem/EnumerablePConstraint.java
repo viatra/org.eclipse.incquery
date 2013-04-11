@@ -23,12 +23,12 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * @author Gabor Bergmann
  * 
  */
-public abstract class EnumerablePConstraint<PatternDescription> extends BasePConstraint<PatternDescription> {
+public abstract class EnumerablePConstraint extends BasePConstraint {
     protected Tuple variablesTuple;
 
     private Stub stub;
 
-    protected EnumerablePConstraint(PSystem<PatternDescription> pSystem, Tuple variablesTuple) {
+    protected EnumerablePConstraint(PSystem pSystem, Tuple variablesTuple) {
         super(pSystem, variablesTuple.<PVariable> getDistinctElements());
         this.variablesTuple = variablesTuple;
     }

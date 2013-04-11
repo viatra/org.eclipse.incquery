@@ -163,12 +163,11 @@ public class ReteVisView extends ViewPart implements IZoomableWorkbenchPart {
         createToolbar();
     }
 
-    public void setContent(@SuppressWarnings("rawtypes") ReteBoundary rb) {
+    public void setContent(ReteBoundary rb) {
         ((ZestReteLabelProvider) graphViewer.getLabelProvider()).setRb(rb);
         graphViewer.setLayoutAlgorithm(new TreeLayoutAlgorithm());
         graphViewer.setInput(rb.getHeadContainer());
     }
-     
 
     /**
      * Passing the focus request to the viewer's control.

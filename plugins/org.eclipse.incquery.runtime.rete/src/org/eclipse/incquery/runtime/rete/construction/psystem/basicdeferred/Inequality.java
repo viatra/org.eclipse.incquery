@@ -27,7 +27,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.VariableDeferredPC
  * @author Gabor Bergmann
  * 
  */
-public class Inequality<PatternDescription> extends VariableDeferredPConstraint<PatternDescription>
+public class Inequality<PatternDescription> extends VariableDeferredPConstraint
 // implements IFoldablePConstraint
 {
 
@@ -41,11 +41,11 @@ public class Inequality<PatternDescription> extends VariableDeferredPConstraint<
      */
     private boolean weak;
 
-    public Inequality(PSystem<PatternDescription> pSystem, PVariable who, PVariable withWhom) {
+    public Inequality(PSystem pSystem, PVariable who, PVariable withWhom) {
         this(pSystem, who, withWhom, false);
     }
 
-    public Inequality(PSystem<PatternDescription> pSystem, PVariable who, PVariable withWhom,
+    public Inequality(PSystem pSystem, PVariable who, PVariable withWhom,
             boolean weak) {
         super(pSystem, CollectionsFactory.getSet(Arrays.asList(new PVariable[] { who, withWhom }) ));
         // this(pSystem, who, Collections.singleton(withWhom));

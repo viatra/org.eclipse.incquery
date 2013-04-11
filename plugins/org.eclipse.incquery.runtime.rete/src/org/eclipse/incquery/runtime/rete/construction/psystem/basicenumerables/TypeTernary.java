@@ -30,9 +30,9 @@ import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
  * @author Gabor Bergmann
  * 
  */
-public class TypeTernary<PatternDescription> extends KeyedEnumerablePConstraint<Object, PatternDescription> implements
+public class TypeTernary extends KeyedEnumerablePConstraint<Object> implements
         ITypeInfoProviderConstraint {
-    private final IPatternMatcherContext<PatternDescription> context;
+    private final IPatternMatcherContext context;
     private PVariable edge; private PVariable source; private PVariable target;
     /**
      * @param buildable
@@ -40,9 +40,8 @@ public class TypeTernary<PatternDescription> extends KeyedEnumerablePConstraint<
      * @param supplierKey
      *            type info
      */
-    public TypeTernary(PSystem<PatternDescription> pSystem,
-            IPatternMatcherContext<PatternDescription> context, PVariable edge, PVariable source, PVariable target,
-            Object supplierKey) {
+    public TypeTernary(PSystem pSystem, IPatternMatcherContext context, PVariable edge, PVariable source,
+            PVariable target, Object supplierKey) {
         super(pSystem, new FlatTuple(edge, source, target), supplierKey);
         this.edge = edge;
         this.source = source;

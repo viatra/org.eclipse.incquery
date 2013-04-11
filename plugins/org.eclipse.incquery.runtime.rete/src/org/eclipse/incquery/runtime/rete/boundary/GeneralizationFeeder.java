@@ -24,8 +24,8 @@ public class GeneralizationFeeder extends Feeder {
      * @param network
      * @param boundary
      */
-    public GeneralizationFeeder(Address<? extends Receiver> receiver, IPatternMatcherRuntimeContext<?> context,
-            Network network, ReteBoundary<?> boundary) {
+    public GeneralizationFeeder(Address<? extends Receiver> receiver, IPatternMatcherRuntimeContext context,
+            Network network, ReteBoundary boundary) {
         super(receiver, context, network, boundary);
         // TODO Auto-generated constructor stub
     }

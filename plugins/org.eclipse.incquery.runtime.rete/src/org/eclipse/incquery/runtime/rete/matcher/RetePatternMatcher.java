@@ -13,7 +13,6 @@ package org.eclipse.incquery.runtime.rete.matcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.incquery.runtime.rete.boundary.ReteBoundary;
@@ -33,8 +32,8 @@ import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
  */
 public class RetePatternMatcher extends TransformerNode {
 
-    protected ReteEngine<?> engine;
-    protected ReteBoundary<?> boundary;
+    protected ReteEngine engine;
+    protected ReteBoundary boundary;
     protected Production productionNode;
     protected Map<Object, Integer> posMapping;
     protected Map<Object, Receiver> taggedChildren = //new HashMap<Object, Receiver>();
@@ -47,7 +46,7 @@ public class RetePatternMatcher extends TransformerNode {
      *            a production node that matches this pattern without any parameter bindings
      * @pre: Production must be local to the head container
      */
-    public RetePatternMatcher(ReteEngine<?> engine, Address<? extends Production> productionNode) {
+    public RetePatternMatcher(ReteEngine engine, Address<? extends Production> productionNode) {
         super(engine.getReteNet().getHeadContainer());
         this.engine = engine;
         this.boundary = engine.getBoundary();

@@ -15,12 +15,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EStructuralFeature.Setting;
-import org.eclipse.incquery.patternlanguage.patternLanguage.Pattern;
 import org.eclipse.incquery.runtime.api.IncQueryEngine;
 import org.eclipse.incquery.runtime.base.api.FeatureListener;
 import org.eclipse.incquery.runtime.base.api.NavigationHelper;
@@ -52,8 +49,8 @@ public class EStructuralFeatureBinaryInputNode extends StandardNode implements D
 	private EStructuralFeature feature;
 	private IncQueryEngine engine;
 	private NavigationHelper baseIndex;
-	private ReteEngine<Pattern> reteEngine;
-	private ReteBoundary<Pattern> boundary;
+    private ReteEngine reteEngine;
+    private ReteBoundary boundary;
 		
 	static final TupleMask nullMask = TupleMask.linear(0, 2); 
 	static final TupleMask sourceKnown = TupleMask.selectSingle(0, 2); 

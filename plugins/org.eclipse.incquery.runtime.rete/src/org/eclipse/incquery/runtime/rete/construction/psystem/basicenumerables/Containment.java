@@ -24,14 +24,14 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
  * @author Gabor Bergmann
  * 
  */
-public class Containment<PatternDescription> extends CoreModelRelationship<PatternDescription> {
+public class Containment extends CoreModelRelationship {
 
 	PVariable parent; 
 	PVariable child;
     /**
      * @param variablesTuple
      */
-    public Containment(PSystem<PatternDescription> pSystem, PVariable parent, PVariable child,
+    public Containment(PSystem pSystem, PVariable parent, PVariable child,
             boolean transitive) {
         super(pSystem, parent, child, transitive);
         this.parent = parent;

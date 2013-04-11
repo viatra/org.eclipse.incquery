@@ -27,14 +27,14 @@ import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
  * @author Gabor Bergmann
  * 
  */
-public class ConstantValue<PatternDescription> extends KeyedEnumerablePConstraint<Object, PatternDescription> {
+public class ConstantValue extends KeyedEnumerablePConstraint<Object> {
 
     /**
      * @param buildable
      * @param variablesTuple
      * @param supplierKey
      */
-    public ConstantValue(PSystem<PatternDescription> pSystem, PVariable variable, Object value) {
+    public ConstantValue(PSystem pSystem, PVariable variable, Object value) {
         super(pSystem, new FlatTuple(variable), value);
     }
 

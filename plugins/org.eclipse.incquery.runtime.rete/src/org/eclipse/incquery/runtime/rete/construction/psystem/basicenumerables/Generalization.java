@@ -19,14 +19,14 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
  * @author Gabor Bergmann
  * 
  */
-public class Generalization<PatternDescription> extends CoreModelRelationship<PatternDescription> {
+public class Generalization extends CoreModelRelationship {
 
     /**
      * @param parent
      * @param child
      * @param transitive
      */
-    public Generalization(PSystem<PatternDescription> pSystem, PVariable parent, PVariable child,
+    public Generalization(PSystem pSystem, PVariable parent, PVariable child,
             boolean transitive) {
         super(pSystem, parent, child, transitive);
     }

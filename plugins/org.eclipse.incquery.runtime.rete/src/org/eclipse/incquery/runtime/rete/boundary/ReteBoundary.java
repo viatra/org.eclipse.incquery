@@ -47,9 +47,9 @@ import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
  * 
  * @param <PatternDescription>
  */
-public class ReteBoundary<PatternDescription> {
+public class ReteBoundary {
 
-    protected ReteEngine<PatternDescription> engine;
+    protected ReteEngine engine;
     protected Network network;
     protected ReteContainer headContainer;
 
@@ -57,7 +57,7 @@ public class ReteBoundary<PatternDescription> {
         return headContainer;
     }
 
-    protected IPatternMatcherRuntimeContext<PatternDescription> context;
+    protected IPatternMatcherRuntimeContext context;
     IPatternMatcherContext.GeneralizationQueryDirection generalizationQueryDirection;
 
     /*
@@ -76,7 +76,7 @@ public class ReteBoundary<PatternDescription> {
      */
     protected Map<Object, Address<? extends Tunnel>> binaryEdgeRoots;
 
-    protected Map<PatternDescription, Address<? extends Production>> productions;
+    protected Map<Object, Address<? extends Production>> productions;
     // protected Map<PatternDescription, Map<Map<Integer, Scope>, Address<? extends Production>>> productionsScoped; //
     // (pattern, scopemap) -> production
 
@@ -98,7 +98,7 @@ public class ReteBoundary<PatternDescription> {
      * 
      * @param headContainer
      */
-    public ReteBoundary(ReteEngine<PatternDescription> engine) {
+    public ReteBoundary(ReteEngine engine) {
         super();
         this.engine = engine;
         this.network = engine.getReteNet();
@@ -447,7 +447,7 @@ public class ReteBoundary<PatternDescription> {
     /**
      * accesses the production node for specified pattern; builds pattern matcher if it doesn't exist yet
      */
-    public synchronized Address<? extends Production> accessProduction(PatternDescription gtPattern)
+    public synchronized Address<? extends Production> accessProduction(Object gtPattern)
             throws RetePatternBuildException {
         Address<? extends Production> pn;
         pn = productions.get(gtPattern);
@@ -470,7 +470,7 @@ public class ReteBoundary<PatternDescription> {
      * @throws PatternMatcherCompileTimeException
      *             if production node is already created
      */
-    public synchronized Address<? extends Production> createProductionInternal(PatternDescription gtPattern)
+    public synchronized Address<? extends Production> createProductionInternal(Object gtPattern)
             throws RetePatternBuildException {
         if (productions.containsKey(gtPattern)) {
             String[] args = { gtPattern.toString() };
@@ -518,7 +518,7 @@ public class ReteBoundary<PatternDescription> {
     /**
      * @pre: builder is set
      */
-    protected void construct(PatternDescription gtPattern) throws RetePatternBuildException {
+    protected void construct(Object gtPattern) throws RetePatternBuildException {
         engine.getReteNet().waitForReteTermination();
         engine.getBuilder().construct(gtPattern);
         // production.setDirty(false);

@@ -22,12 +22,19 @@ import org.eclipse.incquery.runtime.rete.construction.Stub;
  * @author Gabor Bergmann
  * 
  */
-public abstract class DeferredPConstraint<PatternDescription> extends BasePConstraint<PatternDescription> {
+public abstract class DeferredPConstraint extends BasePConstraint {
 
-    public DeferredPConstraint(PSystem<PatternDescription> pSystem, Set<PVariable> affectedVariables) {
+    public DeferredPConstraint(PSystem pSystem, Set<PVariable> affectedVariables) {
         super(pSystem, affectedVariables);
     }
 
+    /**
+     * Decides whether it is possible to evaluate the PConstraint at a selected {@link Stub}. No cost model is included
+     * when calculating the readiness of a constraint.
+     * 
+     * @param stub
+     * @return
+     */
     public abstract boolean isReadyAt(Stub stub);
 
     /**

@@ -22,7 +22,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.incquery.patternlanguage.patternLanguage.Pattern;
 import org.eclipse.incquery.runtime.base.api.IncQueryBaseFactory;
 import org.eclipse.incquery.runtime.base.api.NavigationHelper;
 import org.eclipse.incquery.runtime.base.exception.IncQueryBaseException;
@@ -83,7 +82,7 @@ public class IncQueryEngine {
     /**
      * The RETE pattern matcher component of the EMF-IncQuery engine.
      */
-    private ReteEngine<Pattern> reteEngine = null;
+    private ReteEngine reteEngine = null;
     /**
      * A sanitizer to catch faulty patterns.
      */
@@ -213,7 +212,7 @@ public class IncQueryEngine {
      * 
      * @noreference A typical user would not need to call this method.
      */
-    public ReteEngine<Pattern> getReteEngine() throws IncQueryException {
+    public ReteEngine getReteEngine() throws IncQueryException {
         if (reteEngine == null) {
             // if uninitialized, don't initialize yet
             getBaseIndexInternal(WILDCARD_MODE_DEFAULT, false);
@@ -302,10 +301,10 @@ public class IncQueryEngine {
         }
     }
 
-    private ReteEngine<Pattern> buildReteEngineInternal(IPatternMatcherRuntimeContext<Pattern> context) {
-        ReteEngine<Pattern> engine;
-        engine = new ReteEngine<Pattern>(context, reteThreads);
-        ReteContainerBuildable<Pattern> buildable = new ReteContainerBuildable<Pattern>(engine);
+    private ReteEngine buildReteEngineInternal(IPatternMatcherRuntimeContext context) {
+        ReteEngine engine;
+        engine = new ReteEngine(context, reteThreads);
+        ReteContainerBuildable buildable = new ReteContainerBuildable(engine);
         EPMBuilder<Address<? extends Receiver>> builder = new EPMBuilder<Address<? extends Receiver>>(
                 buildable, context);
         engine.setBuilder(builder);

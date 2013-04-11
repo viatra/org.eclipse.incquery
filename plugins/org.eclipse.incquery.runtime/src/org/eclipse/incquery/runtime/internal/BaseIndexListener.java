@@ -37,7 +37,7 @@ import org.eclipse.incquery.runtime.rete.network.Direction;
  * 
  */
 public class BaseIndexListener implements FeatureListener, InstanceListener, DataTypeListener, IManipulationListener {
-    private final ReteBoundary<?> boundary;
+    private final ReteBoundary boundary;
     private final NavigationHelper baseIndex;
 
     /**
@@ -54,7 +54,7 @@ public class BaseIndexListener implements FeatureListener, InstanceListener, Dat
     /**
      * @param boundary
      */
-    public BaseIndexListener(IncQueryEngine iqEngine, ReteEngine<?> engine, NavigationHelper baseIndex) {
+    public BaseIndexListener(IncQueryEngine iqEngine, ReteEngine engine, NavigationHelper baseIndex) {
         super();
         this.iqEngine = iqEngine;
         this.boundary = engine.getBoundary();

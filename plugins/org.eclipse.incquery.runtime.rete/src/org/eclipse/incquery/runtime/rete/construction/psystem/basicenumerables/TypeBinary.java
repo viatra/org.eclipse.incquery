@@ -28,10 +28,9 @@ import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
  * @author Gabor Bergmann
  * 
  */
-public class TypeBinary<PatternDescription> extends
- KeyedEnumerablePConstraint<Object, PatternDescription>
+public class TypeBinary extends KeyedEnumerablePConstraint<Object>
         implements ITypeInfoProviderConstraint {
-    private final IPatternMatcherContext<PatternDescription> context;
+    private final IPatternMatcherContext context;
     private PVariable source; private PVariable target;
 
     /**
@@ -39,8 +38,8 @@ public class TypeBinary<PatternDescription> extends
      * @param variablesTuple
      * @param typeKey
      */
-    public TypeBinary(PSystem<PatternDescription> pSystem,
-            IPatternMatcherContext<PatternDescription> context, PVariable source, PVariable target, Object typeKey) {
+    public TypeBinary(PSystem pSystem, IPatternMatcherContext context, PVariable source, PVariable target,
+            Object typeKey) {
         super(pSystem, new FlatTuple(source, target), typeKey);
         this.source = source;
         this.target = target;

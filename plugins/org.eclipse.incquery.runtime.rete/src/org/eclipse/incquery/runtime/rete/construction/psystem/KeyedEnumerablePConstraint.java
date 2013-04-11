@@ -17,8 +17,7 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * @author Gabor Bergmann
  * 
  */
-public abstract class KeyedEnumerablePConstraint<KeyType, PatternDescription> extends
-        EnumerablePConstraint<PatternDescription> {
+public abstract class KeyedEnumerablePConstraint<KeyType> extends EnumerablePConstraint {
 
     protected KeyType supplierKey;
 
@@ -27,7 +26,7 @@ public abstract class KeyedEnumerablePConstraint<KeyType, PatternDescription> ex
      * @param buildable
      * @param supplierKey
      */
-    public KeyedEnumerablePConstraint(PSystem<PatternDescription> pSystem, Tuple variablesTuple,
+    public KeyedEnumerablePConstraint(PSystem pSystem, Tuple variablesTuple,
             KeyType supplierKey) {
         super(pSystem, variablesTuple);
         this.supplierKey = supplierKey;

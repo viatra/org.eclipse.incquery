@@ -24,8 +24,8 @@ public class InstantiationFeeder extends Feeder {
      * @param network
      * @param boundary
      */
-    public InstantiationFeeder(Address<? extends Receiver> receiver, IPatternMatcherRuntimeContext<?> context,
-            Network network, ReteBoundary<?> boundary) {
+    public InstantiationFeeder(Address<? extends Receiver> receiver, IPatternMatcherRuntimeContext context,
+            Network network, ReteBoundary boundary) {
         super(receiver, context, network, boundary);
         // TODO Auto-generated constructor stub
     }

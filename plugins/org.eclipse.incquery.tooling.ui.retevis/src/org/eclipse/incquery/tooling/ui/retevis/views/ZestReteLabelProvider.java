@@ -37,6 +37,7 @@ import org.eclipse.incquery.runtime.rete.matcher.RetePatternMatcher;
 import org.eclipse.incquery.runtime.rete.misc.ConstantNode;
 import org.eclipse.incquery.runtime.rete.network.Node;
 import org.eclipse.incquery.runtime.rete.network.Production;
+import org.eclipse.incquery.runtime.rete.network.Receiver;
 import org.eclipse.incquery.runtime.rete.remote.Address;
 import org.eclipse.incquery.runtime.rete.single.UniquenessEnforcerNode;
 import org.eclipse.incquery.runtime.rete.tuple.MaskedTupleMemory;
@@ -208,7 +209,7 @@ public class ZestReteLabelProvider extends LabelProvider implements IEntityStyle
     }
 
     private void initalizeReverseMap(Production prod) {
-        for (Object _stubOfProd : rb.getParentStubsOfReceiver(new Address<Node>(prod))) {
+        for (Object _stubOfProd : rb.getParentStubsOfReceiver(new Address<Receiver>(prod))) {
             Stub stubOfProd = (Stub) _stubOfProd;
             for (Stub s : getAllParentStubs(stubOfProd)) {
                 Address<Node> address = (Address<Node>) null;// s.getHandle();

@@ -12,8 +12,6 @@
 package org.eclipse.incquery.runtime.rete.boundary;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -51,8 +49,8 @@ import org.eclipse.incquery.runtime.rete.util.Options;
 
 public class PredicateEvaluatorNode extends SingleInputNode {
 
-    protected ReteEngine<?> engine;
-    protected ReteBoundary<?> boundary;
+    protected ReteEngine engine;
+    protected ReteBoundary boundary;
     protected Integer rhsIndex;
     protected int[] affectedIndices;
     protected Set<Tuple> outgoing;
@@ -76,7 +74,7 @@ public class PredicateEvaluatorNode extends SingleInputNode {
      * @param variableIndices
      *            maps variable names to values.
      */
-    public PredicateEvaluatorNode(ReteEngine<?> engine, ReteContainer container, Integer rhsIndex,
+    public PredicateEvaluatorNode(ReteEngine engine, ReteContainer container, Integer rhsIndex,
             int[] affectedIndices, int tupleWidth, AbstractEvaluator evaluator) {
         super(container);
         this.engine = engine;
@@ -308,7 +306,7 @@ public class PredicateEvaluatorNode extends SingleInputNode {
     /**
      * @return the engine
      */
-    public ReteEngine<?> getEngine() {
+    public ReteEngine getEngine() {
         return engine;
     }
 

@@ -25,16 +25,15 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * @author Gabor Bergmann
  * 
  */
-public class PositivePatternCall<PatternDescription> extends
-        KeyedEnumerablePConstraint<PatternDescription, PatternDescription> {
+public class PositivePatternCall extends KeyedEnumerablePConstraint<Object> {
 
     /**
      * @param buildable
      * @param variablesTuple
      * @param pattern
+     *            the pattern definition to use
      */
-    public PositivePatternCall(PSystem<PatternDescription> pSystem, Tuple variablesTuple,
-            PatternDescription pattern) {
+    public PositivePatternCall(PSystem pSystem, Tuple variablesTuple, Object pattern) {
         super(pSystem, variablesTuple, pattern);
     }
 

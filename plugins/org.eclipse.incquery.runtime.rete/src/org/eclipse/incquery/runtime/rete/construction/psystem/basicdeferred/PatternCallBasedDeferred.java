@@ -27,11 +27,8 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 /**
  * @author Gabor Bergmann
  * 
- * @param <PatternDescription>
- * @param <StubHandle>
  */
-public abstract class PatternCallBasedDeferred<PatternDescription> extends
-        VariableDeferredPConstraint<PatternDescription> {
+public abstract class PatternCallBasedDeferred extends VariableDeferredPConstraint {
 
     protected Tuple actualParametersTuple;
 
@@ -39,22 +36,21 @@ public abstract class PatternCallBasedDeferred<PatternDescription> extends
 
     protected abstract Set<PVariable> getCandidateQuantifiedVariables();
 
-    protected PatternDescription pattern;
+    protected Object pattern;
     private Set<PVariable> deferringVariables;
 
     /**
      * @param buildable
      * @param additionalAffectedVariables
      */
-    public PatternCallBasedDeferred(PSystem<PatternDescription> pSystem, Tuple actualParametersTuple,
-            PatternDescription pattern, Set<PVariable> additionalAffectedVariables) {
+    public PatternCallBasedDeferred(PSystem pSystem, Tuple actualParametersTuple, Object pattern,
+            Set<PVariable> additionalAffectedVariables) {
         super(pSystem, union(actualParametersTuple.<PVariable> getDistinctElements(), additionalAffectedVariables));
         this.actualParametersTuple = actualParametersTuple;
         this.pattern = pattern;
     }
 
-    public PatternCallBasedDeferred(PSystem<PatternDescription> pSystem, Tuple actualParametersTuple,
-            PatternDescription pattern) {
+    public PatternCallBasedDeferred(PSystem pSystem, Tuple actualParametersTuple, Object pattern) {
         this(pSystem, actualParametersTuple, pattern, Collections.<PVariable> emptySet());
     }
 
@@ -85,8 +81,7 @@ public abstract class PatternCallBasedDeferred<PatternDescription> extends
             if (!getDeferringVariables().contains(var)) {
                 // so this is a free variable of the NAC / aggregation?
                 for (PConstraint pConstraint : var.getReferringConstraints()) {
-                    if (pConstraint != this
-                            && !(pConstraint instanceof Equality<?> && ((Equality<?>) pConstraint).isMoot()))
+                    if (pConstraint != this && !(pConstraint instanceof Equality && ((Equality) pConstraint).isMoot()))
                         throw new RetePatternBuildException(
                                 "Variable {1} of constraint {2} is not a positively determined part of the pattern, yet it is also affected by {3}.",
                                 new String[] { var.toString(), this.toString(), pConstraint.toString() },

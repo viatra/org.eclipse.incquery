@@ -33,7 +33,7 @@ public class BuildHelper {
      * 
      * @return the derived stub that contains the additional checkers, or the original if no action was neccessary.
      */
-    public static Stub enforceVariableCoincidences(Buildable<?, ?> buildable, Stub stub) {
+    public static Stub enforceVariableCoincidences(Buildable<?> buildable, Stub stub) {
         Map<Object, List<Integer>> indexWithMupliplicity = stub.getVariablesTuple().invertIndexWithMupliplicity();
         for (Map.Entry<Object, List<Integer>> pVariableIndices : indexWithMupliplicity.entrySet()) {
             List<Integer> indices = pVariableIndices.getValue();
@@ -55,7 +55,7 @@ public class BuildHelper {
      * 
      * @return the derived stub that contains the additional checkers, or the original if no action was necessary.
      */
-    public static <Collector> void projectIntoCollector(Buildable<?, Collector> buildable, Stub stub,
+    public static <Collector> void projectIntoCollector(Buildable<Collector> buildable, Stub stub,
             Collector collector, PVariable[] selectedVariables) {
         int paramNum = selectedVariables.length;
         int[] tI = new int[paramNum];
@@ -141,7 +141,7 @@ public class BuildHelper {
 
     }
 
-    public static <StubHandle> Stub naturalJoin(Buildable<?, ?> buildable, Stub primaryStub, Stub secondaryStub) {
+    public static <StubHandle> Stub naturalJoin(Buildable<?> buildable, Stub primaryStub, Stub secondaryStub) {
         JoinHelper joinHelper = new JoinHelper(primaryStub, secondaryStub);
         return buildable.buildBetaNode(primaryStub, secondaryStub, joinHelper.getPrimaryMask(),
                 joinHelper.getSecondaryMask(), joinHelper.getComplementerMask(), false);

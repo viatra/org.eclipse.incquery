@@ -26,9 +26,9 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * 
  */
 public class Stub {
-    private Tuple variablesTuple;
-    private Map<Object, Integer> variablesIndex;
-    private Set<PConstraint> constraints;
+    private final Tuple variablesTuple;
+    private final Map<Object, Integer> variablesIndex;
+    private final Set<PConstraint> constraints;
     private Stub primaryParentStub;
     private Stub secondaryParentStub;
 	private final Set<PVariable> variablesSet;

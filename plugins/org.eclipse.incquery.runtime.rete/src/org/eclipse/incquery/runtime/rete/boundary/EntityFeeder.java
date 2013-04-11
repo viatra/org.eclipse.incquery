@@ -27,8 +27,8 @@ public class EntityFeeder extends Feeder {
      * @param boundary
      * @param typeObject
      */
-    public EntityFeeder(Address<? extends Receiver> receiver, IPatternMatcherRuntimeContext<?> context,
-            Network network, ReteBoundary<?> boundary, Object typeObject) {
+    public EntityFeeder(Address<? extends Receiver> receiver, IPatternMatcherRuntimeContext context, Network network,
+            ReteBoundary boundary, Object typeObject) {
         super(receiver, context, network, boundary);
         this.typeObject = typeObject;
     }

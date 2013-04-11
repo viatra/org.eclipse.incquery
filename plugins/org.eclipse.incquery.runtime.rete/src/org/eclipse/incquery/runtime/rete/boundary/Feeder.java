@@ -25,9 +25,9 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  */
 public abstract class Feeder {
     protected Address<? extends Receiver> receiver;
-    protected IPatternMatcherRuntimeContext<?> context;
+    protected IPatternMatcherRuntimeContext context;
     protected Network network;
-    protected ReteBoundary<?> boundary;
+    protected ReteBoundary boundary;
 
     /**
      * @param receiver
@@ -35,8 +35,8 @@ public abstract class Feeder {
      * @param network
      * @param boundary
      */
-    public Feeder(Address<? extends Receiver> receiver, IPatternMatcherRuntimeContext<?> context, Network network,
-            ReteBoundary<?> boundary) {
+    public Feeder(Address<? extends Receiver> receiver, IPatternMatcherRuntimeContext context, Network network,
+            ReteBoundary boundary) {
         super();
         this.receiver = receiver;
         this.context = context;

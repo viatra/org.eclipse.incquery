@@ -27,15 +27,14 @@ import org.eclipse.incquery.runtime.rete.util.Options.BuilderMethod;
  */
 public class EPMBuildScaffold<Collector> {
 
-    protected Buildable<Pattern, Collector> baseBuildable;
-    protected IPatternMatcherContext<Pattern> context;
+    protected Buildable<Collector> baseBuildable;
+    protected IPatternMatcherContext context;
 
     /**
      * @param baseBuildable
      * @param context
      */
-    public EPMBuildScaffold(Buildable<Pattern, Collector> baseBuildable,
-            IPatternMatcherContext<Pattern> context) {
+    public EPMBuildScaffold(Buildable<Collector> baseBuildable, IPatternMatcherContext context) {
         super();
         this.baseBuildable = baseBuildable;
         this.context = context;
@@ -47,14 +46,14 @@ public class EPMBuildScaffold<Collector> {
 
         context.logDebug("EPMBuilder starts construction of: " + pattern.getName());
         for (PatternBody body : pattern.getBodies()) {
-            Buildable<Pattern, Collector> currentBuildable = baseBuildable.getNextContainer().putOnTab(
+            Buildable<Collector> currentBuildable = baseBuildable.getNextContainer().putOnTab(
                     pattern);
             if (Options.builderMethod == BuilderMethod.LEGACY) {
                 throw new UnsupportedOperationException();
             } else {
                 EPMBodyToPSystem<Collector> converter = new EPMBodyToPSystem<Collector>(
                         pattern, body, context, currentBuildable);
-                Stub bodyFinal = Options.builderMethod.<Pattern, Collector> layoutStrategy()
+                Stub bodyFinal = Options.builderMethod.<Collector> layoutStrategy()
                         .layout(converter.toPSystem());
                 BuildHelper.projectIntoCollector(currentBuildable, bodyFinal, production,
                         converter.symbolicParameterArray());

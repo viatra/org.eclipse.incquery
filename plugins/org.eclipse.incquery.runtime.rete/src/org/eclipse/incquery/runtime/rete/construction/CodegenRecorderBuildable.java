@@ -23,16 +23,15 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * 
  * @author Gabor Bergmann
  */
-public abstract class CodegenRecorderBuildable<PatternDescription> implements
- Buildable<PatternDescription, String> {
-    public CodegenRecordingCoordinator<PatternDescription> coordinator;
-    public PatternDescription effort;
+public abstract class CodegenRecorderBuildable implements Buildable<String> {
+    public CodegenRecordingCoordinator coordinator;
+    public Object effort;
     public String myName;
     public String baseName;
     public String indent;
 
-    public CodegenRecorderBuildable(CodegenRecordingCoordinator<PatternDescription> coordinator,
-            PatternDescription effort, String indent, String baseName, String instanceSuffix) {
+    public CodegenRecorderBuildable(CodegenRecordingCoordinator coordinator, Object effort, String indent,
+            String baseName, String instanceSuffix) {
         super();
         this.coordinator = coordinator;
         this.effort = effort;
@@ -207,7 +206,7 @@ public abstract class CodegenRecorderBuildable<PatternDescription> implements
 
     public abstract String genBinaryEdgeType(Object type);
 
-    public abstract String genPattern(PatternDescription desc);
+    public abstract String genPattern(Object desc);
 
     // public abstract String genPosMap(PatternDescription desc);
 
@@ -342,7 +341,7 @@ public abstract class CodegenRecorderBuildable<PatternDescription> implements
         return new Stub(nodes, resultVar);
     }
 
-    public Stub patternCallStub(Tuple nodes, PatternDescription supplierKey) {
+    public Stub patternCallStub(Tuple nodes, Object supplierKey) {
         // if (!coordinator.collectors.containsKey(supplierKey)) coordinator.unbuilt.add(supplierKey);
         String[] arguments = { gen(nodes, false), genPattern(supplierKey) };
         String resultVar = emitFunctionCall(coordinator.stubType, "patternCallStub", arguments);
@@ -361,7 +360,7 @@ public abstract class CodegenRecorderBuildable<PatternDescription> implements
         return new Stub(nodes, resultVar);
     }
 
-    public String patternCollector(PatternDescription pattern) {
+    public String patternCollector(Object pattern) {
         String patternName = genPattern(pattern);
         String[] arguments = { patternName };
         return emitFunctionCall(coordinator.collectorType, "patternCollector", arguments);

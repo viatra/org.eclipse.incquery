@@ -29,11 +29,11 @@ import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
  *            the handle of a receiver-like RETE ending to which stubs can be connected
  * @author Gabor Bergmann
  */
-public interface Buildable<PatternDescription, Collector> {
+public interface Buildable<Collector> {
 
-    public Collector patternCollector(PatternDescription pattern) throws RetePatternBuildException;
+    public Collector patternCollector(Object pattern) throws RetePatternBuildException;
 
-    public Stub patternCallStub(Tuple nodes, PatternDescription supplierKey)
+    public Stub patternCallStub(Tuple nodes, Object supplierKey)
             throws RetePatternBuildException;
 
     public Stub instantiationTransitiveStub(Tuple nodes);
@@ -84,12 +84,12 @@ public interface Buildable<PatternDescription, Collector> {
     /**
      * @return a buildable that potentially acts on a separate container
      */
-    public Buildable<PatternDescription, Collector> getNextContainer();
+    public Buildable<Collector> getNextContainer();
 
     /**
      * @return a buildable that puts build actions on the tab of the given pattern
      */
-    public Buildable<PatternDescription, Collector> putOnTab(PatternDescription effort);
+    public Buildable<Collector> putOnTab(Object effort);
 
     public void reinitialize();
 }

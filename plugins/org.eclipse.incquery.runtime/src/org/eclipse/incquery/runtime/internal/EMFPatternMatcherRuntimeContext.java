@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.incquery.patternlanguage.patternLanguage.Pattern;
 import org.eclipse.incquery.runtime.api.IncQueryEngine;
 import org.eclipse.incquery.runtime.base.api.NavigationHelper;
 import org.eclipse.incquery.runtime.rete.boundary.IManipulationListener;
@@ -37,7 +36,7 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * 
  */
 public class EMFPatternMatcherRuntimeContext extends EMFPatternMatcherContext implements
-        IPatternMatcherRuntimeContext<Pattern> {
+ IPatternMatcherRuntimeContext {
 
     // protected abstract EMFContainmentHierarchyTraversal newTraversal();
     // protected abstract ExtensibleEMFManipulationListener newListener(ReteEngine<PatternDescription> engine);
@@ -445,7 +444,7 @@ public class EMFPatternMatcherRuntimeContext extends EMFPatternMatcherContext im
 
     @Override
     // TODO Transactional?
-    public IManipulationListener subscribePatternMatcherForUpdates(ReteEngine<Pattern> engine) {
+    public IManipulationListener subscribePatternMatcherForUpdates(ReteEngine engine) {
         if (listener == null)
             listener = new BaseIndexListener(iqEngine, engine, baseIndex);
         return listener;
@@ -462,7 +461,7 @@ public class EMFPatternMatcherRuntimeContext extends EMFPatternMatcherContext im
     }
 
     @Override
-    public IPredicateTraceListener subscribePatternMatcherForTraceInfluences(ReteEngine<Pattern> engine) {
+    public IPredicateTraceListener subscribePatternMatcherForTraceInfluences(ReteEngine engine) {
         // No ASMFunctions, use DUMMY
         return new IPredicateTraceListener() {
             @Override

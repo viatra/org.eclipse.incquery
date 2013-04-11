@@ -72,10 +72,10 @@ public class EPMBodyToPSystem<Collector> {
 
     protected Pattern pattern;
     protected PatternBody body;
-    protected IPatternMatcherContext<Pattern> context;
-    protected Buildable<Pattern, Collector> buildable;
+    protected IPatternMatcherContext context;
+    protected Buildable<Collector> buildable;
 
-    protected PSystem<Pattern> pSystem;
+    protected PSystem pSystem;
 
     String patternFQN;
 
@@ -85,8 +85,8 @@ public class EPMBodyToPSystem<Collector> {
      * @param builder
      * @param buildable
      */
-    public EPMBodyToPSystem(Pattern pattern, PatternBody body, IPatternMatcherContext<Pattern> context,
-            Buildable<Pattern, Collector> buildable) {
+    public EPMBodyToPSystem(Pattern pattern, PatternBody body, IPatternMatcherContext context,
+            Buildable<Collector> buildable) {
         super();
         this.pattern = pattern;
         this.body = body;
@@ -96,10 +96,10 @@ public class EPMBodyToPSystem<Collector> {
         patternFQN = CorePatternLanguageHelper.getFullyQualifiedName(pattern);
     }
 
-    public PSystem<Pattern> toPSystem() throws RetePatternBuildException {
+    public PSystem toPSystem() throws RetePatternBuildException {
         try {
             if (this.pSystem == null) {
-                this.pSystem = new PSystem<Pattern>(context, pattern);
+                this.pSystem = new PSystem(context, pattern);
 
                 // TODO
                 // preProcessAssignments();
@@ -198,11 +198,11 @@ public class EPMBodyToPSystem<Collector> {
     private void preProcessParameters() {
         EList<Variable> parameters = pattern.getParameters();
         for (Variable variable : parameters) {
-            new ExportedParameter<Pattern>(pSystem, getPNode(variable), variable.getName());
+            new ExportedParameter(pSystem, getPNode(variable), variable.getName());
             if (variable.getType() != null && variable.getType() instanceof ClassType) {
                 EClassifier classname = ((ClassType) variable.getType()).getClassname();
                 PVariable pNode = getPNode(variable);
-                new TypeUnary<Pattern>(pSystem, pNode, classname);
+                new TypeUnary(pSystem, pNode, classname);
             }
         }
 
@@ -273,7 +273,7 @@ public class EPMBodyToPSystem<Collector> {
         Type headType = head.getType();
         if (headType instanceof ClassType) {
             EClassifier headClassname = ((ClassType) headType).getClassname();
-            new TypeUnary<Pattern>(pSystem, currentSrc, headClassname);
+            new TypeUnary(pSystem, currentSrc, headClassname);
         } else {
             throw new RetePatternBuildException("Unsupported path expression head type {1} in pattern {2}: {3}",
                     new String[] { headType.eClass().getName(), patternFQN, typeStr(headType) },
@@ -291,7 +291,7 @@ public class EPMBodyToPSystem<Collector> {
             currentSrc = intermediate;
         }
         // link the final step to the overall destination
-        new Equality<Pattern>(pSystem, currentSrc, finalDst);
+        new Equality(pSystem, currentSrc, finalDst);
     }
 
     /**
@@ -303,10 +303,10 @@ public class EPMBodyToPSystem<Collector> {
         PVariable right = getPNode(compare.getRightOperand());
         switch (compare.getFeature()) {
         case EQUALITY:
-            new Equality<Pattern>(pSystem, left, right);
+            new Equality(pSystem, left, right);
             break;
         case INEQUALITY:
-            new Inequality<Pattern>(pSystem, left, right, false);
+            new Inequality(pSystem, left, right, false);
         }
     }
 
@@ -321,9 +321,9 @@ public class EPMBodyToPSystem<Collector> {
         Tuple pNodeTuple = getPNodeTuple(call.getParameters());
         if (!call.isTransitive()) {
             if (constraint.isNegative())
-                new NegativePatternCall<Pattern>(pSystem, pNodeTuple, patternRef);
+                new NegativePatternCall(pSystem, pNodeTuple, patternRef);
             else
-                new PositivePatternCall<Pattern>(pSystem, pNodeTuple, patternRef);
+                new PositivePatternCall(pSystem, pNodeTuple, patternRef);
         } else {
             if (pNodeTuple.getSize() != 2)
                 throw new RetePatternBuildException(
@@ -335,7 +335,7 @@ public class EPMBodyToPSystem<Collector> {
                         new String[] { CorePatternLanguageHelper.getFullyQualifiedName(patternRef), patternFQN },
                         "Unsupported negated transitive closure", pattern);
             else
-                new BinaryTransitiveClosure<Pattern>(pSystem, pNodeTuple, patternRef);
+                new BinaryTransitiveClosure(pSystem, pNodeTuple, patternRef);
             // throw new RetePatternBuildException(
             // "Unsupported positive transitive closure of {1} in pattern {2}",
             // new String[]{CorePatternLanguageHelper.getFullyQualifiedName(patternRef), patternFQN},
@@ -349,16 +349,16 @@ public class EPMBodyToPSystem<Collector> {
     protected void gatherClassifierConstraint(EClassifierConstraint constraint) {
         EClassifier classname = ((ClassType) constraint.getType()).getClassname();
         PVariable pNode = getPNode(constraint.getVar());
-        new TypeUnary<Pattern>(pSystem, pNode, classname);
+        new TypeUnary(pSystem, pNode, classname);
     }
 
     protected void gatherPathSegment(Type segmentType, PVariable src, PVariable trg) throws RetePatternBuildException {
         if (segmentType instanceof ReferenceType) { // EMF-specific
             EStructuralFeature typeObject = ((ReferenceType) segmentType).getRefname();
             if (context.edgeInterpretation() == EdgeInterpretation.TERNARY) {
-                new TypeTernary<Pattern>(pSystem, context, newVirtual(), src, trg, typeObject);
+                new TypeTernary(pSystem, context, newVirtual(), src, trg, typeObject);
             } else {
-                new TypeBinary<Pattern>(pSystem, context, src, trg, typeObject);
+                new TypeBinary(pSystem, context, src, trg, typeObject);
             }
         } else
             throw new RetePatternBuildException("Unsupported path segment type {1} in pattern {2}: {3}", new String[] {

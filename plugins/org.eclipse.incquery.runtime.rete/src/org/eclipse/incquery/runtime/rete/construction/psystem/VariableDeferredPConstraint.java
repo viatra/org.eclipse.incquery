@@ -24,9 +24,9 @@ import org.eclipse.incquery.runtime.rete.construction.Stub;
  * @author Gabor Bergmann
  * 
  */
-public abstract class VariableDeferredPConstraint<PatternDescription> extends DeferredPConstraint<PatternDescription> {
+public abstract class VariableDeferredPConstraint extends DeferredPConstraint {
 
-    public VariableDeferredPConstraint(PSystem<PatternDescription> pSystem,
+    public VariableDeferredPConstraint(PSystem pSystem,
             Set<PVariable> affectedVariables) {
         super(pSystem, affectedVariables);
     }

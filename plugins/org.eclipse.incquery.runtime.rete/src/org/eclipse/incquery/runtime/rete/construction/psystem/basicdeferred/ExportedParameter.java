@@ -24,7 +24,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.VariableDeferredPC
  * @author Gabor Bergmann
  * 
  */
-public class ExportedParameter<PatternDescription> extends VariableDeferredPConstraint<PatternDescription> {
+public class ExportedParameter extends VariableDeferredPConstraint {
     PVariable parameterVariable;
     Object parameterName;
 
@@ -32,7 +32,7 @@ public class ExportedParameter<PatternDescription> extends VariableDeferredPCons
      * @param buildable
      * @param parameterVariable
      */
-    public ExportedParameter(PSystem<PatternDescription> pSystem, PVariable parameterVariable,
+    public ExportedParameter(PSystem pSystem, PVariable parameterVariable,
             String parameterName) {
         super(pSystem, Collections.singleton(parameterVariable));
         this.parameterVariable = parameterVariable;

@@ -18,20 +18,19 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 
 /**
- * @author Bergmann GĂˇbor
+ * @author Gabor Bergmann
  * 
  *         For a binary base pattern, computes the irreflexive transitive closure (base)+
  */
-public class BinaryTransitiveClosure<PatternDescription> extends
-        KeyedEnumerablePConstraint<PatternDescription, PatternDescription> {
+public class BinaryTransitiveClosure extends KeyedEnumerablePConstraint<Object> {
 
     /**
      * @param pSystem
      * @param variablesTuple
      * @param pattern
      */
-    public BinaryTransitiveClosure(PSystem<PatternDescription> pSystem, Tuple variablesTuple,
-            PatternDescription pattern) {
+    public BinaryTransitiveClosure(PSystem pSystem, Tuple variablesTuple,
+ Object pattern) {
         super(pSystem, variablesTuple, pattern);
     }
 

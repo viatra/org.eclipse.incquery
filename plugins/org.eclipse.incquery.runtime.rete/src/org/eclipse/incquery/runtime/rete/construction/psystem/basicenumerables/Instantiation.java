@@ -19,7 +19,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
  * @author Gabor Bergmann
  * 
  */
-public class Instantiation<PatternDescription> extends CoreModelRelationship<PatternDescription> {
+public class Instantiation extends CoreModelRelationship {
 
     /**
      * @param buildable
@@ -27,7 +27,7 @@ public class Instantiation<PatternDescription> extends CoreModelRelationship<Pat
      * @param child
      * @param transitive
      */
-    public Instantiation(PSystem<PatternDescription> pSystem, PVariable parent, PVariable child,
+    public Instantiation(PSystem pSystem, PVariable parent, PVariable child,
             boolean transitive) {
         super(pSystem, parent, child, transitive);
     }

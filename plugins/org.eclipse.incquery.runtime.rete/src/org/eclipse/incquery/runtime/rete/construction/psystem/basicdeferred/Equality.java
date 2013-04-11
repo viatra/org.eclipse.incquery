@@ -27,7 +27,7 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
  * @author Gabor Bergmann
  * 
  */
-public class Equality<PatternDescription> extends DeferredPConstraint<PatternDescription> {
+public class Equality extends DeferredPConstraint {
 
     private PVariable who;
     private PVariable withWhom;
@@ -36,7 +36,7 @@ public class Equality<PatternDescription> extends DeferredPConstraint<PatternDes
      * @param buildable
      * @param affectedVariables
      */
-    public Equality(PSystem<PatternDescription> pSystem, PVariable who, PVariable withWhom) {
+    public Equality(PSystem pSystem, PVariable who, PVariable withWhom) {
         super(pSystem, buildSet(who, withWhom));
         this.who = who;
         this.withWhom = withWhom;

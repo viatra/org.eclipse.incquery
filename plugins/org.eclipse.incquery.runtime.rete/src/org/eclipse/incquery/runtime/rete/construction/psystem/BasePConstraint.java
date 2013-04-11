@@ -22,14 +22,14 @@ import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
  * @author Gabor Bergmann
  * 
  */
-public abstract class BasePConstraint<PatternDescription> implements PConstraint {
-    protected PSystem<PatternDescription> pSystem;
+public abstract class BasePConstraint implements PConstraint {
+    protected PSystem pSystem;
     private final Set<PVariable> affectedVariables;
 
     /**
      * @param affectedVariables
      */
-    public BasePConstraint(PSystem<PatternDescription> pSystem, Set<PVariable> affectedVariables) {
+    public BasePConstraint(PSystem pSystem, Set<PVariable> affectedVariables) {
         super();
         this.pSystem = pSystem;
         this.affectedVariables = CollectionsFactory.getSet(affectedVariables);//new HashSet<PVariable>(affectedVariables);

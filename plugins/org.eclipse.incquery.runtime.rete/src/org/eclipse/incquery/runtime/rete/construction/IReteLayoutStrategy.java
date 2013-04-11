@@ -19,7 +19,6 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
  * @author Gabor Bergmann
  * 
  */
-public interface IReteLayoutStrategy<PatternDescription> {
-    public Stub layout(PSystem<PatternDescription> pSystem)
-            throws RetePatternBuildException;
+public interface IReteLayoutStrategy {
+    public Stub layout(PSystem pSystem) throws RetePatternBuildException;
 }

@@ -25,14 +25,13 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * @author Gabor Bergmann
  * 
  */
-public class NegativePatternCall<PatternDescription> extends PatternCallBasedDeferred<PatternDescription> {
+public class NegativePatternCall extends PatternCallBasedDeferred {
 
     /**
      * @param buildable
      * @param affectedVariables
      */
-    public NegativePatternCall(PSystem<PatternDescription> pSystem, Tuple actualParametersTuple,
-            PatternDescription pattern) {
+    public NegativePatternCall(PSystem pSystem, Tuple actualParametersTuple, Object pattern) {
         super(pSystem, actualParametersTuple, pattern);
     }
 

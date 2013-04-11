@@ -35,24 +35,24 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * @author Gabor Bergmann
  * 
  */
-public class QuasiTreeLayout<PatternDescription, Collector> implements IReteLayoutStrategy<PatternDescription> {
+public class QuasiTreeLayout<Collector> implements IReteLayoutStrategy {
 
     @Override
-    public Stub layout(PSystem<PatternDescription> pSystem)
+    public Stub layout(PSystem pSystem)
             throws RetePatternBuildException {
         return new Scaffold(pSystem).run();
     }
 
     public class Scaffold {
-        PSystem<PatternDescription> pSystem;
-        PatternDescription pattern;
-        IPatternMatcherContext<PatternDescription> context;
-        Buildable<PatternDescription, Collector> buildable;
+        PSystem pSystem;
+        Object pattern;
+        IPatternMatcherContext context;
+        Buildable<Collector> buildable;
 
         Set<DeferredPConstraint> deferredConstraints = null;
         Set<Stub> forefront = new LinkedHashSet<Stub>();
 
-        Scaffold(PSystem<PatternDescription> pSystem) {
+        Scaffold(PSystem pSystem) {
             this.pSystem = pSystem;
             pattern = pSystem.getPattern();
             context = pSystem.getContext();
@@ -81,7 +81,7 @@ public class QuasiTreeLayout<PatternDescription, Collector> implements IReteLayo
                 // PROCESS CONSTRAINTS
                 deferredConstraints = pSystem.getConstraintsOfType(DeferredPConstraint.class);
                 Set<EnumerablePConstraint> enumerables = pSystem.getConstraintsOfType(EnumerablePConstraint.class);
-                for (EnumerablePConstraint<PatternDescription> enumerable : enumerables) {
+                for (EnumerablePConstraint enumerable : enumerables) {
                     Stub stub = enumerable.getStub();
                     admitStub(stub);
                 }
@@ -95,7 +95,7 @@ public class QuasiTreeLayout<PatternDescription, Collector> implements IReteLayo
                     // TODO QUASI-TREE TRIVIAL JOINS?
 
                     List<JoinCandidate> candidates = generateJoinCandidates();
-                    JoinOrderingHeuristics<PatternDescription, Collector> ordering = new JoinOrderingHeuristics<PatternDescription, Collector>();
+                    JoinOrderingHeuristics<Collector> ordering = new JoinOrderingHeuristics<Collector>();
                     JoinCandidate selectedJoin = Collections.min(candidates, ordering);
                     doJoin(selectedJoin.getPrimary(), selectedJoin.getSecondary());
                 }
@@ -129,7 +129,7 @@ public class QuasiTreeLayout<PatternDescription, Collector> implements IReteLayo
         }
 
         private void admitStub(Stub stub) throws RetePatternBuildException {
-            for (DeferredPConstraint<PatternDescription> deferred : deferredConstraints) {
+            for (DeferredPConstraint deferred : deferredConstraints) {
                 if (!stub.getAllEnforcedConstraints().contains(deferred)) {
                     if (deferred.isReadyAt(stub)) {
                         admitStub(deferred.checkOn(stub));

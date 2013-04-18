@@ -22,9 +22,7 @@ import org.eclipse.incquery.runtime.rete.index.MemoryNullIndexer;
 import org.eclipse.incquery.runtime.rete.index.ProjectionIndexer;
 import org.eclipse.incquery.runtime.rete.matcher.ReteEngine;
 import org.eclipse.incquery.runtime.rete.network.Direction;
-import org.eclipse.incquery.runtime.rete.network.Receiver;
 import org.eclipse.incquery.runtime.rete.network.ReteContainer;
-import org.eclipse.incquery.runtime.rete.remote.Address;
 import org.eclipse.incquery.runtime.rete.single.SingleInputNode;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
@@ -59,8 +57,8 @@ public class PredicateEvaluatorNode extends SingleInputNode {
     protected Map<Object, Collection<Tuple>> elementOccurences;
     protected Map<Tuple, Set<Tuple>> invoker2traces;
     protected Map<Tuple, Set<Tuple>> trace2invokers;
-    protected Address<ASMFunctionTraceNotifierNode> asmFunctionTraceNotifier;
-    protected Address<ElementChangeNotifierNode> elementChangeNotifier;
+    //protected Address<ASMFunctionTraceNotifierNode> asmFunctionTraceNotifier;
+    //protected Address<ElementChangeNotifierNode> elementChangeNotifier;
     protected AbstractEvaluator evaluator;
 
     private final int tupleWidth;
@@ -89,8 +87,8 @@ public class PredicateEvaluatorNode extends SingleInputNode {
         this.invoker2traces = CollectionsFactory.getMap();//new HashMap<Tuple, Set<Tuple>>();
         this.trace2invokers = CollectionsFactory.getMap();//new HashMap<Tuple, Set<Tuple>>();
         // extractASMFunctions();
-        this.asmFunctionTraceNotifier = Address.of(new ASMFunctionTraceNotifierNode(reteContainer));
-        this.elementChangeNotifier = Address.of(new ElementChangeNotifierNode(reteContainer));
+        //this.asmFunctionTraceNotifier = Address.of(new ASMFunctionTraceNotifierNode(reteContainer));
+        //this.elementChangeNotifier = Address.of(new ElementChangeNotifierNode(reteContainer));
 
         nullMask = TupleMask.linear(0, tupleWidth);
         identityMask = TupleMask.identity(tupleWidth);
@@ -289,20 +287,16 @@ public class PredicateEvaluatorNode extends SingleInputNode {
             memoryNullIndexer.propagate(direction, updateElement);
     }
 
-    /**
-     * @return the asmFunctionTraceNotifier
-     */
+    /*
     public Address<? extends Receiver> getAsmFunctionTraceNotifier() {
         return asmFunctionTraceNotifier;
     }
 
-    /**
-     * @return the elementChangeNotifier
-     */
     public Address<? extends Receiver> getElementChangeNotifier() {
         return elementChangeNotifier;
     }
-
+    */
+    
     /**
      * @return the engine
      */
@@ -322,6 +316,7 @@ public class PredicateEvaluatorNode extends SingleInputNode {
         return memoryIdentityIndexer;
     }
 
+    /*
     class ASMFunctionTraceNotifierNode extends SingleInputNode {
         public ASMFunctionTraceNotifierNode(ReteContainer reteContainer) {
             super(reteContainer);
@@ -351,5 +346,6 @@ public class PredicateEvaluatorNode extends SingleInputNode {
             notifyElementChange(updateElement.get(0));
         }
     }
+    */
 
 }

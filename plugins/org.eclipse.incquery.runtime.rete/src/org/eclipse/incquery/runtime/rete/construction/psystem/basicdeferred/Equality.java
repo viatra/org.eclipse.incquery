@@ -98,7 +98,7 @@ public class Equality extends DeferredPConstraint {
 
     @Override
     public boolean isReadyAt(Stub stub) {
-        return isMoot() || stub.getVariablesIndex().containsKey(who) && stub.getVariablesIndex().containsKey(withWhom);
+        return stub.getVariablesIndex().containsKey(who) && stub.getVariablesIndex().containsKey(withWhom);
         // will be replaced by || if copierNode is available;
         // until then, LayoutHelper.unifyVariablesAlongEqualities(PSystem<PatternDescription, StubHandle, Collector>) is
         // recommended.

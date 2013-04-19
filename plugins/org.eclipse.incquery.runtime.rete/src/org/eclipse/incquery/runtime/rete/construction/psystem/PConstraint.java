@@ -14,7 +14,7 @@ package org.eclipse.incquery.runtime.rete.construction.psystem;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
 
 /**
  * @author Gabor Bergmann
@@ -42,5 +42,5 @@ public interface PConstraint {
 
     public void delete();
 
-    public void checkSanity() throws RetePatternBuildException;
+    public void checkSanity() throws QueryPlannerException;
 }

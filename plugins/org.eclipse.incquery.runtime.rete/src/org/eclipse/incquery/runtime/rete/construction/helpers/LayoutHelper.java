@@ -14,8 +14,8 @@ package org.eclipse.incquery.runtime.rete.construction.helpers;
 import java.util.Collections;
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.ITypeInfoProviderConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
@@ -87,10 +87,10 @@ final PSystem pSystem,
      * Verifies the sanity of all constraints. Should be issued as a preventive check before layouting.
      * 
      * @param pSystem
-     * @throws RetePatternBuildException
+     * @throws QueryPlannerException
      */
     public static <PatternDescription> void checkSanity(PSystem pSystem)
-            throws RetePatternBuildException {
+            throws QueryPlannerException {
         for (PConstraint pConstraint : pSystem.getConstraints())
             pConstraint.checkSanity();
     }
@@ -102,12 +102,12 @@ final PSystem pSystem,
      * @param <StubHandle>
      * @param <Collector>
      * @param pSystem
-     * @param stub
+     * @param subPlan
      * @return a PConstraint that is not enforced, if any, or null if all are enforced
      */
     public static <PatternDescription> PConstraint getAnyUnenforcedConstraint(PSystem pSystem,
-            Stub stub) {
-        Set<PConstraint> allEnforcedConstraints = stub.getAllEnforcedConstraints();
+            SubPlan subPlan) {
+        Set<PConstraint> allEnforcedConstraints = subPlan.getAllEnforcedConstraints();
         Set<PConstraint> constraints = pSystem.getConstraints();
         for (PConstraint pConstraint : constraints) {
             if (!allEnforcedConstraints.contains(pConstraint))
@@ -120,23 +120,23 @@ final PSystem pSystem,
      * Verifies whether all constraints are enforced and exported parameters are present.
      * 
      * @param pSystem
-     * @param stub
-     * @throws RetePatternBuildException
+     * @param subPlan
+     * @throws QueryPlannerException
      */
     public static <PatternDescription, StubHandle, Collector> void finalCheck(
-final PSystem pSystem, Stub stub)
-            throws RetePatternBuildException {
-        PConstraint unenforcedConstraint = getAnyUnenforcedConstraint(pSystem, stub);
+final PSystem pSystem, SubPlan subPlan)
+            throws QueryPlannerException {
+        PConstraint unenforcedConstraint = getAnyUnenforcedConstraint(pSystem, subPlan);
         if (unenforcedConstraint != null) {
-            throw new RetePatternBuildException(
+            throw new QueryPlannerException(
                     "Pattern matcher construction terminated without successfully enforcing constraint {1}."
                             + " Could be caused if the value of some variables can not be deduced, e.g. by circularity of pattern constraints.",
                     new String[] { unenforcedConstraint.toString() }, "Could not enforce a pattern constraint", null);
         }
         for (ExportedParameter export : pSystem
                 .getConstraintsOfType(ExportedParameter.class)) {
-            if (!export.isReadyAt(stub)) {
-                throw new RetePatternBuildException(
+            if (!export.isReadyAt(subPlan)) {
+                throw new QueryPlannerException(
                         "Exported pattern parameter {1} could not be deduced during pattern matcher construction."
                                 + " A pattern constraint is required to positively deduce its value.",
                         new String[] { export.getParameterName().toString() }, "Could not calculate pattern parameter",

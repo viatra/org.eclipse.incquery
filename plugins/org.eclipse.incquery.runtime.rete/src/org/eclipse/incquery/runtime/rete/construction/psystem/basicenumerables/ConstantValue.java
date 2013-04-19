@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.KeyedEnumerablePConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
@@ -39,7 +39,7 @@ public class ConstantValue extends KeyedEnumerablePConstraint<Object> {
     }
 
     @Override
-    public Stub doCreateStub() throws RetePatternBuildException {
+    public SubPlan doCreateStub() throws QueryPlannerException {
         // return buildable.buildStartStub(new Object[] { supplierKey }, this.variablesTuple.getElements());
         return null;
     }

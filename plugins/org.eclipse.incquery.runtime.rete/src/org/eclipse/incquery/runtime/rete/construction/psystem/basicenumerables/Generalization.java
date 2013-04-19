@@ -11,7 +11,7 @@
 
 package org.eclipse.incquery.runtime.rete.construction.psystem.basicenumerables;
 
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 
@@ -32,13 +32,13 @@ public class Generalization extends CoreModelRelationship {
     }
 
     @Override
-    protected Stub doCreateTransitiveStub() {
+    protected SubPlan doCreateTransitiveStub() {
         // return buildable.generalizationTransitiveStub(variablesTuple);
         return null;
     }
 
     @Override
-    protected Stub doCreateDirectStub() {
+    protected SubPlan doCreateDirectStub() {
         // return buildable.generalizationDirectStub(variablesTuple);
         return null;
     }

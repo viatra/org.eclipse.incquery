@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.eclipse.incquery.runtime.rete.construction.Buildable;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.POperationCompiler;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
 
@@ -33,8 +33,8 @@ public class BuildHelper {
      * 
      * @return the derived stub that contains the additional checkers, or the original if no action was neccessary.
      */
-    public static Stub enforceVariableCoincidences(Buildable<?> buildable, Stub stub) {
-        Map<Object, List<Integer>> indexWithMupliplicity = stub.getVariablesTuple().invertIndexWithMupliplicity();
+    public static SubPlan enforceVariableCoincidences(POperationCompiler<?> buildable, SubPlan subPlan) {
+        Map<Object, List<Integer>> indexWithMupliplicity = subPlan.getVariablesTuple().invertIndexWithMupliplicity();
         for (Map.Entry<Object, List<Integer>> pVariableIndices : indexWithMupliplicity.entrySet()) {
             List<Integer> indices = pVariableIndices.getValue();
             if (indices.size() > 1) {
@@ -42,11 +42,11 @@ public class BuildHelper {
                 int m = 0;
                 for (Integer index : indices)
                     indexArray[m++] = index;
-                stub = buildable.buildEqualityChecker(stub, indexArray);
+                subPlan = buildable.buildEqualityChecker(subPlan, indexArray);
                 // TODO also trim here?
             }
         }
-        return stub;
+        return subPlan;
 
     }
 
@@ -55,16 +55,16 @@ public class BuildHelper {
      * 
      * @return the derived stub that contains the additional checkers, or the original if no action was necessary.
      */
-    public static <Collector> void projectIntoCollector(Buildable<Collector> buildable, Stub stub,
+    public static <Collector> void projectIntoCollector(POperationCompiler<Collector> buildable, SubPlan subPlan,
             Collector collector, PVariable[] selectedVariables) {
         int paramNum = selectedVariables.length;
         int[] tI = new int[paramNum];
         for (int i = 0; i < paramNum; i++) {
-            tI[i] = stub.getVariablesIndex().get(selectedVariables[i]);
+            tI[i] = subPlan.getVariablesIndex().get(selectedVariables[i]);
         }
-        int tiW = stub.getVariablesTuple().getSize();
+        int tiW = subPlan.getVariablesTuple().getSize();
         TupleMask trim = new TupleMask(tI, tiW);
-        Stub trimmer = buildable.buildTrimmer(stub, trim);
+        SubPlan trimmer = buildable.buildTrimmer(subPlan, trim);
         buildable.buildConnection(trimmer, collector);
     }
 
@@ -84,7 +84,7 @@ public class BuildHelper {
          * @param primaryStub
          * @param secondaryStub
          */
-        public JoinHelper(Stub primaryStub, Stub secondaryStub) {
+        public JoinHelper(SubPlan primaryStub, SubPlan secondaryStub) {
             super();
 
             Set<PVariable> primaryVariables = primaryStub.getVariablesTuple().getDistinctElements();
@@ -141,7 +141,7 @@ public class BuildHelper {
 
     }
 
-    public static <StubHandle> Stub naturalJoin(Buildable<?> buildable, Stub primaryStub, Stub secondaryStub) {
+    public static <StubHandle> SubPlan naturalJoin(POperationCompiler<?> buildable, SubPlan primaryStub, SubPlan secondaryStub) {
         JoinHelper joinHelper = new JoinHelper(primaryStub, secondaryStub);
         return buildable.buildBetaNode(primaryStub, secondaryStub, joinHelper.getPrimaryMask(),
                 joinHelper.getSecondaryMask(), joinHelper.getComplementerMask(), false);

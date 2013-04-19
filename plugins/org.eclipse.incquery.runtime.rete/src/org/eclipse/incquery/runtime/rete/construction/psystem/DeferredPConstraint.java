@@ -13,8 +13,8 @@ package org.eclipse.incquery.runtime.rete.construction.psystem;
 
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 
 /**
  * Any constraint that can only be checked on certain stubs (e.g. those stubs that already contain some variables).
@@ -29,31 +29,31 @@ public abstract class DeferredPConstraint extends BasePConstraint {
     }
 
     /**
-     * Decides whether it is possible to evaluate the PConstraint at a selected {@link Stub}. No cost model is included
+     * Decides whether it is possible to evaluate the PConstraint at a selected {@link SubPlan}. No cost model is included
      * when calculating the readiness of a constraint.
      * 
-     * @param stub
+     * @param subPlan
      * @return
      */
-    public abstract boolean isReadyAt(Stub stub);
+    public abstract boolean isReadyAt(SubPlan subPlan);
 
     /**
      * @pre this.isReadyAt(stub);
      */
-    public Stub checkOn(Stub stub) throws RetePatternBuildException {
-        Stub newStub = doCheckOn(stub);
+    public SubPlan checkOn(SubPlan subPlan) throws QueryPlannerException {
+        SubPlan newStub = doCheckOn(subPlan);
         newStub.addConstraint(this);
         return newStub;
     }
 
-    protected abstract Stub doCheckOn(Stub stub) throws RetePatternBuildException;
+    protected abstract SubPlan doCheckOn(SubPlan subPlan) throws QueryPlannerException;
 
     /**
      * Called when the constraint is not ready, but cannot be deferred further.
      * 
-     * @param stub
-     * @throws RetePatternBuildException
+     * @param subPlan
+     * @throws QueryPlannerException
      *             to indicate the error in detail. PRE: !isReady(stub)
      */
-    public abstract void raiseForeverDeferredError(Stub stub) throws RetePatternBuildException;
+    public abstract void raiseForeverDeferredError(SubPlan subPlan) throws QueryPlannerException;
 }

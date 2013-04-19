@@ -14,8 +14,8 @@ package org.eclipse.incquery.runtime.rete.construction.psystem.basicdeferred;
 import java.util.Collections;
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.construction.psystem.VariableDeferredPConstraint;
@@ -77,12 +77,12 @@ public class ExportedParameter extends VariableDeferredPConstraint {
     }
 
     @Override
-    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
-        return stub;
+    protected SubPlan doCheckOn(SubPlan subPlan) throws QueryPlannerException {
+        return subPlan;
     }
 
     @Override
-    public void checkSanity() throws RetePatternBuildException {
+    public void checkSanity() throws QueryPlannerException {
         super.checkSanity();
         if (!parameterVariable.isDeducable()) {
             String[] args = { parameterName.toString() };
@@ -90,19 +90,19 @@ public class ExportedParameter extends VariableDeferredPConstraint {
                     + "exported pattern variable {1} can not be determined based on the pattern constraints. "
                     + "HINT: certain constructs (e.g. negative patterns or check expressions) cannot output symbolic parameters.";
             String shortMsg = "Could not deduce value of parameter";
-            throw new RetePatternBuildException(msg, args, shortMsg, null);
+            throw new QueryPlannerException(msg, args, shortMsg, null);
         }
 
     }
 
     @Override
-    public void raiseForeverDeferredError(Stub stub) throws RetePatternBuildException {
+    public void raiseForeverDeferredError(SubPlan subPlan) throws QueryPlannerException {
         String[] args = { parameterName.toString() };
         String msg = "Pattern Graph Search terminated incompletely: "
                 + "exported pattern variable {1} could not be determined based on the pattern constraints. "
                 + "HINT: certain constructs (e.g. negative patterns or check expressions) cannot output symbolic parameters.";
         String shortMsg = "Could not deduce value of parameter";
-        throw new RetePatternBuildException(msg, args, shortMsg, null);
+        throw new QueryPlannerException(msg, args, shortMsg, null);
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 
@@ -42,7 +42,7 @@ public class Containment extends CoreModelRelationship {
      * @return
      */
     @Override
-    protected Stub doCreateDirectStub() {
+    protected SubPlan doCreateDirectStub() {
         // return buildable.containmentDirectStub(variablesTuple);
         return null;
     }
@@ -51,7 +51,7 @@ public class Containment extends CoreModelRelationship {
      * @return
      */
     @Override
-    protected Stub doCreateTransitiveStub() {
+    protected SubPlan doCreateTransitiveStub() {
         return null;
         // return buildable.containmentTransitiveStub(variablesTuple);
     }

@@ -15,10 +15,10 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.Buildable;
-import org.eclipse.incquery.runtime.rete.construction.IReteLayoutStrategy;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.POperationCompiler;
+import org.eclipse.incquery.runtime.rete.construction.IQueryPlanner;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.helpers.BuildHelper;
 import org.eclipse.incquery.runtime.rete.construction.helpers.LayoutHelper;
 import org.eclipse.incquery.runtime.rete.construction.psystem.DeferredPConstraint;
@@ -34,13 +34,13 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * @author Gabor Bergmann
  * 
  */
-public class BasicLinearLayout<PatternDescription> implements IReteLayoutStrategy {
+public class BasicLinearLayout<PatternDescription> implements IQueryPlanner {
 
     @Override
-    public Stub layout(final PSystem pSystem) throws RetePatternBuildException {
+    public SubPlan layout(final PSystem pSystem) throws QueryPlannerException {
         Object pattern = pSystem.getPattern();
         IPatternMatcherContext context = pSystem.getContext();
-        Buildable<?> buildable = null;// pSystem.getBuildable();
+        POperationCompiler<?> buildable = null;// pSystem.getBuildable();
         try {
 
             context.logDebug(getClass().getSimpleName() + ": patternbody build started");
@@ -58,7 +58,7 @@ public class BasicLinearLayout<PatternDescription> implements IReteLayoutStrateg
             LayoutHelper.checkSanity(pSystem);
 
             // STARTING THE LINE
-            Stub stub = buildable.buildStartStub(new Object[] {}, new Object[] {});
+            SubPlan subPlan = buildable.buildStartStub(new Object[] {}, new Object[] {});
 
             // Set<ConstantValue> constants = pSystem.getConstraintsOfType(ConstantValue.class);
             // for (ConstantValue<PatternDescription, StubHandle> pConstraint : constants) {
@@ -75,25 +75,25 @@ public class BasicLinearLayout<PatternDescription> implements IReteLayoutStrateg
             // MAIN LOOP
             while (!pQueue.isEmpty()) {
                 PConstraint pConstraint = Collections.min(pQueue,
- new OrderingHeuristics<PatternDescription>(stub)); // pQueue.iterator().next();
+ new OrderingHeuristics<PatternDescription>(subPlan)); // pQueue.iterator().next();
                 pQueue.remove(pConstraint);
 
                 if (pConstraint instanceof EnumerablePConstraint) {
                     EnumerablePConstraint enumerable = (EnumerablePConstraint) pConstraint;
-                    Stub sideStub = enumerable.getStub();
-                    stub = BuildHelper.naturalJoin(buildable, stub, sideStub);
+                    SubPlan sideStub = enumerable.getStub();
+                    subPlan = BuildHelper.naturalJoin(buildable, subPlan, sideStub);
                 } else {
                     DeferredPConstraint deferred = (DeferredPConstraint) pConstraint;
-                    if (deferred.isReadyAt(stub)) {
-                        stub = deferred.checkOn(stub);
+                    if (deferred.isReadyAt(subPlan)) {
+                        subPlan = deferred.checkOn(subPlan);
                     } else {
-                        deferred.raiseForeverDeferredError(stub);
+                        deferred.raiseForeverDeferredError(subPlan);
                     }
                 }
             }
 
             // FINAL CHECK, whether all exported variables are present
-            LayoutHelper.finalCheck(pSystem, stub);
+            LayoutHelper.finalCheck(pSystem, subPlan);
 
             // // output
             // int paramNum = patternScaffold.gtPattern.getSymParameters().size();
@@ -114,9 +114,9 @@ public class BasicLinearLayout<PatternDescription> implements IReteLayoutStrateg
 
             context.logDebug(getClass().getSimpleName() + ": patternbody build concluded");
 
-            return stub;
+            return subPlan;
 
-        } catch (RetePatternBuildException ex) {
+        } catch (QueryPlannerException ex) {
             ex.setPatternDescription(pattern);
             throw ex;
         }

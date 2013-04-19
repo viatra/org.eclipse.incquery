@@ -19,8 +19,8 @@ import java.util.Set;
 import org.eclipse.incquery.patternlanguage.helper.CorePatternLanguageHelper;
 import org.eclipse.incquery.patternlanguage.patternLanguage.Pattern;
 import org.eclipse.incquery.patternlanguage.patternLanguage.Variable;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.construction.psystem.basicdeferred.BaseTypeSafePredicateCheck;
 import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
@@ -48,13 +48,13 @@ public class XBaseCheck<StubHandle> extends BaseTypeSafePredicateCheck {
     }
 
     @Override
-    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
+    protected SubPlan doCheckOn(SubPlan subPlan) throws QueryPlannerException {
         Set<Integer> affectedIndices = new HashSet<Integer>();
         Map<String, Integer> tupleNameMap = new HashMap<String, Integer>();
         Set<Variable> variables = CorePatternLanguageHelper.getReferencedPatternVariablesOfXExpression(xExpression);
         for (Variable variable : variables) {
             PVariable pNode = pGraph.getPNode(variable);
-            Integer position = stub.getVariablesIndex().get(pNode);
+            Integer position = subPlan.getVariablesIndex().get(pNode);
             tupleNameMap.put(variable.getSimpleName(), position);
             affectedIndices.add(position);
         }

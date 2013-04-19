@@ -18,7 +18,7 @@ import java.util.Set;
 
 import org.eclipse.incquery.runtime.base.api.FunctionalDependencyHelper;
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 
@@ -27,14 +27,14 @@ import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
  * 
  */
 class JoinCandidate {
-    Stub primary;
-    Stub secondary;
+    SubPlan primary;
+    SubPlan secondary;
 
     Set<PVariable> varPrimary;
     Set<PVariable> varSecondary;
     Set<PVariable> varCommon;
 
-    JoinCandidate(Stub primary, Stub secondary) {
+    JoinCandidate(SubPlan primary, SubPlan secondary) {
         super();
         this.primary = primary;
         this.secondary = secondary;
@@ -48,14 +48,14 @@ class JoinCandidate {
     /**
      * @return the a
      */
-    public Stub getPrimary() {
+    public SubPlan getPrimary() {
         return primary;
     }
 
     /**
      * @return the b
      */
-    public Stub getSecondary() {
+    public SubPlan getSecondary() {
         return secondary;
     }
 

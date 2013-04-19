@@ -11,7 +11,7 @@
 
 package org.eclipse.incquery.runtime.rete.construction.psystem.basicenumerables;
 
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.ITypeInfoProviderConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.KeyedEnumerablePConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
@@ -34,7 +34,7 @@ public class TypeUnary extends KeyedEnumerablePConstraint<Object>
     }
 
     @Override
-    public Stub doCreateStub() {
+    public SubPlan doCreateStub() {
         // return buildable.unaryTypeStub(variablesTuple, supplierKey);
         return null;
     }

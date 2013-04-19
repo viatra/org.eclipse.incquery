@@ -14,11 +14,11 @@ package org.eclipse.incquery.runtime.rete.construction;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 
 /**
- * An algorithm that builds a RETE net based on a PSystem.
+ * An algorithm that builds a query plan based on a PSystem.
  * 
  * @author Gabor Bergmann
  * 
  */
-public interface IReteLayoutStrategy {
-    public Stub layout(PSystem pSystem) throws RetePatternBuildException;
+public interface IQueryPlanner {
+    public SubPlan layout(PSystem pSystem) throws QueryPlannerException;
 }

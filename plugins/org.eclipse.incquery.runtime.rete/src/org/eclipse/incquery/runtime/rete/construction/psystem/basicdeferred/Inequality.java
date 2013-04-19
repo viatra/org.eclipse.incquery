@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.construction.psystem.VariableDeferredPConstraint;
@@ -75,8 +75,8 @@ public class Inequality<PatternDescription> extends VariableDeferredPConstraint
     }
 
     @Override
-    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
-        Map<Object, Integer> variablesIndex = stub.getVariablesIndex();
+    protected SubPlan doCheckOn(SubPlan subPlan) throws QueryPlannerException {
+        Map<Object, Integer> variablesIndex = subPlan.getVariablesIndex();
         // return buildable.buildInjectivityChecker(stub, variablesIndex.get(who),
         // new int[] { variablesIndex.get(withWhom) });
         return null;

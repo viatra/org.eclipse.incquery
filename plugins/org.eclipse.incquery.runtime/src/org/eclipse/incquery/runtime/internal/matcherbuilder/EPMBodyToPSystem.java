@@ -44,8 +44,8 @@ import org.eclipse.incquery.patternlanguage.patternLanguage.ValueReference;
 import org.eclipse.incquery.patternlanguage.patternLanguage.Variable;
 import org.eclipse.incquery.patternlanguage.patternLanguage.VariableReference;
 import org.eclipse.incquery.patternlanguage.patternLanguage.VariableValue;
-import org.eclipse.incquery.runtime.rete.construction.Buildable;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
+import org.eclipse.incquery.runtime.rete.construction.POperationCompiler;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.construction.psystem.basicdeferred.Equality;
@@ -73,7 +73,7 @@ public class EPMBodyToPSystem<Collector> {
     protected Pattern pattern;
     protected PatternBody body;
     protected IPatternMatcherContext context;
-    protected Buildable<Collector> buildable;
+    protected POperationCompiler<Collector> pOperationCompiler;
 
     protected PSystem pSystem;
 
@@ -86,17 +86,17 @@ public class EPMBodyToPSystem<Collector> {
      * @param buildable
      */
     public EPMBodyToPSystem(Pattern pattern, PatternBody body, IPatternMatcherContext context,
-            Buildable<Collector> buildable) {
+            POperationCompiler<Collector> buildable) {
         super();
         this.pattern = pattern;
         this.body = body;
         this.context = context;
-        this.buildable = buildable;
+        this.pOperationCompiler = buildable;
 
         patternFQN = CorePatternLanguageHelper.getFullyQualifiedName(pattern);
     }
 
-    public PSystem toPSystem() throws RetePatternBuildException {
+    public PSystem toPSystem() throws QueryPlannerException {
         try {
             if (this.pSystem == null) {
                 this.pSystem = new PSystem(context, pattern);
@@ -107,13 +107,13 @@ public class EPMBodyToPSystem<Collector> {
                 gatherBodyConstraints();
             }
             return pSystem;
-        } catch (RetePatternBuildException e) {
+        } catch (QueryPlannerException e) {
             e.setPatternDescription(pattern);
             throw e;
         }
     }
 
-    public PVariable[] symbolicParameterArray() throws RetePatternBuildException {
+    public PVariable[] symbolicParameterArray() throws QueryPlannerException {
         toPSystem();
 
         EList<Variable> symParameters = pattern.getParameters();
@@ -141,12 +141,12 @@ public class EPMBodyToPSystem<Collector> {
         return getPNode(variable.getVariable());
     }
 
-    protected Tuple getPNodeTuple(List<? extends ValueReference> variables) throws RetePatternBuildException {
+    protected Tuple getPNodeTuple(List<? extends ValueReference> variables) throws QueryPlannerException {
         PVariable[] pNodeArray = getPNodeArray(variables);
         return new FlatTuple(pNodeArray);
     }
 
-    public PVariable[] getPNodeArray(List<? extends ValueReference> variables) throws RetePatternBuildException {
+    public PVariable[] getPNodeArray(List<? extends ValueReference> variables) throws QueryPlannerException {
         int k = 0;
         PVariable[] pNodeArray = new PVariable[variables.size()];
         for (ValueReference varRef : variables) {
@@ -155,7 +155,7 @@ public class EPMBodyToPSystem<Collector> {
         return pNodeArray;
     }
 
-    protected PVariable getPNode(ValueReference reference) throws RetePatternBuildException {
+    protected PVariable getPNode(ValueReference reference) throws QueryPlannerException {
         if (reference instanceof VariableValue)
             return getPNode(((VariableValue) reference).getValue());
         else if (reference instanceof AggregatedValue)
@@ -172,7 +172,7 @@ public class EPMBodyToPSystem<Collector> {
             Boolean b = ((BoolValue) reference).isValue();
             return pSystem.newConstantVariable(b);
         } else
-            throw new RetePatternBuildException(
+            throw new QueryPlannerException(
                     "Unsupported value reference of type {1} from EPackage {2} currently unsupported by pattern builder in pattern {3}.",
                     new String[] { reference != null ? reference.eClass().getName() : "(null)",
                             reference != null ? reference.eClass().getEPackage().getNsURI() : "(null)",
@@ -216,7 +216,7 @@ public class EPMBodyToPSystem<Collector> {
         // }
     }
 
-    private void gatherBodyConstraints() throws RetePatternBuildException {
+    private void gatherBodyConstraints() throws QueryPlannerException {
         EList<Constraint> constraints = body.getConstraints();
         for (Constraint constraint : constraints) {
             gatherConstraint(constraint);
@@ -225,9 +225,9 @@ public class EPMBodyToPSystem<Collector> {
 
     /**
      * @param constraint
-     * @throws RetePatternBuildException
+     * @throws QueryPlannerException
      */
-    protected void gatherConstraint(Constraint constraint) throws RetePatternBuildException {
+    protected void gatherConstraint(Constraint constraint) throws QueryPlannerException {
         if (constraint instanceof EClassifierConstraint) { // EMF-specific
             EClassifierConstraint constraint2 = (EClassifierConstraint) constraint;
             gatherClassifierConstraint(constraint2);
@@ -246,7 +246,7 @@ public class EPMBodyToPSystem<Collector> {
             gatherCheckConstraint(check);
             // TODO OTHER CONSTRAINT TYPES
         } else {
-            throw new RetePatternBuildException("Unsupported constraint type {1} in pattern {2}.", new String[] {
+            throw new QueryPlannerException("Unsupported constraint type {1} in pattern {2}.", new String[] {
                     constraint.eClass().getName(), patternFQN }, "Unsupported constraint type", pattern);
         }
     }
@@ -261,9 +261,9 @@ public class EPMBodyToPSystem<Collector> {
 
     /**
      * @param pathExpression
-     * @throws RetePatternBuildException
+     * @throws QueryPlannerException
      */
-    protected void gatherPathExpression(PathExpressionConstraint pathExpression) throws RetePatternBuildException {
+    protected void gatherPathExpression(PathExpressionConstraint pathExpression) throws QueryPlannerException {
         PathExpressionHead head = pathExpression.getHead();
         PVariable currentSrc = getPNode(head.getSrc());
         PVariable finalDst = getPNode(head.getDst());
@@ -275,7 +275,7 @@ public class EPMBodyToPSystem<Collector> {
             EClassifier headClassname = ((ClassType) headType).getClassname();
             new TypeUnary(pSystem, currentSrc, headClassname);
         } else {
-            throw new RetePatternBuildException("Unsupported path expression head type {1} in pattern {2}: {3}",
+            throw new QueryPlannerException("Unsupported path expression head type {1} in pattern {2}: {3}",
                     new String[] { headType.eClass().getName(), patternFQN, typeStr(headType) },
                     "Unsupported navigation source", pattern);
         }
@@ -296,9 +296,9 @@ public class EPMBodyToPSystem<Collector> {
 
     /**
      * @param compare
-     * @throws RetePatternBuildException
+     * @throws QueryPlannerException
      */
-    protected void gatherCompareConstraint(CompareConstraint compare) throws RetePatternBuildException {
+    protected void gatherCompareConstraint(CompareConstraint compare) throws QueryPlannerException {
         PVariable left = getPNode(compare.getLeftOperand());
         PVariable right = getPNode(compare.getRightOperand());
         switch (compare.getFeature()) {
@@ -312,10 +312,10 @@ public class EPMBodyToPSystem<Collector> {
 
     /**
      * @param constraint
-     * @throws RetePatternBuildException
+     * @throws QueryPlannerException
      */
     protected void gatherCompositionConstraint(PatternCompositionConstraint constraint)
-            throws RetePatternBuildException {
+            throws QueryPlannerException {
         PatternCall call = constraint.getCall();
         Pattern patternRef = call.getPatternRef();
         Tuple pNodeTuple = getPNodeTuple(call.getParameters());
@@ -326,12 +326,12 @@ public class EPMBodyToPSystem<Collector> {
                 new PositivePatternCall(pSystem, pNodeTuple, patternRef);
         } else {
             if (pNodeTuple.getSize() != 2)
-                throw new RetePatternBuildException(
+                throw new QueryPlannerException(
                         "Transitive closure of {1} in pattern {2} is unsupported because called pattern is not binary.",
                         new String[] { CorePatternLanguageHelper.getFullyQualifiedName(patternRef), patternFQN },
                         "Transitive closure only supported for binary patterns.", pattern);
             else if (constraint.isNegative())
-                throw new RetePatternBuildException("Unsupported negated transitive closure of {1} in pattern {2}",
+                throw new QueryPlannerException("Unsupported negated transitive closure of {1} in pattern {2}",
                         new String[] { CorePatternLanguageHelper.getFullyQualifiedName(patternRef), patternFQN },
                         "Unsupported negated transitive closure", pattern);
             else
@@ -352,7 +352,7 @@ public class EPMBodyToPSystem<Collector> {
         new TypeUnary(pSystem, pNode, classname);
     }
 
-    protected void gatherPathSegment(Type segmentType, PVariable src, PVariable trg) throws RetePatternBuildException {
+    protected void gatherPathSegment(Type segmentType, PVariable src, PVariable trg) throws QueryPlannerException {
         if (segmentType instanceof ReferenceType) { // EMF-specific
             EStructuralFeature typeObject = ((ReferenceType) segmentType).getRefname();
             if (context.edgeInterpretation() == EdgeInterpretation.TERNARY) {
@@ -361,12 +361,12 @@ public class EPMBodyToPSystem<Collector> {
                 new TypeBinary(pSystem, context, src, trg, typeObject);
             }
         } else
-            throw new RetePatternBuildException("Unsupported path segment type {1} in pattern {2}: {3}", new String[] {
+            throw new QueryPlannerException("Unsupported path segment type {1} in pattern {2}: {3}", new String[] {
                     segmentType.eClass().getName(), patternFQN, typeStr(segmentType) }, "Unsupported navigation step",
                     pattern);
     }
 
-    protected PVariable aggregate(AggregatedValue reference) throws RetePatternBuildException {
+    protected PVariable aggregate(AggregatedValue reference) throws QueryPlannerException {
         PVariable result = newVirtual();
 
         PatternCall call = reference.getCall();
@@ -377,7 +377,7 @@ public class EPMBodyToPSystem<Collector> {
         if (aggregator instanceof CountAggregator) {
             new PatternMatchCounter<Pattern>(pSystem, pNodeTuple, patternRef, result);
         } else
-            throw new RetePatternBuildException("Unsupported aggregator expression type {1} in pattern {2}.",
+            throw new QueryPlannerException("Unsupported aggregator expression type {1} in pattern {2}.",
                     new String[] { aggregator.eClass().getName(), patternFQN }, "Unsupported aggregator expression",
                     pattern);
 

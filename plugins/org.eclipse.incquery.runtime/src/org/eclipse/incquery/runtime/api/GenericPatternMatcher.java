@@ -18,7 +18,7 @@ import org.eclipse.incquery.patternlanguage.helper.CorePatternLanguageHelper;
 import org.eclipse.incquery.patternlanguage.patternLanguage.Pattern;
 import org.eclipse.incquery.runtime.api.impl.BaseMatcher;
 import org.eclipse.incquery.runtime.exception.IncQueryException;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
 import org.eclipse.incquery.runtime.rete.matcher.RetePatternMatcher;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 
@@ -113,7 +113,7 @@ public class GenericPatternMatcher extends BaseMatcher<GenericPatternMatch> {
         checkPattern(engine, pattern);
         try {
             return engine.getReteEngine().accessMatcher(pattern);
-        } catch (RetePatternBuildException e) {
+        } catch (QueryPlannerException e) {
             throw new IncQueryException(e);
         }
     }

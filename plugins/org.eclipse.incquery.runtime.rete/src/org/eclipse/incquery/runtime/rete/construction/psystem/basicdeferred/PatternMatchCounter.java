@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
@@ -67,7 +67,7 @@ public class PatternMatchCounter<PatternDescription> extends PatternCallBasedDef
     }
 
     @Override
-    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
+    protected SubPlan doCheckOn(SubPlan subPlan) throws QueryPlannerException {
         // Stub sideStub = getSideStub();
         // BuildHelper.JoinHelper joinHelper = getJoinHelper(stub, sideStub);
         // Integer resultPositionLeft = stub.getVariablesIndex().get(resultVariable);

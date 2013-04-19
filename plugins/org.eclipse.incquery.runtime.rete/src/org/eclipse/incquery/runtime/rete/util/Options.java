@@ -11,7 +11,7 @@
 
 package org.eclipse.incquery.runtime.rete.util;
 
-import org.eclipse.incquery.runtime.rete.construction.IReteLayoutStrategy;
+import org.eclipse.incquery.runtime.rete.construction.IQueryPlanner;
 import org.eclipse.incquery.runtime.rete.construction.basiclinear.BasicLinearLayout;
 import org.eclipse.incquery.runtime.rete.construction.quasitree.QuasiTreeLayout;
 
@@ -51,7 +51,7 @@ public class Options {
     public enum BuilderMethod {
         LEGACY, // ONLY with GTASM
         PSYSTEM_BASIC_LINEAR, PSYSTEM_QUASITREE;
-        public <Collector> IReteLayoutStrategy layoutStrategy() {
+        public <Collector> IQueryPlanner layoutStrategy() {
             switch (this) {
             case PSYSTEM_BASIC_LINEAR:
                 return new BasicLinearLayout();

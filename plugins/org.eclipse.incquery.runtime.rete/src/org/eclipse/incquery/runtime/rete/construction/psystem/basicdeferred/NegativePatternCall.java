@@ -14,8 +14,8 @@ package org.eclipse.incquery.runtime.rete.construction.psystem.basicdeferred;
 import java.util.Collections;
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.helpers.BuildHelper;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
@@ -49,9 +49,9 @@ public class NegativePatternCall extends PatternCallBasedDeferred {
     }
 
     @Override
-    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
-        Stub sideStub = getSideStub();
-        BuildHelper.JoinHelper joinHelper = getJoinHelper(stub, sideStub);
+    protected SubPlan doCheckOn(SubPlan subPlan) throws QueryPlannerException {
+        SubPlan sideStub = getSideStub();
+        BuildHelper.JoinHelper joinHelper = getJoinHelper(subPlan, sideStub);
         // return buildable.buildBetaNode(stub, sideStub, joinHelper.getPrimaryMask(), joinHelper.getSecondaryMask(),
         // joinHelper.getComplementerMask(), true);
         return null;

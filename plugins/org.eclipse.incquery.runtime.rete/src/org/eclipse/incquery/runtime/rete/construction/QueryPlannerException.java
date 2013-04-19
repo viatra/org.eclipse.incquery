@@ -17,7 +17,7 @@ package org.eclipse.incquery.runtime.rete.construction;
  * @author Gabor Bergmann
  * 
  */
-public class RetePatternBuildException extends Exception {
+public class QueryPlannerException extends Exception {
 
     /**
 	 * 
@@ -38,7 +38,7 @@ public class RetePatternBuildException extends Exception {
      * @param patternDescription
      *            the PatternDescription where the exception occurred
      */
-    public RetePatternBuildException(String message, String[] context, String shortMessage, Object patternDescription) {
+    public QueryPlannerException(String message, String[] context, String shortMessage, Object patternDescription) {
         super(bind(message, context));
         this.patternDescription = patternDescription;
         this.templateMessage = message;
@@ -55,7 +55,7 @@ public class RetePatternBuildException extends Exception {
      * @param patternDescription
      *            the PatternDescription where the exception occurred
      */
-    public RetePatternBuildException(String message, String[] context, String shortMessage, Object patternDescription,
+    public QueryPlannerException(String message, String[] context, String shortMessage, Object patternDescription,
             Throwable cause) {
         super(bind(message, context), cause);
         this.patternDescription = patternDescription;

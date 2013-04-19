@@ -13,8 +13,8 @@ package org.eclipse.incquery.runtime.rete.construction.psystem;
 
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 
 /**
@@ -26,25 +26,25 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 public abstract class EnumerablePConstraint extends BasePConstraint {
     protected Tuple variablesTuple;
 
-    private Stub stub;
+    private SubPlan subPlan;
 
     protected EnumerablePConstraint(PSystem pSystem, Tuple variablesTuple) {
         super(pSystem, variablesTuple.<PVariable> getDistinctElements());
         this.variablesTuple = variablesTuple;
     }
 
-    public Stub getStub() throws RetePatternBuildException {
-        if (stub == null) {
-            stub = doCreateStub();
-            stub.addConstraint(this);
+    public SubPlan getStub() throws QueryPlannerException {
+        if (subPlan == null) {
+            subPlan = doCreateStub();
+            subPlan.addConstraint(this);
 
             // check for any variable coincidences and enforce them
             // stub = BuildHelper.enforceVariableCoincidences(buildable, stub);
         }
-        return stub;
+        return subPlan;
     }
 
-    public abstract Stub doCreateStub() throws RetePatternBuildException;
+    public abstract SubPlan doCreateStub() throws QueryPlannerException;
 
     @Override
     public void doReplaceVariable(PVariable obsolete, PVariable replacement) {

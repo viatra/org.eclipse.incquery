@@ -11,8 +11,8 @@
 
 package org.eclipse.incquery.runtime.rete.construction.psystem.basicenumerables;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.KeyedEnumerablePConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
@@ -35,7 +35,7 @@ public class BinaryTransitiveClosure extends KeyedEnumerablePConstraint<Object> 
     }
 
     @Override
-    public Stub doCreateStub() throws RetePatternBuildException {
+    public SubPlan doCreateStub() throws QueryPlannerException {
         // Stub<StubHandle> patternProduction = buildable.patternCallStub(variablesTuple, supplierKey);
         // return buildable.buildTransitiveClosure(patternProduction);
         return null;

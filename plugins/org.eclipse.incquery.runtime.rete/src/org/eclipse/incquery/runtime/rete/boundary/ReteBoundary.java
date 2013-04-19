@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.index.Indexer;
 import org.eclipse.incquery.runtime.rete.index.IterableIndexer;
 import org.eclipse.incquery.runtime.rete.index.JoinNode;
@@ -91,7 +91,7 @@ public class ReteBoundary {
      * Stubs of parent nodes that have the key node as their child. For RETE --> Stub traceability, mainly at production
      * nodes.
      */
-    protected Map<Address<? extends Receiver>, Set<Stub>> parentStubsOfReceiver;
+    protected Map<Address<? extends Receiver>, Set<SubPlan>> parentStubsOfReceiver;
 
     /**
      * Prerequisite: engine has its network and framework fields initialized
@@ -448,7 +448,7 @@ public class ReteBoundary {
      * accesses the production node for specified pattern; builds pattern matcher if it doesn't exist yet
      */
     public synchronized Address<? extends Production> accessProduction(Object gtPattern)
-            throws RetePatternBuildException {
+            throws QueryPlannerException {
         Address<? extends Production> pn;
         pn = productions.get(gtPattern);
         if (pn == null) {
@@ -456,7 +456,7 @@ public class ReteBoundary {
             pn = productions.get(gtPattern);
             if (pn == null) {
                 String[] args = { gtPattern.toString() };
-                throw new RetePatternBuildException("Unsuccessful creation of RETE production node for pattern {1}",
+                throw new QueryPlannerException("Unsuccessful creation of RETE production node for pattern {1}",
                         args, "Could not create RETE production node.", gtPattern);
             }
         }
@@ -471,10 +471,10 @@ public class ReteBoundary {
      *             if production node is already created
      */
     public synchronized Address<? extends Production> createProductionInternal(Object gtPattern)
-            throws RetePatternBuildException {
+            throws QueryPlannerException {
         if (productions.containsKey(gtPattern)) {
             String[] args = { gtPattern.toString() };
-            throw new RetePatternBuildException("Multiple creation attempts of production node for {1}", args,
+            throw new QueryPlannerException("Multiple creation attempts of production node for {1}", args,
                     "Duplicate RETE production node.", gtPattern);
         }
 
@@ -518,7 +518,7 @@ public class ReteBoundary {
     /**
      * @pre: builder is set
      */
-    protected void construct(Object gtPattern) throws RetePatternBuildException {
+    protected void construct(Object gtPattern) throws QueryPlannerException {
         engine.getReteNet().waitForReteTermination();
         engine.getBuilder().construct(gtPattern);
         // production.setDirty(false);
@@ -632,8 +632,8 @@ public class ReteBoundary {
     }
 
     public void registerParentStubForReceiver(Address<? extends Receiver> receiver,
- Stub parentStub) {
-        Set<Stub> parents = parentStubsOfReceiver.get(receiver);
+ SubPlan parentStub) {
+        Set<SubPlan> parents = parentStubsOfReceiver.get(receiver);
         if (parents == null) {
             parents = CollectionsFactory.getSet();//new HashSet<Stub<Address<? extends Supplier>>>();
             parentStubsOfReceiver.put(receiver, parents);
@@ -641,8 +641,8 @@ public class ReteBoundary {
         parents.add(parentStub);
     }
 
-    public Set<Stub> getParentStubsOfReceiver(Address<? extends Receiver> receiver) {
-        Set<Stub> parents = parentStubsOfReceiver.get(receiver);
+    public Set<SubPlan> getParentStubsOfReceiver(Address<? extends Receiver> receiver) {
+        Set<SubPlan> parents = parentStubsOfReceiver.get(receiver);
         if (parents == null)
             parents = Collections.emptySet();
         return parents;

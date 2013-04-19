@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.helpers.TypeHelper;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
@@ -49,7 +49,7 @@ public abstract class BaseTypeSafePredicateCheck extends VariableDeferredPConstr
     }
 
     @Override
-    public boolean isReadyAt(Stub stub) {
+    public boolean isReadyAt(SubPlan subPlan) {
         // if (super.isReadyAt(stub)) {
         // return checkTypeSafety(stub) == null;
         // }
@@ -59,13 +59,13 @@ public abstract class BaseTypeSafePredicateCheck extends VariableDeferredPConstr
     /**
      * Checks whether all type restrictions are already enforced on affected variables.
      * 
-     * @param stub
+     * @param subPlan
      * @return a variable whose type safety is not enforced yet, or null if the stub is typesafe
      */
-    protected PVariable checkTypeSafety(Stub stub) {
+    protected PVariable checkTypeSafety(SubPlan subPlan) {
         for (PVariable pVariable : getAffectedVariables()) {
             Set<Object> allTypeRestrictionsForVariable = getAllTypeRestrictions().get(pVariable);
-            Set<Object> checkedTypeRestrictions = TypeHelper.inferTypes(pVariable, stub.getAllEnforcedConstraints());
+            Set<Object> checkedTypeRestrictions = TypeHelper.inferTypes(pVariable, subPlan.getAllEnforcedConstraints());
             Set<Object> uncheckedTypeRestrictions = TypeHelper.subsumeTypes(allTypeRestrictionsForVariable,
                     checkedTypeRestrictions, this.pSystem.getContext());
             if (!uncheckedTypeRestrictions.isEmpty())
@@ -89,15 +89,15 @@ public abstract class BaseTypeSafePredicateCheck extends VariableDeferredPConstr
     }
 
     @Override
-    public void raiseForeverDeferredError(Stub stub) throws RetePatternBuildException {
-        if (!super.isReadyAt(stub)) {
-            super.raiseForeverDeferredError(stub);
+    public void raiseForeverDeferredError(SubPlan subPlan) throws QueryPlannerException {
+        if (!super.isReadyAt(subPlan)) {
+            super.raiseForeverDeferredError(subPlan);
         } else {
-            String[] args = { toString(), checkTypeSafety(stub).toString() };
+            String[] args = { toString(), checkTypeSafety(subPlan).toString() };
             String msg = "The checking of pattern constraint {1} cannot be deferred further, but variable {2} is still not type safe. "
                     + "HINT: the incremental matcher is not an equation solver, please make sure that all variable values are deducible.";
             String shortMsg = "Could not check all constraints due to undeducible type restrictions";
-            throw new RetePatternBuildException(msg, args, shortMsg, null);
+            throw new QueryPlannerException(msg, args, shortMsg, null);
         }
 
     }

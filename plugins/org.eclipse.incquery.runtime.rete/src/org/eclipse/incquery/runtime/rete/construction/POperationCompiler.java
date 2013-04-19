@@ -29,67 +29,67 @@ import org.eclipse.incquery.runtime.rete.tuple.TupleMask;
  *            the handle of a receiver-like RETE ending to which stubs can be connected
  * @author Gabor Bergmann
  */
-public interface Buildable<Collector> {
+public interface POperationCompiler<Collector> {
 
-    public Collector patternCollector(Object pattern) throws RetePatternBuildException;
+    public Collector patternCollector(Object pattern) throws QueryPlannerException;
 
-    public Stub patternCallStub(Tuple nodes, Object supplierKey)
-            throws RetePatternBuildException;
+    public SubPlan patternCallStub(Tuple nodes, Object supplierKey)
+            throws QueryPlannerException;
 
-    public Stub instantiationTransitiveStub(Tuple nodes);
+    public SubPlan instantiationTransitiveStub(Tuple nodes);
 
-    public Stub instantiationDirectStub(Tuple nodes);
+    public SubPlan instantiationDirectStub(Tuple nodes);
 
-    public Stub generalizationTransitiveStub(Tuple nodes);
+    public SubPlan generalizationTransitiveStub(Tuple nodes);
 
-    public Stub generalizationDirectStub(Tuple nodes);
+    public SubPlan generalizationDirectStub(Tuple nodes);
 
-    public Stub containmentTransitiveStub(Tuple nodes);
+    public SubPlan containmentTransitiveStub(Tuple nodes);
 
-    public Stub containmentDirectStub(Tuple nodes);
+    public SubPlan containmentDirectStub(Tuple nodes);
 
-    public Stub binaryEdgeTypeStub(Tuple nodes, Object supplierKey);
+    public SubPlan binaryEdgeTypeStub(Tuple nodes, Object supplierKey);
 
-    public Stub ternaryEdgeTypeStub(Tuple nodes, Object supplierKey);
+    public SubPlan ternaryEdgeTypeStub(Tuple nodes, Object supplierKey);
 
-    public Stub unaryTypeStub(Tuple nodes, Object supplierKey);
+    public SubPlan unaryTypeStub(Tuple nodes, Object supplierKey);
 
-    public void buildConnection(Stub stub, Collector collector);
+    public void buildConnection(SubPlan subPlan, Collector collector);
 
-    public Stub buildStartStub(Object[] constantValues, Object[] constantNames);
+    public SubPlan buildStartStub(Object[] constantValues, Object[] constantNames);
 
-    public Stub buildEqualityChecker(Stub stub, int[] indices);
+    public SubPlan buildEqualityChecker(SubPlan subPlan, int[] indices);
 
-    public Stub buildInjectivityChecker(Stub stub, int subject, int[] inequalIndices);
+    public SubPlan buildInjectivityChecker(SubPlan subPlan, int subject, int[] inequalIndices);
 
-    public Stub buildTransitiveClosure(Stub stub);
+    public SubPlan buildTransitiveClosure(SubPlan subPlan);
 
-    public Stub buildTrimmer(Stub stub, TupleMask trimMask);
+    public SubPlan buildTrimmer(SubPlan subPlan, TupleMask trimMask);
 
-    public Stub buildBetaNode(Stub primaryStub, Stub sideStub,
+    public SubPlan buildBetaNode(SubPlan primaryStub, SubPlan sideStub,
             TupleMask primaryMask, TupleMask sideMask, TupleMask complementer, boolean negative);
 
-    public Stub buildCounterBetaNode(Stub primaryStub, Stub sideStub,
+    public SubPlan buildCounterBetaNode(SubPlan primaryStub, SubPlan sideStub,
             TupleMask primaryMask, TupleMask originalSideMask, TupleMask complementer,
             Object aggregateResultCalibrationElement);
 
-    public Stub buildCountCheckBetaNode(Stub primaryStub, Stub sideStub,
+    public SubPlan buildCountCheckBetaNode(SubPlan primaryStub, SubPlan sideStub,
             TupleMask primaryMask, TupleMask originalSideMask, int resultPositionInSignature);
 
-    public Stub buildScopeConstrainer(Stub stub, boolean transitive, Object unwrappedContainer,
+    public SubPlan buildScopeConstrainer(SubPlan subPlan, boolean transitive, Object unwrappedContainer,
             int constrainedIndex);
 
-    public Stub buildPredicateChecker(AbstractEvaluator evaluator, Integer rhsIndex, int[] affectedIndices, Stub stub);
+    public SubPlan buildPredicateChecker(AbstractEvaluator evaluator, Integer rhsIndex, int[] affectedIndices, SubPlan subPlan);
 
     /**
      * @return a buildable that potentially acts on a separate container
      */
-    public Buildable<Collector> getNextContainer();
+    public POperationCompiler<Collector> getNextContainer();
 
     /**
      * @return a buildable that puts build actions on the tab of the given pattern
      */
-    public Buildable<Collector> putOnTab(Object effort);
+    public POperationCompiler<Collector> putOnTab(Object effort);
 
     public void reinitialize();
 }

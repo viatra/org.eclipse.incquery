@@ -11,7 +11,7 @@
 
 package org.eclipse.incquery.runtime.rete.matcher;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
 
 /**
  * 
@@ -24,13 +24,13 @@ public interface IPatternMatcherStringTypedContext<PatternDescription> extends I
     // String retrieveTernaryEdgeTypeFQN(Object typeObject);
     // String retrieveBinaryEdgeTypeFQN(Object typeObject);
 
-    Object resolveConstant(String fullyQualifiedName) throws RetePatternBuildException; // Type? Instance? Entity?
+    Object resolveConstant(String fullyQualifiedName) throws QueryPlannerException; // Type? Instance? Entity?
                                                                                         // Relation? Who knows?
 
-    Object retrieveBinaryEdgeType(String fullyQualifiedName) throws RetePatternBuildException;
+    Object retrieveBinaryEdgeType(String fullyQualifiedName) throws QueryPlannerException;
 
-    Object retrieveTernaryEdgeType(String fullyQualifiedName) throws RetePatternBuildException;
+    Object retrieveTernaryEdgeType(String fullyQualifiedName) throws QueryPlannerException;
 
-    Object retrieveUnaryType(String fullyQualifiedName) throws RetePatternBuildException;
+    Object retrieveUnaryType(String fullyQualifiedName) throws QueryPlannerException;
 
 }

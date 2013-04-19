@@ -23,7 +23,7 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * 
  * @author Gabor Bergmann
  */
-public abstract class CodegenRecorderBuildable implements Buildable<String> {
+public abstract class CodegenRecorderBuildable implements POperationCompiler<String> {
     public CodegenRecordingCoordinator coordinator;
     public Object effort;
     public String myName;
@@ -140,7 +140,7 @@ public abstract class CodegenRecorderBuildable implements Buildable<String> {
         return name;
     }
 
-    protected String gen(Stub stub) {
+    protected String gen(SubPlan subPlan) {
         return "";// (String)stub.getHandle();
     }
 
@@ -221,32 +221,32 @@ public abstract class CodegenRecorderBuildable implements Buildable<String> {
     // * BL
     // //////////////////////////////////
 
-    public Stub buildBetaNode(Stub primaryStub, Stub sideStub, TupleMask primaryMask,
+    public SubPlan buildBetaNode(SubPlan primaryStub, SubPlan sideStub, TupleMask primaryMask,
             TupleMask sideMask, TupleMask complementer, boolean negative) {
         String[] arguments = { gen(primaryStub), gen(sideStub), gen(primaryMask), gen(sideMask), gen(complementer),
                 gen(negative) };
         String resultVar = emitFunctionCall(coordinator.stubType, "buildBetaNode", arguments);
 
         if (negative) {
-            return new Stub(primaryStub, resultVar);
+            return new SubPlan(primaryStub, resultVar);
         } else {
             Tuple newCalibrationPattern = negative ? primaryStub.getVariablesTuple() : complementer.combine(
                     primaryStub.getVariablesTuple(), sideStub.getVariablesTuple(), Options.enableInheritance, true);
 
-            return new Stub(primaryStub, sideStub, newCalibrationPattern, resultVar);
+            return new SubPlan(primaryStub, sideStub, newCalibrationPattern, resultVar);
         }
     }
 
-    public Stub buildCountCheckBetaNode(Stub primaryStub, Stub sideStub, TupleMask primaryMask,
+    public SubPlan buildCountCheckBetaNode(SubPlan primaryStub, SubPlan sideStub, TupleMask primaryMask,
             TupleMask originalSideMask, int resultPositionInSignature) {
         String[] arguments = { gen(primaryStub), gen(sideStub), gen(primaryMask), gen(originalSideMask),
                 gen(resultPositionInSignature) };
         String resultVar = emitFunctionCall(coordinator.stubType, "buildCountCheckBetaNode", arguments);
 
-        return new Stub(primaryStub, primaryStub.getVariablesTuple(), resultVar);
+        return new SubPlan(primaryStub, primaryStub.getVariablesTuple(), resultVar);
     }
 
-    public Stub buildCounterBetaNode(Stub primaryStub, Stub sideStub, TupleMask primaryMask,
+    public SubPlan buildCounterBetaNode(SubPlan primaryStub, SubPlan sideStub, TupleMask primaryMask,
             TupleMask originalSideMask, TupleMask complementer, Object aggregateResultCalibrationElement) {
         String[] arguments = { gen(primaryStub), gen(sideStub), gen(primaryMask), gen(originalSideMask),
                 gen(complementer), genCalibrationElement(aggregateResultCalibrationElement) };
@@ -255,109 +255,109 @@ public abstract class CodegenRecorderBuildable implements Buildable<String> {
         Object[] newCalibrationElement = { aggregateResultCalibrationElement };
         Tuple newCalibrationPattern = new LeftInheritanceTuple(primaryStub.getVariablesTuple(), newCalibrationElement);
 
-        return new Stub(primaryStub, newCalibrationPattern, resultVar);
+        return new SubPlan(primaryStub, newCalibrationPattern, resultVar);
     }
 
-    public void buildConnection(Stub stub, String collector) {
-        String[] arguments = { gen(stub), collector };
+    public void buildConnection(SubPlan subPlan, String collector) {
+        String[] arguments = { gen(subPlan), collector };
         emitProcedureCall("buildConnection", arguments);
     }
 
-    public Stub buildEqualityChecker(Stub stub, int[] indices) {
-        String[] arguments = { gen(stub), gen(indices) };
+    public SubPlan buildEqualityChecker(SubPlan subPlan, int[] indices) {
+        String[] arguments = { gen(subPlan), gen(indices) };
         String resultVar = emitFunctionCall(coordinator.stubType, "buildEqualityChecker", arguments);
-        return new Stub(stub, resultVar);
+        return new SubPlan(subPlan, resultVar);
     }
 
-    public Stub buildInjectivityChecker(Stub stub, int subject, int[] inequalIndices) {
-        String[] arguments = { gen(stub), gen(subject), gen(inequalIndices) };
+    public SubPlan buildInjectivityChecker(SubPlan subPlan, int subject, int[] inequalIndices) {
+        String[] arguments = { gen(subPlan), gen(subject), gen(inequalIndices) };
         String resultVar = emitFunctionCall(coordinator.stubType, "buildInjectivityChecker", arguments);
-        return new Stub(stub, resultVar);
+        return new SubPlan(subPlan, resultVar);
     }
 
     @Override
-    public Stub buildTransitiveClosure(Stub stub) {
-        String[] arguments = { gen(stub) };
+    public SubPlan buildTransitiveClosure(SubPlan subPlan) {
+        String[] arguments = { gen(subPlan) };
         String resultVar = emitFunctionCall(coordinator.stubType, "buildTransitiveClosure", arguments);
-        return new Stub(stub, resultVar);
+        return new SubPlan(subPlan, resultVar);
     }
 
-    public Stub buildScopeConstrainer(Stub stub, boolean transitive, Object unwrappedContainer,
+    public SubPlan buildScopeConstrainer(SubPlan subPlan, boolean transitive, Object unwrappedContainer,
             int constrainedIndex) {
         throw new UnsupportedOperationException("Code generation does not support external scoping as of now");
     }
 
-    public Stub buildStartStub(Object[] constantValues, Object[] constantNames) {
+    public SubPlan buildStartStub(Object[] constantValues, Object[] constantNames) {
         String[] arguments = { gen(constantValues, true), gen(constantNames, false), };
         String resultVar = emitFunctionCall(coordinator.stubType, "buildStartStub", arguments);
-        return new Stub(new FlatTuple(constantNames), resultVar);
+        return new SubPlan(new FlatTuple(constantNames), resultVar);
     }
 
-    public Stub buildTrimmer(Stub stub, TupleMask trimMask) {
-        String[] arguments = { gen(stub), gen(trimMask) };
+    public SubPlan buildTrimmer(SubPlan subPlan, TupleMask trimMask) {
+        String[] arguments = { gen(subPlan), gen(trimMask) };
         String resultVar = emitFunctionCall(coordinator.stubType, "buildTrimmer", arguments);
-        return new Stub(stub, trimMask.transform(stub.getVariablesTuple()), resultVar);
+        return new SubPlan(subPlan, trimMask.transform(subPlan.getVariablesTuple()), resultVar);
     }
 
-    public Stub containmentDirectStub(Tuple nodes) {
+    public SubPlan containmentDirectStub(Tuple nodes) {
         String[] arguments = { gen(nodes, false) };
         String resultVar = emitFunctionCall(coordinator.stubType, "containmentDirectStub", arguments);
-        return new Stub(nodes, resultVar);
+        return new SubPlan(nodes, resultVar);
     }
 
-    public Stub containmentTransitiveStub(Tuple nodes) {
+    public SubPlan containmentTransitiveStub(Tuple nodes) {
         String[] arguments = { gen(nodes, false) };
         String resultVar = emitFunctionCall(coordinator.stubType, "containmentTransitiveStub", arguments);
-        return new Stub(nodes, resultVar);
+        return new SubPlan(nodes, resultVar);
     }
 
-    public Stub unaryTypeStub(Tuple nodes, Object supplierKey) {
+    public SubPlan unaryTypeStub(Tuple nodes, Object supplierKey) {
         String[] arguments = { gen(nodes, false), declareNewValue("Object", genUnaryType(supplierKey)) };
         String resultVar = emitFunctionCall(coordinator.stubType, "unaryTypeStub", arguments);
-        return new Stub(nodes, resultVar);
+        return new SubPlan(nodes, resultVar);
     }
 
-    public Stub generalizationDirectStub(Tuple nodes) {
+    public SubPlan generalizationDirectStub(Tuple nodes) {
         String[] arguments = { gen(nodes, false) };
         String resultVar = emitFunctionCall(coordinator.stubType, "generalizationDirectStub", arguments);
-        return new Stub(nodes, resultVar);
+        return new SubPlan(nodes, resultVar);
     }
 
-    public Stub generalizationTransitiveStub(Tuple nodes) {
+    public SubPlan generalizationTransitiveStub(Tuple nodes) {
         String[] arguments = { gen(nodes, false) };
         String resultVar = emitFunctionCall(coordinator.stubType, "generalizationTransitiveStub", arguments);
-        return new Stub(nodes, resultVar);
+        return new SubPlan(nodes, resultVar);
     }
 
-    public Stub instantiationDirectStub(Tuple nodes) {
+    public SubPlan instantiationDirectStub(Tuple nodes) {
         String[] arguments = { gen(nodes, false) };
         String resultVar = emitFunctionCall(coordinator.stubType, "instantiationDirectStub", arguments);
-        return new Stub(nodes, resultVar);
+        return new SubPlan(nodes, resultVar);
     }
 
-    public Stub instantiationTransitiveStub(Tuple nodes) {
+    public SubPlan instantiationTransitiveStub(Tuple nodes) {
         String[] arguments = { gen(nodes, false) };
         String resultVar = emitFunctionCall(coordinator.stubType, "instantiationTransitiveStub", arguments);
-        return new Stub(nodes, resultVar);
+        return new SubPlan(nodes, resultVar);
     }
 
-    public Stub patternCallStub(Tuple nodes, Object supplierKey) {
+    public SubPlan patternCallStub(Tuple nodes, Object supplierKey) {
         // if (!coordinator.collectors.containsKey(supplierKey)) coordinator.unbuilt.add(supplierKey);
         String[] arguments = { gen(nodes, false), genPattern(supplierKey) };
         String resultVar = emitFunctionCall(coordinator.stubType, "patternCallStub", arguments);
-        return new Stub(nodes, resultVar);
+        return new SubPlan(nodes, resultVar);
     }
 
-    public Stub binaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
+    public SubPlan binaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
         String[] arguments = { gen(nodes, false), declareNewValue("Object", genBinaryEdgeType(supplierKey)) };
         String resultVar = emitFunctionCall(coordinator.stubType, "binaryEdgeTypeStub", arguments);
-        return new Stub(nodes, resultVar);
+        return new SubPlan(nodes, resultVar);
     }
 
-    public Stub ternaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
+    public SubPlan ternaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
         String[] arguments = { gen(nodes, false), declareNewValue("Object", genTernaryEdgeType(supplierKey)) };
         String resultVar = emitFunctionCall(coordinator.stubType, "ternaryEdgeTypeStub", arguments);
-        return new Stub(nodes, resultVar);
+        return new SubPlan(nodes, resultVar);
     }
 
     public String patternCollector(Object pattern) {

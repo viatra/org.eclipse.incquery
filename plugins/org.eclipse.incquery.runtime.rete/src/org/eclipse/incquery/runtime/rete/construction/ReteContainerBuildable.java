@@ -40,7 +40,7 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * @author Gabor Bergmann
  * 
  */
-public class ReteContainerBuildable implements Buildable<Address<? extends Receiver>> {
+public class ReteContainerBuildable implements POperationCompiler<Address<? extends Receiver>> {
 
     protected Library library;
     protected ReteContainer targetContainer;
@@ -86,86 +86,86 @@ public class ReteContainerBuildable implements Buildable<Address<? extends Recei
         this.library = targetContainer.getLibrary();
     }
 
-    public Stub buildTrimmer(Stub stub, TupleMask trimMask) {
+    public SubPlan buildTrimmer(SubPlan subPlan, TupleMask trimMask) {
         // Address<TrimmerNode> bodyTerminator = library.accessTrimmerNode(stub.getHandle(), trimMask);
         Address<TrimmerNode> bodyTerminator = library.accessTrimmerNode(null, trimMask);
-        return new Stub(stub, trimMask.transform(stub.getVariablesTuple()), bodyTerminator);
+        return new SubPlan(subPlan, trimMask.transform(subPlan.getVariablesTuple()), bodyTerminator);
     }
 
-    public void buildConnection(Stub stub, Address<? extends Receiver> collector) {
+    public void buildConnection(SubPlan subPlan, Address<? extends Receiver> collector) {
         // reteNet.connectRemoteNodes(stub.getHandle(), collector, true);
         reteNet.connectRemoteNodes(null, collector, true);
-        boundary.registerParentStubForReceiver(collector, stub);
+        boundary.registerParentStubForReceiver(collector, subPlan);
     }
 
-    public Stub buildStartStub(Object[] constantValues, Object[] constantNames) {
-        return new Stub(new FlatTuple(constantNames), library.accessConstantNode(boundary
+    public SubPlan buildStartStub(Object[] constantValues, Object[] constantNames) {
+        return new SubPlan(new FlatTuple(constantNames), library.accessConstantNode(boundary
                 .wrapTuple(new FlatTuple(constantValues))));
     }
 
-    public Stub buildEqualityChecker(Stub stub, int[] indices) {
+    public SubPlan buildEqualityChecker(SubPlan subPlan, int[] indices) {
         // Address<EqualityFilterNode> checker = library.accessEqualityFilterNode(stub.getHandle(), indices);
         Address<EqualityFilterNode> checker = library.accessEqualityFilterNode(null, indices);
-        return new Stub(stub, checker);
+        return new SubPlan(subPlan, checker);
     }
 
-    public Stub buildInjectivityChecker(Stub stub,
+    public SubPlan buildInjectivityChecker(SubPlan subPlan,
             int subject, int[] inequalIndices) {
         // Address<InequalityFilterNode> checker = library.accessInequalityFilterNode(stub.getHandle(), subject,
         Address<InequalityFilterNode> checker = library.accessInequalityFilterNode(null, subject,
-                new TupleMask(inequalIndices, stub.getVariablesTuple().getSize()));
-        return new Stub(stub, checker);
+                new TupleMask(inequalIndices, subPlan.getVariablesTuple().getSize()));
+        return new SubPlan(subPlan, checker);
     }
 
     @Override
-    public Stub buildTransitiveClosure(Stub stub) {
+    public SubPlan buildTransitiveClosure(SubPlan subPlan) {
         // Address<TransitiveClosureNode> checker = library.accessTransitiveClosureNode(stub.getHandle());
         Address<TransitiveClosureNode> checker = library.accessTransitiveClosureNode(null);
-        return new Stub(stub, checker);
+        return new SubPlan(subPlan, checker);
     }
 
-    public Stub patternCallStub(Tuple nodes, Object supplierKey)
-            throws RetePatternBuildException {
-        return new Stub(nodes, boundary.accessProduction(supplierKey));
+    public SubPlan patternCallStub(Tuple nodes, Object supplierKey)
+            throws QueryPlannerException {
+        return new SubPlan(nodes, boundary.accessProduction(supplierKey));
     }
 
-    public Stub instantiationTransitiveStub(Tuple nodes) {
-        return new Stub(nodes, boundary.accessInstantiationTransitiveRoot());
+    public SubPlan instantiationTransitiveStub(Tuple nodes) {
+        return new SubPlan(nodes, boundary.accessInstantiationTransitiveRoot());
     }
 
-    public Stub instantiationDirectStub(Tuple nodes) {
-        return new Stub(nodes, boundary.accessInstantiationRoot());
+    public SubPlan instantiationDirectStub(Tuple nodes) {
+        return new SubPlan(nodes, boundary.accessInstantiationRoot());
     }
 
-    public Stub generalizationTransitiveStub(Tuple nodes) {
-        return new Stub(nodes, boundary.accessGeneralizationTransitiveRoot());
+    public SubPlan generalizationTransitiveStub(Tuple nodes) {
+        return new SubPlan(nodes, boundary.accessGeneralizationTransitiveRoot());
     }
 
-    public Stub generalizationDirectStub(Tuple nodes) {
-        return new Stub(nodes, boundary.accessGeneralizationRoot());
+    public SubPlan generalizationDirectStub(Tuple nodes) {
+        return new SubPlan(nodes, boundary.accessGeneralizationRoot());
     }
 
-    public Stub containmentTransitiveStub(Tuple nodes) {
-        return new Stub(nodes, boundary.accessContainmentTransitiveRoot());
+    public SubPlan containmentTransitiveStub(Tuple nodes) {
+        return new SubPlan(nodes, boundary.accessContainmentTransitiveRoot());
     }
 
-    public Stub containmentDirectStub(Tuple nodes) {
-        return new Stub(nodes, boundary.accessContainmentRoot());
+    public SubPlan containmentDirectStub(Tuple nodes) {
+        return new SubPlan(nodes, boundary.accessContainmentRoot());
     }
 
-    public Stub binaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
-        return new Stub(nodes, boundary.accessBinaryEdgeRoot(supplierKey));
+    public SubPlan binaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
+        return new SubPlan(nodes, boundary.accessBinaryEdgeRoot(supplierKey));
     }
 
-    public Stub ternaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
-        return new Stub(nodes, boundary.accessTernaryEdgeRoot(supplierKey));
+    public SubPlan ternaryEdgeTypeStub(Tuple nodes, Object supplierKey) {
+        return new SubPlan(nodes, boundary.accessTernaryEdgeRoot(supplierKey));
     }
 
-    public Stub unaryTypeStub(Tuple nodes, Object supplierKey) {
-        return new Stub(nodes, boundary.accessUnaryRoot(supplierKey));
+    public SubPlan unaryTypeStub(Tuple nodes, Object supplierKey) {
+        return new SubPlan(nodes, boundary.accessUnaryRoot(supplierKey));
     }
 
-    public Stub buildBetaNode(Stub primaryStub, Stub sideStub, TupleMask primaryMask, TupleMask sideMask,
+    public SubPlan buildBetaNode(SubPlan primaryStub, SubPlan sideStub, TupleMask primaryMask, TupleMask sideMask,
             TupleMask complementer, boolean negative) {
         // Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(primaryStub.getHandle(),
         Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(
@@ -177,16 +177,16 @@ public class ReteContainerBuildable implements Buildable<Address<? extends Recei
 
         if (negative) {
             Address<? extends DualInputNode> checker = library.accessExistenceNode(primarySlot, sideSlot, true);
-            return new Stub(primaryStub, checker);
+            return new SubPlan(primaryStub, checker);
         } else {
             Address<? extends DualInputNode> checker = library.accessJoinNode(primarySlot, sideSlot, complementer);
             Tuple newCalibrationPattern = complementer.combine(primaryStub.getVariablesTuple(),
                     sideStub.getVariablesTuple(), Options.enableInheritance, true);
-            return new Stub(primaryStub, sideStub, newCalibrationPattern, checker);
+            return new SubPlan(primaryStub, sideStub, newCalibrationPattern, checker);
         }
     }
 
-    public Stub buildCounterBetaNode(Stub primaryStub, Stub sideStub, TupleMask primaryMask,
+    public SubPlan buildCounterBetaNode(SubPlan primaryStub, SubPlan sideStub, TupleMask primaryMask,
             TupleMask originalSideMask,
             TupleMask complementer, Object aggregateResultCalibrationElement) {
         // Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(primaryStub.getHandle(),
@@ -203,13 +203,13 @@ public class ReteContainerBuildable implements Buildable<Address<? extends Recei
         Object[] newCalibrationElement = { aggregateResultCalibrationElement };
         Tuple newCalibrationPattern = new LeftInheritanceTuple(primaryStub.getVariablesTuple(), newCalibrationElement);
 
-        Stub result = new Stub(primaryStub,
+        SubPlan result = new SubPlan(primaryStub,
                 newCalibrationPattern, checker);
 
         return result;
     }
 
-    public Stub buildCountCheckBetaNode(Stub primaryStub, Stub sideStub, TupleMask primaryMask,
+    public SubPlan buildCountCheckBetaNode(SubPlan primaryStub, SubPlan sideStub, TupleMask primaryMask,
             TupleMask originalSideMask,
             int resultPositionInSignature) {
         Address<? extends IterableIndexer> primarySlot = library.accessProjectionIndexer(
@@ -224,21 +224,21 @@ public class ReteContainerBuildable implements Buildable<Address<? extends Recei
 
         Tuple newCalibrationPattern = primaryStub.getVariablesTuple();
 
-        Stub result = new Stub(primaryStub,
+        SubPlan result = new SubPlan(primaryStub,
                 newCalibrationPattern, checker);
 
         return result;
     }
 
-    public Stub buildPredicateChecker(AbstractEvaluator evaluator, Integer rhsIndex, int[] affectedIndices, Stub stub) {
+    public SubPlan buildPredicateChecker(AbstractEvaluator evaluator, Integer rhsIndex, int[] affectedIndices, SubPlan subPlan) {
         PredicateEvaluatorNode ten = new PredicateEvaluatorNode(engine, targetContainer, rhsIndex, affectedIndices,
-                stub.getVariablesTuple().getSize(), evaluator);
+                subPlan.getVariablesTuple().getSize(), evaluator);
         Address<PredicateEvaluatorNode> checker = Address.of(ten);
 
         // reteNet.connectRemoteNodes(stub.getHandle(), checker, true);
         reteNet.connectRemoteNodes(null, checker, true);
 
-        Stub result = new Stub(stub, checker);
+        SubPlan result = new SubPlan(subPlan, checker);
 
         return result;
     }
@@ -250,7 +250,7 @@ public class ReteContainerBuildable implements Buildable<Address<? extends Recei
         return new ReteContainerBuildable(engine, reteNet.getNextContainer());
     }
 
-    public Stub buildScopeConstrainer(Stub stub,
+    public SubPlan buildScopeConstrainer(SubPlan subPlan,
             boolean transitive, Object unwrappedContainer, int constrainedIndex) {
         Address<? extends Supplier> root = (transitive) ? boundary.accessContainmentTransitiveRoot() : boundary
                 .accessContainmentRoot();
@@ -263,17 +263,17 @@ public class ReteContainerBuildable implements Buildable<Address<? extends Recei
                 new TupleMask(secondaryIndices, 2));
         // build primary indexer
         int[] primaryIndices = { constrainedIndex };
-        TupleMask primaryMask = new TupleMask(primaryIndices, stub.getVariablesTuple().getSize());
+        TupleMask primaryMask = new TupleMask(primaryIndices, subPlan.getVariablesTuple().getSize());
         Address<? extends IterableIndexer> primary = targetContainer.getLibrary().accessProjectionIndexer(
                 (Address<? extends Supplier>) null, primaryMask);
         // stub.getHandle(), primaryMask);
         // build checker
-        stub = new Stub(stub, targetContainer.getLibrary().accessExistenceNode(primary,
+        subPlan = new SubPlan(subPlan, targetContainer.getLibrary().accessExistenceNode(primary,
                 secondary, false));
-        return stub;
+        return subPlan;
     }
 
-    public Address<? extends Receiver> patternCollector(Object pattern) throws RetePatternBuildException {
+    public Address<? extends Receiver> patternCollector(Object pattern) throws QueryPlannerException {
         return engine.getBoundary().createProductionInternal(pattern);
     }
 

@@ -15,8 +15,8 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.helpers.BuildHelper;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
@@ -74,7 +74,7 @@ public abstract class PatternCallBasedDeferred extends VariableDeferredPConstrai
     }
 
     @Override
-    public void checkSanity() throws RetePatternBuildException {
+    public void checkSanity() throws QueryPlannerException {
         super.checkSanity();
         for (Object obj : this.actualParametersTuple.getDistinctElements()) {
             PVariable var = (PVariable) obj;
@@ -82,7 +82,7 @@ public abstract class PatternCallBasedDeferred extends VariableDeferredPConstrai
                 // so this is a free variable of the NAC / aggregation?
                 for (PConstraint pConstraint : var.getReferringConstraints()) {
                     if (pConstraint != this && !(pConstraint instanceof Equality && ((Equality) pConstraint).isMoot()))
-                        throw new RetePatternBuildException(
+                        throw new QueryPlannerException(
                                 "Variable {1} of constraint {2} is not a positively determined part of the pattern, yet it is also affected by {3}.",
                                 new String[] { var.toString(), this.toString(), pConstraint.toString() },
                                 "Read-only variable can not be deduced", null);
@@ -93,20 +93,20 @@ public abstract class PatternCallBasedDeferred extends VariableDeferredPConstrai
     }
 
     /**
-     * @param stub
+     * @param subPlan
      * @param sideStub
      * @return
      */
-    protected BuildHelper.JoinHelper getJoinHelper(Stub stub, Stub sideStub) {
-        BuildHelper.JoinHelper joinHelper = new BuildHelper.JoinHelper(stub, sideStub);
+    protected BuildHelper.JoinHelper getJoinHelper(SubPlan subPlan, SubPlan sideStub) {
+        BuildHelper.JoinHelper joinHelper = new BuildHelper.JoinHelper(subPlan, sideStub);
         return joinHelper;
     }
 
     /**
      * @return
-     * @throws RetePatternBuildException
+     * @throws QueryPlannerException
      */
-    protected Stub getSideStub() throws RetePatternBuildException {
+    protected SubPlan getSideStub() throws QueryPlannerException {
         // Stub sideStub = buildable.patternCallStub(actualParametersTuple, pattern);
         // sideStub = BuildHelper.enforceVariableCoincidences(buildable, sideStub);
         // return sideStub;

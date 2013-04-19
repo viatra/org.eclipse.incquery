@@ -25,15 +25,15 @@ import org.eclipse.incquery.runtime.rete.tuple.Tuple;
  * @author Gabor Bergmann
  * 
  */
-public class Stub {
+public class SubPlan {
     private final Tuple variablesTuple;
     private final Map<Object, Integer> variablesIndex;
     private final Set<PConstraint> constraints;
-    private Stub primaryParentStub;
-    private Stub secondaryParentStub;
+    private SubPlan primaryParentStub;
+    private SubPlan secondaryParentStub;
 	private final Set<PVariable> variablesSet;
 
-    private Stub(Map<Object, Integer> variablesIndex, Tuple variablesTuple) {
+    private SubPlan(Map<Object, Integer> variablesIndex, Tuple variablesTuple) {
         super();
         this.variablesIndex = variablesIndex;
         this.variablesTuple = variablesTuple;
@@ -44,26 +44,26 @@ public class Stub {
 		}
     }
 
-    public Stub(Tuple variablesTuple, Object handle) {
+    public SubPlan(Tuple variablesTuple, Object handle) {
         this(variablesTuple.invertIndex(), variablesTuple);
     }
 
     // public Stub(Stub<HandleType> template) {
     // this(template.variablesIndex, template.variablesTuple, template.getHandle());
     // }
-    public Stub(Stub primaryParent, Object handle) {
+    public SubPlan(SubPlan primaryParent, Object handle) {
         this(primaryParent.variablesIndex, primaryParent.variablesTuple);
         this.primaryParentStub = primaryParent;
         constraints.addAll(primaryParent.getAllEnforcedConstraints());
     }
 
-    public Stub(Stub primaryParent, Tuple variablesTuple, Object handle) {
+    public SubPlan(SubPlan primaryParent, Tuple variablesTuple, Object handle) {
         this(variablesTuple.invertIndex(), variablesTuple);
         this.primaryParentStub = primaryParent;
         constraints.addAll(primaryParent.getAllEnforcedConstraints());
     }
 
-    public Stub(Stub primaryParent, Stub secondaryParent, Tuple variablesTuple, Object handle) {
+    public SubPlan(SubPlan primaryParent, SubPlan secondaryParent, Tuple variablesTuple, Object handle) {
         this(variablesTuple.invertIndex(), variablesTuple);
         this.primaryParentStub = primaryParent;
         this.secondaryParentStub = secondaryParent;
@@ -130,14 +130,14 @@ public class Stub {
     /**
      * @return the primaryParentStub
      */
-    public Stub getPrimaryParentStub() {
+    public SubPlan getPrimaryParentStub() {
         return primaryParentStub;
     }
 
     /**
      * @return the secondaryParentStub
      */
-    public Stub getSecondaryParentStub() {
+    public SubPlan getSecondaryParentStub() {
         return secondaryParentStub;
     }
 

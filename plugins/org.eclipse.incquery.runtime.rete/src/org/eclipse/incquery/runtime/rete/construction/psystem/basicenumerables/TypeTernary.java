@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.ITypeInfoProviderConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.KeyedEnumerablePConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
@@ -50,7 +50,7 @@ public class TypeTernary extends KeyedEnumerablePConstraint<Object> implements
     }
 
     @Override
-    public Stub doCreateStub() {
+    public SubPlan doCreateStub() {
         return null;
         // return buildable.ternaryEdgeTypeStub(variablesTuple, supplierKey);
     }

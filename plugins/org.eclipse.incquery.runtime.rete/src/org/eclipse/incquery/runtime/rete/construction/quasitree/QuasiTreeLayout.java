@@ -17,10 +17,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.incquery.runtime.rete.construction.Buildable;
-import org.eclipse.incquery.runtime.rete.construction.IReteLayoutStrategy;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.POperationCompiler;
+import org.eclipse.incquery.runtime.rete.construction.IQueryPlanner;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.helpers.BuildHelper;
 import org.eclipse.incquery.runtime.rete.construction.helpers.LayoutHelper;
 import org.eclipse.incquery.runtime.rete.construction.psystem.DeferredPConstraint;
@@ -35,11 +35,11 @@ import org.eclipse.incquery.runtime.rete.util.Options;
  * @author Gabor Bergmann
  * 
  */
-public class QuasiTreeLayout<Collector> implements IReteLayoutStrategy {
+public class QuasiTreeLayout<Collector> implements IQueryPlanner {
 
     @Override
-    public Stub layout(PSystem pSystem)
-            throws RetePatternBuildException {
+    public SubPlan layout(PSystem pSystem)
+            throws QueryPlannerException {
         return new Scaffold(pSystem).run();
     }
 
@@ -47,22 +47,22 @@ public class QuasiTreeLayout<Collector> implements IReteLayoutStrategy {
         PSystem pSystem;
         Object pattern;
         IPatternMatcherContext context;
-        Buildable<Collector> buildable;
+        POperationCompiler<Collector> pOperationCompiler;
 
         Set<DeferredPConstraint> deferredConstraints = null;
-        Set<Stub> forefront = new LinkedHashSet<Stub>();
+        Set<SubPlan> forefront = new LinkedHashSet<SubPlan>();
 
         Scaffold(PSystem pSystem) {
             this.pSystem = pSystem;
             pattern = pSystem.getPattern();
             context = pSystem.getContext();
-            buildable = null;// pSystem.getBuildable();
+            pOperationCompiler = null;// pSystem.getBuildable();
         }
 
         /**
          * @return
          */
-        public Stub run() throws RetePatternBuildException {
+        public SubPlan run() throws QueryPlannerException {
             try {
                 context.logDebug(getClass().getSimpleName() + ": patternbody build started");
 
@@ -82,12 +82,12 @@ public class QuasiTreeLayout<Collector> implements IReteLayoutStrategy {
                 deferredConstraints = pSystem.getConstraintsOfType(DeferredPConstraint.class);
                 Set<EnumerablePConstraint> enumerables = pSystem.getConstraintsOfType(EnumerablePConstraint.class);
                 for (EnumerablePConstraint enumerable : enumerables) {
-                    Stub stub = enumerable.getStub();
-                    admitStub(stub);
+                    SubPlan subPlan = enumerable.getStub();
+                    admitStub(subPlan);
                 }
                 if (enumerables.isEmpty()) { // EXTREME CASE
-                    Stub stub = buildable.buildStartStub(new Object[] {}, new Object[] {});
-                    admitStub(stub);
+                    SubPlan subPlan = pOperationCompiler.buildStartStub(new Object[] {}, new Object[] {});
+                    admitStub(subPlan);
                 }
 
                 // JOIN FOREFRONT STUBS WHILE POSSIBLE
@@ -102,12 +102,12 @@ public class QuasiTreeLayout<Collector> implements IReteLayoutStrategy {
 
                 // FINAL CHECK, whether all exported variables are present
                 assert (forefront.size() == 1);
-                Stub finalStub = forefront.iterator().next();
+                SubPlan finalStub = forefront.iterator().next();
                 LayoutHelper.finalCheck(pSystem, finalStub);
 
                 context.logDebug(getClass().getSimpleName() + ": patternbody build concluded");
                 return finalStub;
-            } catch (RetePatternBuildException ex) {
+            } catch (QueryPlannerException ex) {
                 ex.setPatternDescription(pattern);
                 throw ex;
             }
@@ -116,9 +116,9 @@ public class QuasiTreeLayout<Collector> implements IReteLayoutStrategy {
         public List<JoinCandidate> generateJoinCandidates() {
             List<JoinCandidate> candidates = new ArrayList<JoinCandidate>();
             int bIndex = 0;
-            for (Stub b : forefront) {
+            for (SubPlan b : forefront) {
                 int aIndex = 0;
-                for (Stub a : forefront) {
+                for (SubPlan a : forefront) {
                     if (aIndex++ >= bIndex)
                         break;
                     candidates.add(new JoinCandidate(a, b));
@@ -128,21 +128,21 @@ public class QuasiTreeLayout<Collector> implements IReteLayoutStrategy {
             return candidates;
         }
 
-        private void admitStub(Stub stub) throws RetePatternBuildException {
+        private void admitStub(SubPlan subPlan) throws QueryPlannerException {
             for (DeferredPConstraint deferred : deferredConstraints) {
-                if (!stub.getAllEnforcedConstraints().contains(deferred)) {
-                    if (deferred.isReadyAt(stub)) {
-                        admitStub(deferred.checkOn(stub));
+                if (!subPlan.getAllEnforcedConstraints().contains(deferred)) {
+                    if (deferred.isReadyAt(subPlan)) {
+                        admitStub(deferred.checkOn(subPlan));
                         return;
                     }
                 }
             }
-            forefront.add(stub);
+            forefront.add(subPlan);
         }
 
-        private void doJoin(Stub primaryStub, Stub secondaryStub)
-                throws RetePatternBuildException {
-            Stub joinedStub = BuildHelper.naturalJoin(buildable, primaryStub, secondaryStub);
+        private void doJoin(SubPlan primaryStub, SubPlan secondaryStub)
+                throws QueryPlannerException {
+            SubPlan joinedStub = BuildHelper.naturalJoin(pOperationCompiler, primaryStub, secondaryStub);
             forefront.remove(primaryStub);
             forefront.remove(secondaryStub);
             admitStub(joinedStub);

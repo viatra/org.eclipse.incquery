@@ -16,7 +16,7 @@ import org.eclipse.incquery.runtime.api.IMatcherFactory;
 import org.eclipse.incquery.runtime.api.IPatternMatch;
 import org.eclipse.incquery.runtime.api.IncQueryEngine;
 import org.eclipse.incquery.runtime.exception.IncQueryException;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
 import org.eclipse.incquery.runtime.rete.matcher.RetePatternMatcher;
 
 /**
@@ -40,7 +40,7 @@ public abstract class BaseGeneratedMatcher<Signature extends IPatternMatch> exte
         checkPattern(engine, pattern);
         try {
             return engine.getReteEngine().accessMatcher(pattern);
-        } catch (RetePatternBuildException e) {
+        } catch (QueryPlannerException e) {
             throw new IncQueryException(e);
         }
     }

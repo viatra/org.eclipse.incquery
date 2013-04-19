@@ -23,7 +23,7 @@ import org.eclipse.incquery.runtime.rete.boundary.IPredicateTraceListener;
 import org.eclipse.incquery.runtime.rete.boundary.ReteBoundary;
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
 import org.eclipse.incquery.runtime.rete.construction.IRetePatternBuilder;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
 import org.eclipse.incquery.runtime.rete.index.Indexer;
 import org.eclipse.incquery.runtime.rete.network.Library;
 import org.eclipse.incquery.runtime.rete.network.Network;
@@ -153,11 +153,11 @@ public class ReteEngine {
      * @param gtPattern
      *            the pattern to be matched.
      * @return a patternmatcher object that can match occurences of the given pattern.
-     * @throws RetePatternBuildException
+     * @throws QueryPlannerException
      *             if construction fails.
      */
     public synchronized RetePatternMatcher accessMatcher(final Object gtPattern)
-            throws RetePatternBuildException {
+            throws QueryPlannerException {
         RetePatternMatcher matcher;
         // String namespace = gtPattern.getNamespace().getName();
         // String name = gtPattern.getName();
@@ -172,7 +172,7 @@ public class ReteEngine {
                     try {
                         context.coalesceTraversals(new Callable<Void>() {
                             @Override
-                            public Void call() throws RetePatternBuildException {
+                            public Void call() throws QueryPlannerException {
                                 Address<? extends Production> prodNode;
                                 prodNode = boundary.accessProduction(gtPattern);
 
@@ -185,8 +185,8 @@ public class ReteEngine {
                         });
                     } catch (InvocationTargetException ex) {
                         final Throwable cause = ex.getCause();
-                        if (cause instanceof RetePatternBuildException)
-                            throw (RetePatternBuildException) cause;
+                        if (cause instanceof QueryPlannerException)
+                            throw (QueryPlannerException) cause;
                         if (cause instanceof RuntimeException)
                             throw (RuntimeException) cause;
                         assert (false);
@@ -214,11 +214,11 @@ public class ReteEngine {
      * @pre: builder is set.
      * @param patterns
      *            the patterns to be matched.
-     * @throws RetePatternBuildException
+     * @throws QueryPlannerException
      *             if construction fails.
      */
     public synchronized void buildMatchersCoalesced(final Collection<?> patterns)
-            throws RetePatternBuildException {
+            throws QueryPlannerException {
         context.modelReadLock();
         try {
             if (parallelExecutionEnabled)
@@ -227,7 +227,7 @@ public class ReteEngine {
                 try {
                     context.coalesceTraversals(new Callable<Void>() {
                         @Override
-                        public Void call() throws RetePatternBuildException {
+                        public Void call() throws QueryPlannerException {
                             for (Object gtPattern : patterns) {
                                 boundary.accessProduction(gtPattern);
                             }
@@ -236,8 +236,8 @@ public class ReteEngine {
                     });
                 } catch (InvocationTargetException ex) {
                     final Throwable cause = ex.getCause();
-                    if (cause instanceof RetePatternBuildException)
-                        throw (RetePatternBuildException) cause;
+                    if (cause instanceof QueryPlannerException)
+                        throw (QueryPlannerException) cause;
                     if (cause instanceof RuntimeException)
                         throw (RuntimeException) cause;
                     assert (false);

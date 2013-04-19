@@ -16,9 +16,9 @@ import java.util.HashMap;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.incquery.patternlanguage.patternLanguage.Pattern;
 import org.eclipse.incquery.patternlanguage.patternLanguage.Variable;
-import org.eclipse.incquery.runtime.rete.construction.Buildable;
+import org.eclipse.incquery.runtime.rete.construction.POperationCompiler;
 import org.eclipse.incquery.runtime.rete.construction.IRetePatternBuilder;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
 import org.eclipse.incquery.runtime.rete.matcher.IPatternMatcherContext;
 
 import com.google.common.base.Preconditions;
@@ -28,14 +28,14 @@ import com.google.common.base.Preconditions;
  * 
  */
 public class EPMBuilder<Collector> implements IRetePatternBuilder<Collector> {
-    protected Buildable<Collector> baseBuildable;
+    protected POperationCompiler<Collector> baseBuildable;
     protected IPatternMatcherContext context;
 
     /**
      * @param baseBuildable
      * @param context
      */
-    public EPMBuilder(Buildable<Collector> baseBuildable, IPatternMatcherContext context) {
+    public EPMBuilder(POperationCompiler<Collector> baseBuildable, IPatternMatcherContext context) {
         super();
         this.baseBuildable = baseBuildable;
         this.context = context;
@@ -52,7 +52,7 @@ public class EPMBuilder<Collector> implements IRetePatternBuilder<Collector> {
     }
 
     @Override
-    public Collector construct(Object _pattern) throws RetePatternBuildException {
+    public Collector construct(Object _pattern) throws QueryPlannerException {
         Preconditions.checkArgument(_pattern instanceof Pattern, "Invalid parameter type");
         Pattern pattern = (Pattern) _pattern;
         try {
@@ -60,7 +60,7 @@ public class EPMBuilder<Collector> implements IRetePatternBuilder<Collector> {
                     baseBuildable, context);
             return epmBuildScaffold.construct(pattern);
         } catch (RuntimeException ex) {
-            throw new RetePatternBuildException(
+            throw new QueryPlannerException(
                     "Error during constructing Rete pattern matcher; please review Error Log and consult developers",
                     new String[0], "Error during pattern matcher construction", pattern, ex);
         }

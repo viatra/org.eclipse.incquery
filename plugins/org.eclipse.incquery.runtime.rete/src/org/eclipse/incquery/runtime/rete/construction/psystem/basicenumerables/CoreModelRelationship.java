@@ -11,8 +11,8 @@
 
 package org.eclipse.incquery.runtime.rete.construction.psystem.basicenumerables;
 
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.EnumerablePConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
@@ -28,9 +28,9 @@ public abstract class CoreModelRelationship extends EnumerablePConstraint {
 
     protected boolean transitive;
 
-    protected abstract Stub doCreateTransitiveStub();
+    protected abstract SubPlan doCreateTransitiveStub();
 
-    protected abstract Stub doCreateDirectStub();
+    protected abstract SubPlan doCreateDirectStub();
 
     /**
      * @param buildable
@@ -43,7 +43,7 @@ public abstract class CoreModelRelationship extends EnumerablePConstraint {
     }
 
     @Override
-    public Stub doCreateStub() throws RetePatternBuildException {
+    public SubPlan doCreateStub() throws QueryPlannerException {
         return isTransitive() ? doCreateTransitiveStub() : doCreateDirectStub();
     }
 

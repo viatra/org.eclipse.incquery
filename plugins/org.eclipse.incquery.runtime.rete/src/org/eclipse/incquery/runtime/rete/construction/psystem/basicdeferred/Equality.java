@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.DeferredPConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PSystem;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
@@ -97,23 +97,23 @@ public class Equality extends DeferredPConstraint {
     }
 
     @Override
-    public boolean isReadyAt(Stub stub) {
-        return stub.getVariablesIndex().containsKey(who) && stub.getVariablesIndex().containsKey(withWhom);
+    public boolean isReadyAt(SubPlan subPlan) {
+        return subPlan.getVariablesIndex().containsKey(who) && subPlan.getVariablesIndex().containsKey(withWhom);
         // will be replaced by || if copierNode is available;
         // until then, LayoutHelper.unifyVariablesAlongEqualities(PSystem<PatternDescription, StubHandle, Collector>) is
         // recommended.
     }
 
     @Override
-    protected Stub doCheckOn(Stub stub) throws RetePatternBuildException {
+    protected SubPlan doCheckOn(SubPlan subPlan) throws QueryPlannerException {
         if (isMoot())
-            return stub;
+            return subPlan;
 
-        Integer index1 = stub.getVariablesIndex().get(who);
-        Integer index2 = stub.getVariablesIndex().get(withWhom);
+        Integer index1 = subPlan.getVariablesIndex().get(who);
+        Integer index2 = subPlan.getVariablesIndex().get(withWhom);
         if (index1 != null && index2 != null) {
             if (index1.equals(index2))
-                return stub;
+                return subPlan;
             else {
                 // return buildable.buildEqualityChecker(stub, new int[] { index1, index2 });
             }
@@ -124,10 +124,10 @@ public class Equality extends DeferredPConstraint {
     }
 
     @Override
-    public void raiseForeverDeferredError(Stub stub) throws RetePatternBuildException {
+    public void raiseForeverDeferredError(SubPlan subPlan) throws QueryPlannerException {
         String[] args = { who.toString(), withWhom.toString() };
         String msg = "Cannot express equality of variables {1} and {2} if neither of them is deducable.";
         String shortMsg = "Equality between undeducible variables.";
-        throw new RetePatternBuildException(msg, args, shortMsg, null);
+        throw new QueryPlannerException(msg, args, shortMsg, null);
     }
 }

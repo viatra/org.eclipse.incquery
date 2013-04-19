@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
+import org.eclipse.incquery.runtime.rete.construction.QueryPlannerException;
 
 /**
  * @author Gabor Bergmann
@@ -81,7 +81,7 @@ public abstract class BasePConstraint implements PConstraint {
     }
 
     @Override
-    public void checkSanity() throws RetePatternBuildException {
+    public void checkSanity() throws QueryPlannerException {
     }
     
 }

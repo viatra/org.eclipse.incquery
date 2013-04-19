@@ -15,7 +15,7 @@ import java.util.Comparator;
 import java.util.Set;
 
 import org.eclipse.incquery.runtime.rete.collections.CollectionsFactory;
-import org.eclipse.incquery.runtime.rete.construction.Stub;
+import org.eclipse.incquery.runtime.rete.construction.SubPlan;
 import org.eclipse.incquery.runtime.rete.construction.psystem.DeferredPConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.EnumerablePConstraint;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PConstraint;
@@ -28,14 +28,14 @@ import org.eclipse.incquery.runtime.rete.util.OrderingCompareAgent;
  * 
  */
 public class OrderingHeuristics<PatternDescription> implements Comparator<PConstraint> {
-    private Stub stub;
+    private SubPlan subPlan;
 
     /**
-     * @param stub
+     * @param subPlan
      */
-    public OrderingHeuristics(Stub stub) {
+    public OrderingHeuristics(SubPlan subPlan) {
         super();
-        this.stub = stub;
+        this.subPlan = subPlan;
     }
 
     /*
@@ -71,12 +71,12 @@ public class OrderingHeuristics<PatternDescription> implements Comparator<PConst
     boolean isReady(PConstraint o) {
         return (o instanceof EnumerablePConstraint)
                 || (o instanceof DeferredPConstraint && ((DeferredPConstraint) o)
-                        .isReadyAt(stub));
+                        .isReadyAt(subPlan));
     }
 
     Set<PVariable> boundVariables(PConstraint o) {
         Set<PVariable> boundVariables = CollectionsFactory.getSet(o.getAffectedVariables());//new HashSet<PVariable>(o.getAffectedVariables());
-        boundVariables.retainAll(stub.getVariablesIndex().keySet());
+        boundVariables.retainAll(subPlan.getVariablesIndex().keySet());
         return boundVariables;
     }
 

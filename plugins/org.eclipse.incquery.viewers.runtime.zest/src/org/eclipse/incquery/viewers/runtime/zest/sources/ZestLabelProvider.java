@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.gef4.zest.core.viewers.IConnectionStyleProvider;
 import org.eclipse.gef4.zest.core.viewers.IEntityStyleProvider;
 import org.eclipse.gef4.zest.core.widgets.ZestStyles;
+import org.eclipse.gef4.zest.core.widgets.decoration.IConnectionDecorator;
 import org.eclipse.incquery.runtime.rete.network.Node;
 import org.eclipse.incquery.viewers.runtime.model.Containment;
 import org.eclipse.incquery.viewers.runtime.model.Edge;
@@ -223,5 +224,14 @@ public class ZestLabelProvider extends QueryLabelProvider implements IEntityStyl
         // TODO Auto-generated method stub
         return null;
     }
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.gef4.zest.core.viewers.IConnectionStyleProvider#getConnectionDecorator(java.lang.Object)
+	 */
+	@Override
+	public IConnectionDecorator getConnectionDecorator(Object rel) {
+		// TODO implement label provider
+		return null;
+	}
 
 }

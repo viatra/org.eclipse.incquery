@@ -193,8 +193,10 @@ public class SubstitutionValueMatcher extends BaseMatcher<SubstitutionValueMatch
    * @param pSubstitution the fixed value of pattern parameter Substitution, or null if not bound.
    * @param pValue the fixed value of pattern parameter Value, or null if not bound.
    * @return the delta monitor.
+   * @deprecated use the IncQuery Databinding API (IncQueryObservables) instead.
    * 
    */
+  @Deprecated
   public DeltaMonitor<SubstitutionValueMatch> newFilteredDeltaMonitor(final boolean fillAtStart, final MatchSubstitutionRecord pSubstitution, final Object pValue) {
     return rawNewFilteredDeltaMonitor(fillAtStart, new Object[]{pSubstitution, pValue});
   }

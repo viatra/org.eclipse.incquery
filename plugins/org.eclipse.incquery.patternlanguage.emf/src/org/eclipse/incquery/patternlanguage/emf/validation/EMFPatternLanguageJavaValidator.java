@@ -60,6 +60,7 @@ import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.util.Strings;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
+import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -97,6 +98,9 @@ public class EMFPatternLanguageJavaValidator extends AbstractEMFPatternLanguageJ
 
     @Inject
     private IEMFTypeProvider emfTypeProvider;
+    
+    @Inject
+    private IJvmModelAssociations associations;
 
     @Override
     protected List<EPackage> getEPackages() {

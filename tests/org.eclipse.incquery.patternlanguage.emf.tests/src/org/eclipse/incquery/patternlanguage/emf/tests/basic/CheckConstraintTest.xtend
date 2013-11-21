@@ -13,9 +13,9 @@ package org.eclipse.incquery.patternlanguage.emf.tests.basic
 import com.google.inject.Inject
 import com.google.inject.Injector
 import org.eclipse.incquery.patternlanguage.emf.eMFPatternLanguage.PatternModel
+import org.eclipse.incquery.patternlanguage.emf.tests.EMFPatternLanguageInjectorProvider
 import org.eclipse.incquery.patternlanguage.emf.validation.EMFPatternLanguageJavaValidator
 import org.eclipse.incquery.patternlanguage.validation.IssueCodes
-import org.eclipse.incquery.patternlanguage.emf.EMFPatternLanguageInjectorProvider
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper

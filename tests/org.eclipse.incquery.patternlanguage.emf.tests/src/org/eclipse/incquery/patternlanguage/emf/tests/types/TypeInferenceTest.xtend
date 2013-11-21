@@ -13,7 +13,11 @@ package org.eclipse.incquery.patternlanguage.emf.tests.types
 
 import com.google.inject.Inject
 import com.google.inject.Injector
-import org.eclipse.incquery.patternlanguage.emf.EMFPatternLanguageInjectorProvider
+import org.eclipse.emf.ecore.EClass
+import org.eclipse.emf.ecore.EClassifier
+import org.eclipse.emf.ecore.EDataType
+import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.incquery.patternlanguage.emf.tests.EMFPatternLanguageInjectorProvider
 import org.eclipse.incquery.patternlanguage.emf.eMFPatternLanguage.PatternModel
 import org.eclipse.incquery.patternlanguage.emf.validation.EMFPatternLanguageJavaValidator
 import org.eclipse.xtext.junit4.InjectWith

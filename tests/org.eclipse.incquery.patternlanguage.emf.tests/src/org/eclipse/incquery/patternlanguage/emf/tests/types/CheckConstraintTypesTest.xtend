@@ -12,7 +12,6 @@ package org.eclipse.incquery.patternlanguage.emf.tests.types
 
 import com.google.inject.Inject
 import com.google.inject.Injector
-import org.eclipse.incquery.patternlanguage.emf.EMFPatternLanguageInjectorProvider
 import org.eclipse.incquery.patternlanguage.validation.IssueCodes
 import org.eclipse.incquery.patternlanguage.emf.eMFPatternLanguage.PatternModel
 import org.eclipse.incquery.patternlanguage.emf.validation.EMFPatternLanguageJavaValidator
@@ -25,10 +24,13 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.eclipse.incquery.patternlanguage.emf.validation.EMFIssueCodes
+import org.eclipse.incquery.patternlanguage.emf.tests.EMFPatternLanguageInjectorProvider
+import org.eclipse.incquery.patternlanguage.emf.tests.util.AbstractValidatorTest
+import org.eclipse.incquery.patternlanguage.patternLanguage.PatternLanguagePackage
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(EMFPatternLanguageInjectorProvider))
-class CheckConstraintTypesTest {
+class CheckConstraintTypesTest extends AbstractValidatorTest {
 	
 	@Inject
 	ParseHelper parseHelper
@@ -74,7 +76,10 @@ class CheckConstraintTypesTest {
 				check(C.name.empty);
 			}
 		') as PatternModel
-		tester.validate(model).assertError(EMFIssueCodes::CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR)
+		tester.validate(model).assertAll(
+			getErrorCode(EMFIssueCodes::CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR),
+			getWarningCode(IssueCodes::CHECK_WITH_IMPURE_JAVA_CALLS)
+		)
 	}
 	
 	@Test
@@ -93,7 +98,7 @@ class CheckConstraintTypesTest {
 			}
 		') as PatternModel
 		model.assertNoErrors
-		tester.validate(model).assertOK
+		tester.validate(model).assertWarning(IssueCodes::CHECK_WITH_IMPURE_JAVA_CALLS)
 	}
 	
 	@Test
@@ -112,7 +117,7 @@ class CheckConstraintTypesTest {
 			}
 		') as PatternModel
 		model.assertNoErrors
-		tester.validate(model).assertOK
+		tester.validate(model).assertWarning(IssueCodes::CHECK_WITH_IMPURE_JAVA_CALLS)
 	}
 	
 	@Test

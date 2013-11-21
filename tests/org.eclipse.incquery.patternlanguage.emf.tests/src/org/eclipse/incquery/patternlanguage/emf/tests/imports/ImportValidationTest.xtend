@@ -12,7 +12,6 @@
 package org.eclipse.incquery.patternlanguage.emf.tests.imports
 
 import org.eclipse.incquery.patternlanguage.emf.tests.util.AbstractValidatorTest
-import org.eclipse.incquery.patternlanguage.emf.EMFPatternLanguageInjectorProvider
 import org.eclipse.xtext.junit4.InjectWith
 import org.junit.runner.RunWith
 import org.eclipse.xtext.junit4.XtextRunner
@@ -27,6 +26,7 @@ import com.google.inject.Injector
 import org.junit.Before
 import org.eclipse.incquery.patternlanguage.emf.validation.EMFIssueCodes
 import org.eclipse.incquery.patternlanguage.validation.IssueCodes
+import org.eclipse.incquery.patternlanguage.emf.tests.EMFPatternLanguageInjectorProvider
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(EMFPatternLanguageInjectorProvider))

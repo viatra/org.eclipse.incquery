@@ -124,11 +124,15 @@ public class EMFPatternTypeProvider extends XbaseTypeProvider implements IEMFTyp
 
     private Set<EClassifier> minimizeClassifiersList(Set<EClassifier> classifierList) {
         Set<EClassifier> resultList = new HashSet<EClassifier>(classifierList);
-        for (EClassifier classifier : classifierList) {
-            if (classifier instanceof EClass) {
-                for (EClass eClass : ((EClass) classifier).getEAllSuperTypes()) {
-                    if (resultList.contains(eClass)) {
-                        resultList.remove(eClass);
+        if (resultList.size() > 1) {
+            for (EClassifier classifier : classifierList) {
+                if ("EObject".equals(classifier.getName())) {
+                    resultList.remove(classifier);
+                } else if (classifier instanceof EClass) {
+                    for (EClass eClass : ((EClass) classifier).getEAllSuperTypes()) {
+                        if (resultList.contains(eClass)) {
+                            resultList.remove(eClass);
+                        }
                     }
                 }
             }

@@ -30,6 +30,8 @@ import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociator
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import java.util.List
 import org.eclipse.incquery.runtime.api.IQuerySpecification
+import org.eclipse.incquery.runtime.api.impl.BasePatternMatch
+import org.eclipse.incquery.runtime.api.impl.BaseMatcher
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -50,6 +52,7 @@ class EMFPatternLanguageJvmModelInferrer extends AbstractModelInferrer {
 	@Inject extension EMFPatternLanguageJvmModelInferrerUtil
 	@Inject extension PatternMatchClassInferrer
 	@Inject extension PatternMatcherClassInferrer
+	@Inject extension PatternMatcherClassMethodInferrer
 	@Inject extension PatternQuerySpecificationClassInferrer
 	@Inject extension PatternMatchProcessorClassInferrer
 	@Inject extension PatternMatchEvaluatorClassInferrer
@@ -77,9 +80,37 @@ class EMFPatternLanguageJvmModelInferrer extends AbstractModelInferrer {
 	   			val utilPackageName = pattern.utilPackageName
 
 			   	if (isPublic) {
-			   		val matchClass = pattern.inferMatchClass(isPrelinkingPhase, packageName)
+			   		val matchClass = pattern.toClass(pattern.matchClassName) [
+			   			it.packageName = packageName			   			
+   						it.superTypes += pattern.newTypeRef(typeof (BasePatternMatch))
+			   		]
+			   		acceptor.accept(matchClass).initializeLater[
+   						it.documentation = pattern.javadocMatchClass.toString
+   						it.^abstract = true
+   						//it.superTypes += pattern.newTypeRef(typeof (IPatternMatch))
+   						
+   						it.inferMatchClassFields(pattern)
+   						it.inferMatchClassConstructors(pattern)
+   						it.inferMatchClassGetters(pattern)
+   						it.inferMatchClassSetters(pattern)
+   						it.inferMatchClassMethods(pattern)
+   						it.inferCheckBodies(pattern)
+  						it.inferMatchInnerClasses(pattern)
+			   		]
+			   		//pattern.inferMatchClass(isPrelinkingPhase, packageName)
 			   		val matchClassRef = types.createTypeRef(matchClass)
-			   		val matcherClass = pattern.inferMatcherClass(isPrelinkingPhase, packageName, matchClassRef)
+			   		val matcherClass =  pattern.toClass(pattern.matcherClassName) [
+   						it.packageName = packageName
+   						it.superTypes += pattern.newTypeRef(typeof(BaseMatcher), cloneWithProxies(matchClassRef))
+			   		]
+			   		acceptor.accept(matcherClass).initializeLater[
+   						it.documentation = pattern.javadocMatcherClass.toString
+   						it.inferStaticMethods(pattern, matcherClass)
+   						it.inferFields(pattern)
+   						it.inferConstructors(pattern)
+			   			it.inferMethods(pattern, matchClassRef)
+			   		]
+			   		
 			   		val matcherClassRef = types.createTypeRef(matcherClass)
 			   		val querySpecificationClass = pattern.inferQuerySpecificationClass(isPrelinkingPhase, utilPackageName, matchClassRef, matcherClassRef)
 			   		val querySpecificationClassRef = types.createTypeRef(querySpecificationClass)

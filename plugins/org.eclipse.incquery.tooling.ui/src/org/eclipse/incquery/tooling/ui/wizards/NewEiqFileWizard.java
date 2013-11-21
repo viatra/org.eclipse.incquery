@@ -20,8 +20,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
@@ -114,12 +116,17 @@ public class NewEiqFileWizard extends Wizard implements INewWizard {
                 }
             }
         };
-        try {
-            getContainer().run(true, false, op);
-            IFile file = (IFile) root.findMember(filePath);
-            BasicNewResourceWizard.selectAndReveal(file, workbench.getActiveWorkbenchWindow());
-            IDE.openEditor(workbench.getActiveWorkbenchWindow().getActivePage(), file, true);
-        } catch (InterruptedException e) {
+		try {
+			getContainer().run(true, false, op);
+			IFile file = null;
+			BasicNewResourceWizard.selectAndReveal(file,
+					workbench.getActiveWorkbenchWindow());
+			do {
+				file = (IFile) root.findMember(filePath);
+				if (file == null) Thread.sleep(50);
+			} while (file == null);
+			IDE.openEditor(workbench.getActiveWorkbenchWindow().getActivePage(), file, true);
+		} catch (InterruptedException e) {
             // This is never thrown as of false cancellable parameter of getContainer().run
             return false;
         } catch (InvocationTargetException e) {
@@ -198,8 +205,11 @@ public class NewEiqFileWizard extends Wizard implements INewWizard {
 
         try {
             resource.save(Collections.EMPTY_MAP);
+            containerResource.refreshLocal(0, new NullProgressMonitor());
         } catch (IOException e) {
             IncQueryGUIPlugin.getDefault().logException("Resource could not be saved", e);
-        }
+        } catch (CoreException e) {
+        	IncQueryGUIPlugin.getDefault().logException("Resource could not be saved", e);
+		}
     }
 }

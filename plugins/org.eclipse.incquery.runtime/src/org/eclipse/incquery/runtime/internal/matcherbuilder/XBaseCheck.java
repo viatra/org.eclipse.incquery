@@ -19,12 +19,15 @@ import java.util.Set;
 import org.eclipse.incquery.patternlanguage.helper.CorePatternLanguageHelper;
 import org.eclipse.incquery.patternlanguage.patternLanguage.Pattern;
 import org.eclipse.incquery.patternlanguage.patternLanguage.Variable;
+import org.eclipse.incquery.runtime.internal.XtextInjectorProvider;
 import org.eclipse.incquery.runtime.rete.construction.RetePatternBuildException;
 import org.eclipse.incquery.runtime.rete.construction.Stub;
 import org.eclipse.incquery.runtime.rete.construction.psystem.PVariable;
 import org.eclipse.incquery.runtime.rete.construction.psystem.basicdeferred.BaseTypeSafePredicateCheck;
 import org.eclipse.incquery.runtime.rete.tuple.FlatTuple;
 import org.eclipse.xtext.xbase.XExpression;
+
+import com.google.inject.Injector;
 
 /**
  * XExpression check constraint: the given XExpression formed over the variables must evaluate to true.
@@ -51,6 +54,7 @@ public class XBaseCheck<StubHandle> extends BaseTypeSafePredicateCheck<Pattern, 
     protected Stub<StubHandle> doCheckOn(Stub<StubHandle> stub) throws RetePatternBuildException {
         Set<Integer> affectedIndices = new HashSet<Integer>();
         Map<String, Integer> tupleNameMap = new HashMap<String, Integer>();
+        Injector injector = XtextInjectorProvider.INSTANCE.getInjector();
         Set<Variable> variables = CorePatternLanguageHelper.getReferencedPatternVariablesOfXExpression(xExpression);
         for (Variable variable : variables) {
             PVariable pNode = pGraph.getPNode(variable);
@@ -64,6 +68,8 @@ public class XBaseCheck<StubHandle> extends BaseTypeSafePredicateCheck<Pattern, 
             indices[k++] = index;
 
         XBaseEvaluator evaluator = new XBaseEvaluator(xExpression, tupleNameMap, pattern);
+        injector.injectMembers(evaluator);
+        evaluator.init();
         return buildable.buildPredicateChecker(evaluator, null, indices, stub);
     }
 

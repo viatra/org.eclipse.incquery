@@ -22,21 +22,18 @@ import org.eclipse.incquery.patternlanguage.patternLanguage.Pattern;
 import org.eclipse.incquery.runtime.IExtensions;
 import org.eclipse.incquery.runtime.exception.IncQueryException;
 import org.eclipse.incquery.runtime.extensibility.IMatchChecker;
-import org.eclipse.incquery.runtime.internal.XtextInjectorProvider;
 import org.eclipse.incquery.runtime.rete.boundary.AbstractEvaluator;
 import org.eclipse.incquery.runtime.rete.tuple.Tuple;
 import org.eclipse.incquery.runtime.util.CheckExpressionUtil;
 import org.eclipse.incquery.runtime.util.ClassLoaderUtil;
-import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationContext;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationResult;
-import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Provider;
 
 /**
@@ -54,9 +51,13 @@ public class XBaseEvaluator extends AbstractEvaluator {
 
     private IMatchChecker matchChecker;
 
+    @Inject
     private XbaseInterpreter interpreter;
+    @Inject
     private Provider<IEvaluationContext> contextProvider;
-
+    @Inject
+    private IQualifiedNameConverter nameConverter;
+    
     /**
      * @param xExpression
      *            the expression to evaluate
@@ -69,8 +70,16 @@ public class XBaseEvaluator extends AbstractEvaluator {
         this.xExpression = xExpression;
         this.tupleNameMap = tupleNameMapping;
         this.pattern = pattern;
+        
+        // code moved to init function, to make sure it is invoked post-injection
+        
+    }
 
-        // First try to setup the generated code from the extension point
+    /**
+     * make sure to call this after members have been injected.
+     */
+    public void init() {
+     // First try to setup the generated code from the extension point
         IConfigurationElement[] configurationElements = Platform.getExtensionRegistry().getConfigurationElementsFor(
                 IExtensions.XEXPRESSIONEVALUATOR_EXTENSION_POINT_ID);
         for (IConfigurationElement configurationElement : configurationElements) {
@@ -90,8 +99,6 @@ public class XBaseEvaluator extends AbstractEvaluator {
 
         // Second option, setup the attributes for the interpreted approach
         if (matchChecker == null) {
-            Injector injector = XtextInjectorProvider.INSTANCE.getInjector();
-            interpreter = (XbaseInterpreter) injector.getInstance(IExpressionInterpreter.class);
             try {
                 ClassLoader classLoader = ClassLoaderUtil.getClassLoader(CheckExpressionUtil.getIFile(pattern));
                 if (classLoader != null) {
@@ -102,12 +109,14 @@ public class XBaseEvaluator extends AbstractEvaluator {
             } catch (CoreException coreException) {
                 logger.error("XBase Java evaluator extension point initialization failed.", coreException);
             }
-            contextProvider = injector.getProvider(IEvaluationContext.class);
         }
     }
-
+    
     @Override
     public Object doEvaluate(Tuple tuple) throws Throwable {
+        
+        init();
+        
         // First option: try to evalute with the generated code
         if (matchChecker != null) {
             return matchChecker.evaluateXExpression(tuple, tupleNameMap);
@@ -116,7 +125,7 @@ public class XBaseEvaluator extends AbstractEvaluator {
         // Second option: try to evaluate with the interpreted approach
         IEvaluationContext context = contextProvider.get();
         for (Entry<String, Integer> entry : tupleNameMap.entrySet()) {
-            context.newValue(QualifiedName.create(entry.getKey()), tuple.get(entry.getValue()));
+            context.newValue(nameConverter.toQualifiedName(entry.getKey()), tuple.get(entry.getValue()));
         }
         IEvaluationResult result = interpreter.evaluate(xExpression, context, CancelIndicator.NullImpl);
         if (result == null)

@@ -44,7 +44,7 @@ public class EMFPatternLanguageQuickfixProvider extends DefaultQuickfixProvider 
         acceptor.accept(issue, "Prefix Identifier", "Adds a ^ prefix to the identifier", null, new IModification() {
 
             @Override
-            public void apply(IModificationContext context) throws Exception {
+            public void apply(IModificationContext context) throws BadLocationException {
                 IXtextDocument document = context.getXtextDocument();
                 document.replace(issue.getOffset(), 0, "^");
             }
@@ -57,7 +57,7 @@ public class EMFPatternLanguageQuickfixProvider extends DefaultQuickfixProvider 
         acceptor.accept(issue, "Add missing import", "Add missing import", null, new IModification() {
             
             @Override
-            public void apply(IModificationContext context) throws Exception {
+            public void apply(IModificationContext context) throws BadLocationException {
                 final IXtextDocument document = context.getXtextDocument();
                 Integer offset = document.readOnly(new IUnitOfWork<Integer, XtextResource>() {
 
@@ -67,7 +67,7 @@ public class EMFPatternLanguageQuickfixProvider extends DefaultQuickfixProvider 
                                 Iterators.find(state.getAllContents(), Predicates.instanceOf(JavaImport.class), null);
                         final ICompositeNode node = NodeModelUtils.getNode(importSection);
                         
-                        return new Integer(node.getTotalEndOffset());
+                        return Integer.valueOf(node.getTotalEndOffset());
                     }
                 });
                 if (offset != null) {

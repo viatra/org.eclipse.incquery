@@ -24,7 +24,6 @@ import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.eclipse.xtext.xbase.compiler.TypeReferenceSerializer
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable
-import org.eclipse.xtext.xbase.typing.ITypeProvider
 import org.eclipse.jdt.core.JavaConventions
 import org.eclipse.jdt.core.JavaCore
 import org.eclipse.core.runtime.IStatus
@@ -32,6 +31,7 @@ import java.util.regex.Matcher
 import org.eclipse.incquery.tooling.core.generator.builder.IErrorFeedback
 import org.eclipse.incquery.tooling.core.generator.builder.GeneratorIssueCodes
 import org.eclipse.xtext.diagnostics.Severity
+import org.eclipse.incquery.patternlanguage.emf.types.IEMFTypeProvider
 
 /**
  * Utility class for the EMFPatternLanguageJvmModelInferrer.
@@ -44,7 +44,8 @@ class EMFPatternLanguageJvmModelInferrerUtil {
 	Logger logger = Logger::getLogger(getClass())
 	private String MULTILINE_COMMENT_PATTERN = "(/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/)"
 	@Inject	IWorkspaceRoot workspaceRoot
-	@Inject ITypeProvider typeProvider
+//	@Inject ITypeProvider typeProvider
+	@Inject IEMFTypeProvider emfTypeProvider
 	@Inject TypeReferenceSerializer typeReferenceSerializer
 	@Inject IErrorFeedback errorFeedback
 	
@@ -198,7 +199,8 @@ class EMFPatternLanguageJvmModelInferrerUtil {
 	 * @see EMFPatternTypeProvider
 	 */
    	def JvmTypeReference calculateType(Variable variable) {
-   		typeProvider.getTypeForIdentifiable(variable)
+   		emfTypeProvider.getVariableType(variable)
+//   	typeProvider.getTypeForIdentifiable(variable)
    	}
    	
    	/**

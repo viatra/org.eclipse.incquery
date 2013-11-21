@@ -233,8 +233,9 @@
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>xtend</id>
-			<url>http://build.eclipse.org/common/xtend/maven/</url>
+			<id>central</id>
+			<name>Maven Central</name>
+			<url>http://repo.maven.apache.org/maven2</url>
 		</pluginRepository>
 		<pluginRepository>
 			<id>fornax.plugin.repository</id>

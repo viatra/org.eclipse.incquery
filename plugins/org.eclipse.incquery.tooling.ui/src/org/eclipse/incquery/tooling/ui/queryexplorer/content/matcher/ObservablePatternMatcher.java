@@ -34,6 +34,8 @@ import org.eclipse.incquery.tooling.ui.queryexplorer.QueryExplorer;
 import org.eclipse.incquery.tooling.ui.queryexplorer.util.DisplayUtil;
 import org.eclipse.swt.widgets.Display;
 
+import com.google.common.collect.Sets;
+
 /**
  * A PatternMatcher is associated to every IncQueryMatcher which is annotated with PatternUI annotation. These elements
  * will be the children of the top level elements in the treeviewer.
@@ -99,7 +101,11 @@ public class ObservablePatternMatcher {
                 
                 @Override
                 public void notifyChanged(ChangeLevel changeLevel) {
-                    processMatchesRunnable.run();
+                	// invoke the processing runnable on the UI thread, to ensure 
+                	// databinding does not complain if the model is not
+                	// originally modified on the UI thread
+                	Display.getDefault().asyncExec(processMatchesRunnable);
+                    //processMatchesRunnable.run();
                 }
                 
                 @Override

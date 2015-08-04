@@ -1084,7 +1084,8 @@ public class NavigationHelperImpl implements NavigationHelper {
     }
     
     private void traverse(final NavigationHelperVisitor visitor) {
-        for (Notifier root : modelRoots) {
+        // Cloning model roots avoids a concurrent modification exception
+        for (Notifier root : new HashSet<Notifier>(modelRoots)) {
             comprehension.traverseModel(visitor, root);
         }
         contentAdapter.notifyBaseIndexChangeListeners();
